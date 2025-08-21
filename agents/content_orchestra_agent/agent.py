@@ -6,7 +6,7 @@ from agents.newsletter_generator import newsletter_generator_agent
 from agents.reel_script import reel_script_agent
 from config import MODEL_GPT_4O
 
-root_agent = Agent(
+content_orchestrator_agent = Agent(
     name="ContentOrchestrator",
     model=LiteLlm(model=MODEL_GPT_4O),
     description="Orchestrates content creation tasks: threads, newsletters, reels.",
