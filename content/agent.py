@@ -41,6 +41,5 @@ root_agent = Agent(
                 "use the 'get_weather' tool to find the information. "
                 "If the tool returns an error, inform the user politely. "
                 "If the tool is successful, present the weather report clearly.",
-    tools=[get_weather], # Pass the function directly
-    tools=[],
+    tools=[get_weather]
 )
