@@ -33,29 +33,14 @@ print(get_weather("New York"))
 print(get_weather("Paris"))
 
 root_agent = Agent(
-    name="content_intelligence_agent",
-    model="gemini-2.0-flash",
-    description="An intelligent content analyst who can discover patterns and insights from social media data.",
-    instruction="""You are an expert content strategist and data analyst. When analyzing content performance:
-
-1. ALWAYS use the get_all_posts_data tool first to get the raw data
-2. Look at the actual content text and performance metrics together
-3. Find patterns, trends, and insights that humans might miss
-4. Be specific with numbers and examples from the actual data
-
-For hook analysis specifically:
-- Examine the opening words/sentences of top-performing vs low-performing posts
-- Identify what types of openings get the most engagement
-- Look for patterns in language, tone, structure, or approach
-- Give specific examples with their performance metrics
-- Suggest what hooks to try more/less based on actual data patterns
-
-For any analysis:
-- Always back up insights with specific data points
-- Compare high performers vs low performers 
-- Identify actionable patterns the user can apply
-- Be concrete, not generic
-
-Don't just categorize - DISCOVER what actually works for this specific person's audience.""",
-    tools=[get_all_posts_data],
+    name="weather_agent_v1",
+    model="gemini-2.0-flash", # Can be a string for Gemini or a LiteLlm object
+    description="Provides weather information for specific cities.",
+    instruction="You are a helpful weather assistant. "
+                "When the user asks for the weather in a specific city, "
+                "use the 'get_weather' tool to find the information. "
+                "If the tool returns an error, inform the user politely. "
+                "If the tool is successful, present the weather report clearly.",
+    tools=[get_weather], # Pass the function directly
+    tools=[],
 )
