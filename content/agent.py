@@ -9,9 +9,9 @@ def get_weather(city: str) -> dict:
 
     Returns:
         dict: A dictionary containing the weather information.
-              Includes a 'status' key ('success' or 'error').
-              If 'success', includes a 'report' key with weather details.
-              If 'error', includes an 'error_message' key.
+            Includes a 'status' key ('success' or 'error').
+            If 'success', includes a 'report' key with weather details.
+            If 'error', includes an 'error_message' key.
     """
     print(f"--- Tool: get_weather called for city: {city} ---") # Log tool execution
     city_normalized = city.lower().replace(" ", "") # Basic normalization
@@ -28,9 +28,6 @@ def get_weather(city: str) -> dict:
     else:
         return {"status": "error", "error_message": f"Sorry, I don't have weather information for '{city}'."}
 
-# Example tool usage (optional test)
-print(get_weather("New York"))
-print(get_weather("Paris"))
 
 root_agent = Agent(
     name="weather_agent_v1",
