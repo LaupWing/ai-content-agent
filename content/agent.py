@@ -1,42 +1,21 @@
 from google.adk.agents import Agent
 
-# @title Define the get_weather Tool
-def get_weather(city: str) -> dict:
-    """Retrieves the current weather report for a specified city.
-
-    Args:
-        city (str): The name of the city (e.g., "New York", "London", "Tokyo").
-
-    Returns:
-        dict: A dictionary containing the weather information.
-            Includes a 'status' key ('success' or 'error').
-            If 'success', includes a 'report' key with weather details.
-            If 'error', includes an 'error_message' key.
-    """
-    print(f"--- Tool: get_weather called for city: {city} ---") # Log tool execution
-    city_normalized = city.lower().replace(" ", "") # Basic normalization
-
-    # Mock weather data
-    mock_weather_db = {
-        "newyork": {"status": "success", "report": "The weather in New York is sunny with a temperature of 25°C."},
-        "london": {"status": "success", "report": "It's cloudy in London with a temperature of 15°C."},
-        "tokyo": {"status": "success", "report": "Tokyo is experiencing light rain and a temperature of 18°C."},
-    }
-
-    if city_normalized in mock_weather_db:
-        return mock_weather_db[city_normalized]
-    else:
-        return {"status": "error", "error_message": f"Sorry, I don't have weather information for '{city}'."}
-
-
 root_agent = Agent(
-    name="weather_agent_v1",
-    model="gemini-2.0-flash", # Can be a string for Gemini or a LiteLlm object
-    description="Provides weather information for specific cities.",
-    instruction="You are a helpful weather assistant. "
-                "When the user asks for the weather in a specific city, "
-                "use the 'get_weather' tool to find the information. "
-                "If the tool returns an error, inform the user politely. "
-                "If the tool is successful, present the weather report clearly.",
-    tools=[get_weather]
+    name="food_macro_vision_agent_v1",
+    model="gemini-2.0-flash",  # multimodal; accepts image Parts
+    description="Analyzes a meal photo and returns estimated macros.",
+    instruction=(
+        "You are a nutrition estimator. The user will send a photo of food. "
+        "Do ALL of the following, and RETURN ONLY JSON:\n"
+        "1) Identify distinct food items visible.\n"
+        "2) Estimate portion grams per item (state assumptions: e.g., plate size, typical serving).\n"
+        "3) Estimate macros per item (protein_g, carb_g, fat_g) and total calories (kcal).\n"
+        "4) Provide overall totals and a confidence score (0–1).\n"
+        "Rules:\n"
+        "- If multiple foods are present, list each with grams and macros.\n"
+        "- If visibility is poor, say so in 'notes' and lower confidence.\n"
+        "- Use typical macro density for common foods when unsure; avoid hallucinating rare items.\n"
+        "- Output strict JSON with keys: items[], totals{}, confidence, notes."
+    ),
+    tools=[]  # <-- no tools
 )
