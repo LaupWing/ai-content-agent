@@ -5,7 +5,7 @@ from vertexai import agent_engines
 # TODO: Fill in these values for your project
 PROJECT_ID = "fitness-coach-471616"
 LOCATION = "europe-west4"  # For other options, see https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview#supported-regions
-STAGING_BUCKET = "gs://fitness_coach/vertex-ai-staging-bucket"  # Must be in the same region as LOCATION
+STAGING_BUCKET = "gs://fitness_coach"  # Must be in the same region as LOCATION
 
 # Initialize the Vertex AI SDK
 vertexai.init(
