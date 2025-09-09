@@ -2,7 +2,7 @@ from google.adk.agents import Agent
 
 root_agent = Agent(
     name="food_macro_vision_agent_v1",
-    model="gemini-2.0-flash",  # multimodal; accepts image Parts
+    model="gemini-2.0-flash",
     description="Analyzes a meal photo and returns estimated macros.",
     instruction=(
         "You are a nutrition estimator. The user will send a photo of food. "
@@ -17,5 +17,5 @@ root_agent = Agent(
         "- Use typical macro density for common foods when unsure; avoid hallucinating rare items.\n"
         "- Output strict JSON with keys: items[], totals{}, confidence, notes."
     ),
-    tools=[]  # <-- no tools
+    tools=[]
 )
