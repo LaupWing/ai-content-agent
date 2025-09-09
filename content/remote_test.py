@@ -2,6 +2,13 @@
 import asyncio
 from vertexai import agent_engines
 from google.genai import types
+import vertexai
+
+
+PROJECT_ID = "fitness-coach-471616"
+LOCATION   = "europe-west4"
+
+vertexai.init(project=PROJECT_ID, location=LOCATION)
 
 RESOURCE = "projects/770732600651/locations/europe-west4/reasoningEngines/900755109846188032"
 
