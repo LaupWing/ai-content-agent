@@ -18,3 +18,13 @@ app = agent_engines.AdkApp(
     agent=root_agent,
     enable_tracing=True,
 )
+
+remote_app = agent_engines.create(
+    agent_engine=app,
+    requirements=[
+        "google-cloud-aiplatform[adk,agent_engines]"   
+    ]
+)
+
+print(f"Deployment finished!")
+print(f"Resource Name: {remote_app.resource_name}")
