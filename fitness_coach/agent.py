@@ -5,7 +5,7 @@ from .agents.workouts.workouts_agent import workouts_agent
 root_agent = Agent(
     name="fitness_coach",
     model="gemini-2.0-flash",
-    description="Fitness coach that can handle diet (analyze/swaps) and workouts (plans/steps).",
+    description="Fitness and diet coach that can handle diet (analyze/swaps) and workouts (plans/steps).",
     instruction=(
         "Route intent:\n"
         "- Diet image/analysis/swaps → TRANSFER to 'diet_agent'.\n"
