@@ -1,9 +1,9 @@
 from google.adk.agents import Agent
-from agents.diet.diet_agent import diet_agent
-from agents.workouts.workouts_agent import workouts_agent
+from .agents.diet.diet_agent import diet_agent
+from .agents.workouts.workouts_agent import workouts_agent
 
-coach_agent = Agent(
-    name="coach_agent",
+root_agent = Agent(
+    name="fitness_coach",
     model="gemini-2.0-flash",
     description="Fitness coach that can handle diet (analyze/swaps) and workouts (plans/steps).",
     instruction=(
