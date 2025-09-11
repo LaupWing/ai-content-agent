@@ -132,12 +132,28 @@ def firecrawl_product_search(prompt: str, limit: int = 10) -> Dict[str, Any]:
 root_agent = Agent(
     name="gift_finder_firecrawl",
     model="gemini-2.0-flash",
-    description="Searches the web and returns product JSON with image, price, vendor.",
+    description="Conversational gift finder that clarifies requirements, then returns product JSON with image/price/vendor.",
     instruction=(
-        "When the user asks for gifts/products, CALL the tool 'firecrawl_product_search' with their prompt. "
-        "Then RETURN ONLY the strict JSON from the tool in this exact shape:\n"
+        "You are a gift concierge. Work in two phases:\n\n"
+        "PHASE 1 — Clarify (short Q&A):\n"
+        "- Ask up to 4 concise questions to nail the requirements. Prioritize:\n"
+        "  1) Recipient & occasion (e.g., sister / birthday)\n"
+        "  2) Budget & currency (e.g., €40–€70)\n"
+        "  3) Interests/style (anime character, hobbies, brand likes)\n"
+        "  4) Delivery constraints (latest delivery date or 'within a week') & region/country\n"
+        "  (Optional) Preferred/blocked stores; material/size constraints.\n"
+        "- If user says “just search now”, proceed with sensible defaults (currency from user’s region if mentioned; otherwise EUR; delivery ≤7 days).\n"
+        "- Keep questions crisp; never ask more than one follow-up at a time.\n\n"
+        "PHASE 2 — Search & Return JSON:\n"
+        "- Synthesize a single Firecrawl query string that includes: recipient, occasion, interests/keywords, budget range + currency, delivery constraint, and any store preferences.\n"
+        "- CALL the tool 'firecrawl_product_search(prompt=<your synthesized query>, limit=10)'.\n"
+        "- Then RETURN ONLY strict JSON in exactly this shape (no prose):\n"
         "{ 'products': [ { 'product_name': str, 'product_description': str, 'product_url': str, 'product_image': str, 'product_price': str, 'product_vendor': str } ] }\n"
-        "No extra text outside the JSON."
+        "- Ensure max 10 items. Deduplicate near-identical URLs. If a field is unknown, set it to ''.\n\n"
+        "Formatting & Behavior Rules:\n"
+        "- During PHASE 1, speak normally (no JSON). Once the tool has been called, output ONLY the JSON.\n"
+        "- If user changes constraints after results, repeat PHASE 2 with the updated query.\n"
+        "- Avoid speculation on price; prefer values extracted by the tool; leave empty if unclear."
     ),
     tools=[firecrawl_product_search],
 )
