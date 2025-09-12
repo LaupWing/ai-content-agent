@@ -647,5 +647,160 @@
             "cachedAt": "2025-09-12T11:50:44.348Z",
             "creditsUsed": 5
         }
+    },
+    "charcuterie": {
+        "products": [
+            {
+                "product_url": "https://charcuterie.nl/product/pasta-carbonara-pakket/",
+                "product_name": "Carbonara pakket",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2018/11/Charcuterie-Pasta-Carbonara-Pakket-Guanciale-Parmagiano-Regiano-Parmazaanse-kaas-online-bestellen.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "19 beoordelingen €17,50 / ±4 personen"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/bucatini-all-amatriciana-pakket/",
+                "product_name": "Amatritiana pakket",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2018/11/charcuterie-Bucatini-all-amatriciana-pasta-guanciale-pecorino-pakket-online-bestellen.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "5 beoordelingen €17,50 / ±4 personen"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/carpaccio-box-bresaola/",
+                "product_name": "Carpaccio Box Bresaola",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2024/03/Bresaola-carpaccio-thuismaken-800x800.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "Geen beoordelingen vanaf: €23,50 / 2 personen Dit product heeft meerdere variaties. Deze optie kan gekozen worden op de productpagina"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/carpaccio-box-cecina-de-leon/",
+                "product_name": "Carpaccio Box Cecina de Leon",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2024/03/Carpaccio_cecina_de_leon_online_Bestellen-800x800.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "Geen beoordelingen vanaf: €27,50 / 2 personen Dit product heeft meerdere variaties. Deze optie kan gekozen worden op de productpagina"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/charcuterie-box/",
+                "product_name": "Charcuterie Box",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2018/09/Charcuterie-Box-Relatiegeschenk-Cadeaupakket-droge-worst-ham-online-bestellen.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "2 beoordelingen €29,50"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/franse-charcuteriebox/",
+                "product_name": "Franse Charcuteriebox",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2025/05/Charcuteriebox-Frankrijk-rosette-jamon-boyonne-lonzu-coppa-800x800.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "Geen beoordelingen €32,50"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/italiaanse-charcuteriebox/",
+                "product_name": "Italiaanse Charcuteriebox",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2025/05/Charcuteriebox-Italie-vleeswaren-bestellen-sandaniele-truffel-salami-800x800.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "Geen beoordelingen €32,50"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/spaanse-charcuteriebox/",
+                "product_name": "Spaanse Charcuteriebox",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2025/05/Spaansebox-lomo-jamon-borrelbox-salchichon-chorizo-800x800.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "Geen beoordelingen €32,50"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/charcuteriepakket-dlvh/",
+                "product_name": "Charcuteriepakket DLVH",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2025/05/DLVH-pakket-800x800.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "Geen beoordelingen €32,50"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/delicatessen-pakket-italie/",
+                "product_name": "Delicatessen pakket Italië",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2023/11/IMG_4415-800x800.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "2 beoordelingen €40,00 Dit product heeft meerdere variaties. Deze optie kan gekozen worden op de productpagina"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/delicatessen-pakket-spanje/",
+                "product_name": "Delicatessen pakket Spanje",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2023/11/IMG_4421.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "1 beoordeling €45,00 Dit product heeft meerdere variaties. Deze optie kan gekozen worden op de productpagina"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/iberico-box/",
+                "product_name": "Iberico Box",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2018/09/Charcuteriebox-Ibericobox-cebo-spanje-paleta-lomo-chorizo-800x800.webp",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "4 beoordelingen €47,50"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/delicatessen-pakket-2/",
+                "product_name": "Delicatessen pakket",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2018/10/charcuterie-nl-delicatessen-pakket-Jamon-Iberico-Manchego-Provolone-Salami-amandelen.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "3 beoordelingen €49,50"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/charcuteriepakket/",
+                "product_name": "Charcuteriepakket",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2018/10/charcuterie-nl-charcuterie-pakket-Jamon-Iberico-Terrine-Coppa-Salami-amandelen.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "1 beoordeling €49,50 / pakket"
+            },
+            {
+                "product_url": "https://charcuterie.nl/product/pata-negra-box-2/",
+                "product_name": "Pata Negra Box",
+                "product_image": "https://charcuterie.nl/wp-content/uploads/2020/04/Pata-Negra-Box-Iberico-Bellota-Cahrcuterie-Juan-Pedro-domecq-800x800.jpg",
+                "product_vendor": "charcuterie.nl",
+                "product_description": "3 beoordelingen €69,50"
+            }
+        ],
+        "metadata": {
+            "og:image:height": "400",
+            "language": "nl-NL",
+            "twitter:card": "summary_large_image",
+            "og:site_name": "Charcuterie.nl",
+            "ogLocale": "nl_NL",
+            "ogDescription": "Een cadeaupakket bestellen met allerbeste ambachtelijke delicatessen uit Spanje, Italië, Frankrijk en Nederland besteld u eenvoudig in onze webshop.",
+            "twitter:title": "Delicatessen Cadeaupakketten | Het lekkerste cadeau om te geven",
+            "og:url": "https://charcuterie.nl/product-categorie/cadeaupakketten/",
+            "msapplication-TileImage": "https://charcuterie.nl/wp-content/uploads/2017/12/charcuterie_nl_favicon2.png",
+            "og:description": "Een cadeaupakket bestellen met allerbeste ambachtelijke delicatessen uit Spanje, Italië, Frankrijk en Nederland besteld u eenvoudig in onze webshop.",
+            "ogSiteName": "Charcuterie.nl",
+            "og:image:secure_url": "https://charcuterie.nl/wp-content/uploads/2019/08/Lekker-verrassend-Cadeaupakketten-online-bestellen.jpg",
+            "og:image:type": "image/jpeg",
+            "og:image": "https://charcuterie.nl/wp-content/uploads/2019/08/Lekker-verrassend-Cadeaupakketten-online-bestellen.jpg",
+            "twitter:site": "@CharcuterieNl",
+            "description": "Een cadeaupakket bestellen met allerbeste ambachtelijke delicatessen uit Spanje, Italië, Frankrijk en Nederland besteld u eenvoudig in onze webshop.",
+            "og:title": "Delicatessen Cadeaupakketten | Het lekkerste cadeau om te geven",
+            "og:locale": "nl_NL",
+            "ogUrl": "https://charcuterie.nl/product-categorie/cadeaupakketten/",
+            "article:publisher": "https://www.facebook.com/charcuterie.nl/",
+            "twitter:description": "Een cadeaupakket bestellen met allerbeste ambachtelijke delicatessen uit Spanje, Italië, Frankrijk en Nederland besteld u eenvoudig in onze webshop.",
+            "favicon": "https://charcuterie.nl/wp-content/uploads/2017/12/charcuterie_nl_favicon2.png",
+            "og:image:width": "600",
+            "robots": "follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large",
+            "title": "Delicatessen Cadeaupakketten | Het lekkerste cadeau om te geven",
+            "og:type": "article",
+            "generator": [
+                "WordPress 6.8.2",
+                "Elementor 3.31.5; features: e_font_icon_svg, additional_custom_breakpoints, e_element_cache; settings: css_print_method-external, google_font-enabled, font_display-auto"
+            ],
+            "viewport": [
+                "width=device-width, initial-scale=1, maximum-scale=1",
+                "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0"
+            ],
+            "ogImage": "https://charcuterie.nl/wp-content/uploads/2019/08/Lekker-verrassend-Cadeaupakketten-online-bestellen.jpg",
+            "ogTitle": "Delicatessen Cadeaupakketten | Het lekkerste cadeau om te geven",
+            "scrapeId": "69d76192-de52-48fd-8737-9f008471588a",
+            "sourceURL": "charcuterie.nl/product-categorie/cadeaupakketten/",
+            "url": "https://charcuterie.nl/product-categorie/cadeaupakketten/",
+            "statusCode": 200,
+            "contentType": "text/html; charset=UTF-8",
+            "proxyUsed": "basic",
+            "cacheState": "miss",
+            "creditsUsed": 5
+        }
     }
 }
