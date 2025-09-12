@@ -1,0 +1,651 @@
+{
+    "upfront": {
+        "products": [
+            {
+                "product_url": "https://upfront.nl/products/eiwitreep",
+                "product_name": "Eiwitreep",
+                "product_image": "https://upfront.nl/cdn/shop/files/LoadingFrame_Eiwitreep_Pistache_00000.png?v=1750290199&width=320",
+                "product_price": "€27",
+                "product_vendor": "Upfront",
+                "product_description": "12 repen"
+            },
+            {
+                "product_url": "https://upfront.nl/products/vegan-protein-bars",
+                "product_name": "Vegan Eiwitreep",
+                "product_image": "https://upfront.nl/cdn/shop/files/LoadingFrame_VeganEiwitreep_ChocoHazelnoot_00000.png?v=1750290200&width=320",
+                "product_price": "€27",
+                "product_vendor": "Upfront",
+                "product_description": "12 repen"
+            },
+            {
+                "product_url": "https://upfront.nl/products/crispy-bar",
+                "product_name": "Eiwitcrisp",
+                "product_image": "https://upfront.nl/cdn/shop/files/LoadingFrame_Eiwitcrisp_CinnamonRoll_00000.png?v=1753186334&width=320",
+                "product_price": "€2,50",
+                "product_vendor": "Upfront",
+                "product_description": "1 reep"
+            },
+            {
+                "product_url": "https://upfront.nl/products/creatabs",
+                "product_name": "CreaTabs",
+                "product_image": "https://upfront.nl/cdn/shop/files/LoadingFrame_CreaTabsPack_Pepermunt_v2_00000.png?v=1756991992&width=320",
+                "product_price": "€6",
+                "product_vendor": "Upfront",
+                "product_description": "3 rolletjes, 42 tabs"
+            },
+            {
+                "product_url": "https://upfront.nl/products/upfront-creatine",
+                "product_name": "Creatine",
+                "product_image": "https://upfront.nl/cdn/shop/files/Loading_Frame_Creatine.png?v=1750290200&width=320",
+                "product_price": "€8",
+                "product_vendor": "Upfront",
+                "product_description": "300g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/soda",
+                "product_name": "Soda",
+                "product_image": "https://upfront.nl/cdn/shop/files/LoadingFrame_Soda_Limoen_00000.png?v=1750620901&width=320",
+                "product_price": "€7",
+                "product_vendor": "Upfront",
+                "product_description": "6 blikjes"
+            },
+            {
+                "product_url": "https://upfront.nl/products/olijfolie",
+                "product_name": "Olijfolie",
+                "product_image": "https://upfront.nl/cdn/shop/files/LoadingFrame_OliveOil_00000.png?v=1754387544&width=320",
+                "product_price": "€7,50",
+                "product_vendor": "Upfront",
+                "product_description": "250ml"
+            },
+            {
+                "product_url": "https://upfront.nl/products/honing",
+                "product_name": "Rauwe Honing",
+                "product_image": "https://upfront.nl/cdn/shop/files/LoadingFrame_Honey_00000.png?v=1750621783&width=320",
+                "product_price": "€6,60",
+                "product_vendor": "Upfront",
+                "product_description": "350g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/whey-isolaat",
+                "product_name": "Whey Isolaat",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/nw_WheyIsolaat_Vanille_still_final_v1.jpg?v=1756884394&width=600",
+                "product_price": "€32",
+                "product_vendor": "Upfront",
+                "product_description": "700g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/whey",
+                "product_name": "Whey Milkshake",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/WheyMilkshake_Vanille_cp_v1.jpg?v=1750082478&width=600",
+                "product_price": "€24",
+                "product_vendor": "Upfront",
+                "product_description": "1kg"
+            },
+            {
+                "product_url": "https://upfront.nl/products/clear-whey",
+                "product_name": "Clear Whey Limonade",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/ClearWheyLimonade_LycheeYuzu_CP_v1_a2924865-5eb1-443f-80c1-853a45c55c3c.jpg?v=1756882959&width=600",
+                "product_price": "€32",
+                "product_vendor": "Upfront",
+                "product_description": "700g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/eiwit-kokoswater",
+                "product_name": "Eiwit Kokoswater",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/EiwitKokoswater_cp_v1.jpg?v=1750247328&width=600",
+                "product_price": "€34",
+                "product_vendor": "Upfront",
+                "product_description": "700g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/eiwit-matcha",
+                "product_name": "Eiwit Matcha",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/EiwitMatcha_Aardbei_CP_v2_93fe4f10-d399-4de8-bc9d-f47e35d52679.jpg?v=1756448595&width=600",
+                "product_price": "€34",
+                "product_vendor": "Upfront",
+                "product_description": "700g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/oats-in-bag",
+                "product_name": "Eiwit Oats",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Oats_Appel_cp_v1_1.jpg?v=1750256079&width=600",
+                "product_price": "€19",
+                "product_vendor": "Upfront",
+                "product_description": "1kg"
+            },
+            {
+                "product_url": "https://upfront.nl/products/overnight-oats-nieuw",
+                "product_name": "Overnight Eiwit Oats",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/OvernightOats_MangoKokos_CP_v2.jpg?v=1754821361&width=600",
+                "product_price": "€21",
+                "product_vendor": "Upfront",
+                "product_description": "1kg"
+            },
+            {
+                "product_url": "https://upfront.nl/products/eiwit-rijstpudding",
+                "product_name": "Eiwit Rijstpudding",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Rijstpudding_Vanille_CP_v2_174b31f9-de4c-4033-a482-83ef53acb1a5.jpg?v=1754158018&width=600",
+                "product_price": "€21",
+                "product_vendor": "Upfront",
+                "product_description": "1kg"
+            },
+            {
+                "product_url": "https://upfront.nl/products/rijstpudding",
+                "product_name": "Rijstpudding",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Rijstpudding_Puur_CP_v2.jpg?v=1754157893&width=600",
+                "product_price": "€12",
+                "product_vendor": "Upfront",
+                "product_description": "1kg"
+            },
+            {
+                "product_url": "https://upfront.nl/products/eiwit-ijskoffie",
+                "product_name": "Eiwit IJskoffie",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/EiwitIjskoffie_Cappuccino_cp_v1.jpg?v=1750079507&width=600",
+                "product_price": "€29",
+                "product_vendor": "Upfront",
+                "product_description": "700g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/eiwit-ijskoffie-2-0",
+                "product_name": "Eiwit Ijskoffie 2.0",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/EiwitIjskoffie_Espresso_CP_v2.jpg?v=1756448893&width=600",
+                "product_price": "€29",
+                "product_vendor": "Upfront",
+                "product_description": "700g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/vegan-eiwit-pro",
+                "product_name": "Vegan PRO",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/VeganPro_Vanille_cp_v1.jpg?v=1750269286&width=600",
+                "product_price": "€33",
+                "product_vendor": "Upfront",
+                "product_description": "1kg"
+            },
+            {
+                "product_url": "https://upfront.nl/products/whey-pro-1",
+                "product_name": "Whey PRO",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/WheyPro_Puur_cp_v1.jpg?v=1750348644&width=600",
+                "product_price": "€29",
+                "product_vendor": "Upfront",
+                "product_description": "1kg"
+            },
+            {
+                "product_url": "https://upfront.nl/products/alpen-whey",
+                "product_name": "BIO Alpenwhey",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/BioAlpenWhey_Puur_cp_v1.jpg?v=1750751337&width=600",
+                "product_price": "€28",
+                "product_vendor": "Upfront",
+                "product_description": "700g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/daily-1",
+                "product_name": "Daily",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Daily_LimoenMunt_cp_v1.jpg?v=1750938039&width=600",
+                "product_price": "€23",
+                "product_vendor": "Upfront",
+                "product_description": "420g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/collageen",
+                "product_name": "Collageen",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Collageen_Puur_cp_v1.jpg?v=1750245027&width=600",
+                "product_price": "€35",
+                "product_vendor": "Upfront",
+                "product_description": "500g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/l-glutamine",
+                "product_name": "L-Glutamine",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/L-Glutamine_cp_v1.jpg?v=1750081083&width=600",
+                "product_price": "€15",
+                "product_vendor": "Upfront",
+                "product_description": "500g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/upfront-creatine",
+                "product_name": "Creatine",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Creatine_cp_v1.jpg?v=1750247155&width=600",
+                "product_price": "€8",
+                "product_vendor": "Upfront",
+                "product_description": "300g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/creatine-pure",
+                "product_name": "Crea PRO",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/CreaPro_cp_v1.jpg?v=1750075464&width=600",
+                "product_price": "€24",
+                "product_vendor": "Upfront",
+                "product_description": "400g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/pre-pro-3-0",
+                "product_name": "Pre PRO 3.0",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/PrePro3.0_GroeneAppel_cp_v1.jpg?v=1751548007&width=600",
+                "product_price": "€22",
+                "product_vendor": "Upfront",
+                "product_description": ""
+            },
+            {
+                "product_url": "https://upfront.nl/products/prepro",
+                "product_name": "Pre PRO",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/PrePro_GroeneAppel_cp_v1.jpg?v=1750076046&width=600",
+                "product_price": "€14,40",
+                "product_vendor": "Upfront",
+                "product_description": "€18\n300g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/pre-pump",
+                "product_name": "Pump",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Pump_Kers_cp_v1.jpg?v=1750076400&width=600",
+                "product_price": "€14,40",
+                "product_vendor": "Upfront",
+                "product_description": "€18\n300g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/creatabs",
+                "product_name": "CreaTabs",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/nw_CreaTabsPack_Pepermunt_Still_v2.jpg?v=1756732651&width=600",
+                "product_price": "€6",
+                "product_vendor": "Upfront",
+                "product_description": "3 rolletjes, 42 tabs"
+            },
+            {
+                "product_url": "https://upfront.nl/products/eiwitreep",
+                "product_name": "Eiwitreep",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Eiwitreep_CaramelFudge_CP_v2.jpg?v=1753957054&width=600",
+                "product_price": "€27",
+                "product_vendor": "Upfront",
+                "product_description": "12 repen"
+            },
+            {
+                "product_url": "https://upfront.nl/products/vegan-protein-bars",
+                "product_name": "Vegan Eiwitreep",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/VeganEiwitreep_CitroenCake_CP_v2.jpg?v=1757505572&width=600",
+                "product_price": "€27",
+                "product_vendor": "Upfront",
+                "product_description": "12 repen"
+            },
+            {
+                "product_url": "https://upfront.nl/products/crispy-bar",
+                "product_name": "Eiwitcrisp",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Eiwitcrisp_FramboosWitteChoco_CP_v1.jpg?v=1751972957&width=600",
+                "product_price": "€2,50",
+                "product_vendor": "Upfront",
+                "product_description": "1 reep"
+            },
+            {
+                "product_url": "https://upfront.nl/products/flapjack-bio",
+                "product_name": "BIO Flapjack",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/BioFlapjack_Pindakaas_still_v1.jpg?v=1750080572&width=600",
+                "product_price": "€15,20",
+                "product_vendor": "Upfront",
+                "product_description": "€19\n12 repen"
+            },
+            {
+                "product_url": "https://upfront.nl/products/ultieme-mixdoos",
+                "product_name": "Ultieme Mixdoos",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Mixdoos_Ultieme_CP_v2.jpg?v=1757523149&width=600",
+                "product_price": "€21,60",
+                "product_vendor": "Upfront",
+                "product_description": "€27\n12 repen"
+            },
+            {
+                "product_url": "https://upfront.nl/products/pre-run",
+                "product_name": "Pre Run",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/PreRun_Sinaasappel_cp_v1.jpg?v=1750270498&width=600",
+                "product_price": "€12",
+                "product_vendor": "Upfront",
+                "product_description": "20g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/nougat-bar",
+                "product_name": "Nougat Bar",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/NougateBar_cp_v1.jpg?v=1750080299&width=600",
+                "product_price": "€23",
+                "product_vendor": "Upfront",
+                "product_description": "12 repen"
+            },
+            {
+                "product_url": "https://upfront.nl/products/endurance-bar",
+                "product_name": "Endurance Bar",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/EnduranceBar_RoodFruit_cp_v1.jpg?v=1750080281&width=600",
+                "product_price": "€14,40",
+                "product_vendor": "Upfront",
+                "product_description": "€18\n12 repen"
+            },
+            {
+                "product_url": "https://upfront.nl/products/gel",
+                "product_name": "Gel",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Gel_Citroen_cp_v1.jpg?v=1750080649&width=600",
+                "product_price": "€18",
+                "product_vendor": "Upfront",
+                "product_description": "€23\n12 gels"
+            },
+            {
+                "product_url": "https://upfront.nl/products/eiwit-limonade-mixdoos",
+                "product_name": "Eiwit Limonade Mixdoos",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/EiwitLimonadeR2D_Mixdoos_CP_v1.jpg?v=1755263901&width=600",
+                "product_price": "€21",
+                "product_vendor": "Upfront",
+                "product_description": "12 flesjes"
+            },
+            {
+                "product_url": "https://upfront.nl/products/ready-to-drink-limonade",
+                "product_name": "Eiwit Limonade",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/R2DLimonade_Granaatappel_cp_v1.jpg?v=1750081828&width=600",
+                "product_price": "€13,50",
+                "product_vendor": "Upfront",
+                "product_description": "6 flesjes"
+            },
+            {
+                "product_url": "https://upfront.nl/products/whey-milkshake-ready-to-drink",
+                "product_name": "Eiwit Milkshake",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/R2DMilkshake_Vanille_cp_v1.jpg?v=1750170331&width=600",
+                "product_price": "€12,80",
+                "product_vendor": "Upfront",
+                "product_description": "€16\n8 flesjes"
+            },
+            {
+                "product_url": "https://upfront.nl/products/eiwit-ijskoffie-r2d",
+                "product_name": "Eiwit IJskoffie",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/IjskoffieR2D_Cappuccino_cp_v1.jpg?v=1750080891&width=600",
+                "product_price": "€26",
+                "product_vendor": "Upfront",
+                "product_description": "12 cans"
+            },
+            {
+                "product_url": "https://upfront.nl/products/ijsthee-ready-to-drink",
+                "product_name": "IJsthee",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/IijstheeR2D_Rooibos_cp_v1.jpg?v=1750256128&width=600",
+                "product_price": "€9",
+                "product_vendor": "Upfront",
+                "product_description": "6 flesjes"
+            },
+            {
+                "product_url": "https://upfront.nl/products/soda",
+                "product_name": "Soda",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Soda_Limoen_cp_v1.jpg?v=1750081903&width=600",
+                "product_price": "€7",
+                "product_vendor": "Upfront",
+                "product_description": "6 blikjes"
+            },
+            {
+                "product_url": "https://upfront.nl/products/linzen-chips",
+                "product_name": "Eiwit Chips",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Chips_PittigePaprika_cp_v1.jpg?v=1750079071&width=600",
+                "product_price": "€12",
+                "product_vendor": "Upfront",
+                "product_description": "€15\n6 zakken"
+            },
+            {
+                "product_url": "https://upfront.nl/products/flavor-powder",
+                "product_name": "Flavor Powder",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/FlavorPowder_Speculaas_CP_v3.jpg?v=1757672051&width=600",
+                "product_price": "€15",
+                "product_vendor": "Upfront",
+                "product_description": "150g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/limonadesiroop",
+                "product_name": "Limonadesiroop",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Siroop_Hibiscus_cp_v1.jpg?v=1750287333&width=600",
+                "product_price": "€4",
+                "product_vendor": "Upfront",
+                "product_description": "250ml"
+            },
+            {
+                "product_url": "https://upfront.nl/products/pasta",
+                "product_name": "Pasta",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Pasta_cp_v1.jpg?v=1750081707&width=600",
+                "product_price": "€2,90",
+                "product_vendor": "Upfront",
+                "product_description": "500g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/pindakaas",
+                "product_name": "Pindakaas",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Pindakaas_cptest_v1.jpg?v=1749663341&width=600",
+                "product_price": "€5",
+                "product_vendor": "Upfront",
+                "product_description": "500g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/honing",
+                "product_name": "Rauwe Honing",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Honey_cp_v1.jpg?v=1750080809&width=600",
+                "product_price": "€6,60",
+                "product_vendor": "Upfront",
+                "product_description": "350g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/hazelnootpasta",
+                "product_name": "Hazelnootpasta",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Hazelnootpasta_cp_v1.jpg?v=1750080754&width=600",
+                "product_price": "€6,30",
+                "product_vendor": "Upfront",
+                "product_description": "300g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/matcha",
+                "product_name": "Ceremoniële Matcha",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/MatchaJar_cp_v1.jpg?v=1750081176&width=600",
+                "product_price": "€34",
+                "product_vendor": "Upfront",
+                "product_description": "60g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/olijfolie",
+                "product_name": "Olijfolie",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/OilveOil_still_v1.jpg?v=1750081621&width=600",
+                "product_price": "€7,50",
+                "product_vendor": "Upfront",
+                "product_description": "250ml"
+            },
+            {
+                "product_url": "https://upfront.nl/products/kruiden",
+                "product_name": "Kruiden",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Kruiden_Kip_cp_v1.jpg?v=1750080971&width=600",
+                "product_price": "€3,80",
+                "product_vendor": "Upfront",
+                "product_description": "€4,75\n120g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/chiazaad",
+                "product_name": "Chiazaad",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Noten_Chiazaad_cp_v1.jpg?v=1750853137&width=600",
+                "product_price": "€4",
+                "product_vendor": "Upfront",
+                "product_description": "230g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/lijnzaad",
+                "product_name": "Lijnzaad",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Noten_Lijnzaad_cp_v1.jpg?v=1750853161&width=600",
+                "product_price": "€2,50",
+                "product_vendor": "Upfront",
+                "product_description": "210g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/cashewnoten",
+                "product_name": "Cashewnoten",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Noten_Cashewnoten_cp_v1.jpg?v=1750853137&width=600",
+                "product_price": "€5",
+                "product_vendor": "Upfront",
+                "product_description": "175g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/amandelen",
+                "product_name": "Amandelen",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Noten_Amandelen_cp_v1.jpg?v=1750853115&width=600",
+                "product_price": "€5",
+                "product_vendor": "Upfront",
+                "product_description": "180g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/hazelnoten",
+                "product_name": "Hazelnoten",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/nw_Noten_Hazelnoten_CP_Sizing.jpg?v=1751555468&width=600",
+                "product_price": "€5",
+                "product_vendor": "Upfront",
+                "product_description": "185g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/zonnebloempitten",
+                "product_name": "Zonnebloempitten",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Noten_Zonnenbloempitten_cp_v1_d40036aa-b017-4842-9f6e-ea5e7cc51ea5.jpg?v=1756714644&width=600",
+                "product_price": "€2,50",
+                "product_vendor": "Upfront",
+                "product_description": "185g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/pompoenpitten",
+                "product_name": "Pompoenpitten",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Noten_Pompoenpitten_cp_v1_26197773-7ba3-470a-9ca1-a3aee5a146c0.jpg?v=1756715004&width=600",
+                "product_price": "€4",
+                "product_vendor": "Upfront",
+                "product_description": "185g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/omega-3",
+                "product_name": "Omega 3",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Vitamine_Omega3_cp_v1.jpg?v=1750082294&width=600",
+                "product_price": "€19",
+                "product_vendor": "Upfront",
+                "product_description": "30 capsules"
+            },
+            {
+                "product_url": "https://upfront.nl/products/magnesium",
+                "product_name": "Magnesium",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Vitamine_Magnesium_cp_v1.jpg?v=1750082274&width=600",
+                "product_price": "€14",
+                "product_vendor": "Upfront",
+                "product_description": "60 capsules"
+            },
+            {
+                "product_url": "https://upfront.nl/products/multivitamine",
+                "product_name": "Multivitamine",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Vitamine_Multi_cp_v1.jpg?v=1750082294&width=600",
+                "product_price": "€17",
+                "product_vendor": "Upfront",
+                "product_description": "60 capsules"
+            },
+            {
+                "product_url": "https://upfront.nl/products/vitamine-d3",
+                "product_name": "Vitamine D3",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Vitamine_D3_cp_v1.jpg?v=1750082274&width=600",
+                "product_price": "€12",
+                "product_vendor": "Upfront",
+                "product_description": "60 capsules"
+            },
+            {
+                "product_url": "https://upfront.nl/products/upfront-shaker",
+                "product_name": "Shaker",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/RegularShaker_cp_v1.jpg?v=1750170331&width=600",
+                "product_price": "€6",
+                "product_vendor": "Upfront",
+                "product_description": "700ml"
+            },
+            {
+                "product_url": "https://upfront.nl/products/blenderbottle-plastic",
+                "product_name": "Shaker [Strada™, Tritan]",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/TritanBlenderShaker_cp_v1.jpg?v=1750170351&width=600",
+                "product_price": "€29",
+                "product_vendor": "Upfront",
+                "product_description": "710ml"
+            },
+            {
+                "product_url": "https://upfront.nl/products/thermoshaker-1",
+                "product_name": "Shaker [Strada™, Thermo]",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/TermoShaker_cp_v1.jpg?v=1750170331&width=600",
+                "product_price": "€39",
+                "product_vendor": "Upfront",
+                "product_description": "590ml"
+            },
+            {
+                "product_url": "https://upfront.nl/products/soft-flask",
+                "product_name": "Soft Flask",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/SoftFlask_cp_v1.jpg?v=1750148447&width=600",
+                "product_price": "€5",
+                "product_vendor": "Upfront",
+                "product_description": "250ml"
+            },
+            {
+                "product_url": "https://upfront.nl/products/hydro-sticks",
+                "product_name": "Electrolytes",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Electrolytes_Watermeloen_cp_v1.jpg?v=1750266753&width=600",
+                "product_price": "€8",
+                "product_vendor": "Upfront",
+                "product_description": "6g"
+            },
+            {
+                "product_url": "https://upfront.nl/products/hyrox-schema",
+                "product_name": "HYROX schema",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/HyroxSchema_cp_v1.jpg?v=1750695052&width=600",
+                "product_price": "Gratis",
+                "product_vendor": "Upfront",
+                "product_description": ""
+            },
+            {
+                "product_url": "https://upfront.nl/products/marathon-schema",
+                "product_name": "Marathon Schema",
+                "product_image": "https://cdn.shopify.com/s/files/1/0254/4667/8590/files/Maraton_Schema_Medal_cp_v1.jpg?v=1751013411&width=600",
+                "product_price": "Gratis",
+                "product_vendor": "Upfront",
+                "product_description": ""
+            }
+        ],
+        "metadata": {
+            "description": "Voeding is de brandstof voor al je prestaties, dus daar beginnen we: geen onzin claims, geen kleine lettertjes op de achterkant. Eerlijke, functionele ingrediënten, duidelijk vermeld op de voorkant van je verpakking.",
+            "og:type": "product.group",
+            "ogDescription": "Voeding is de brandstof voor al je prestaties, dus daar beginnen we: geen onzin claims, geen kleine lettertjes op de achterkant. Eerlijke, functionele ingrediënten, duidelijk vermeld op de voorkant van je verpakking.",
+            "msapplication-TileImage": "http://upfront.nl/cdn/shop/files/Group_454_fac1b4da-88c5-4d44-a3a7-c6bdc92fa13e_1200x675.png?v=1719844699",
+            "shopify-digital-wallet": "/25446678590/digital_wallets/dialog",
+            "og:image:height": "600",
+            "favicon": "https://upfront.nl/cdn/shop/t/394/assets/logo.ico?v=107459048196256782761735061814",
+            "og:image:type": "image/jpeg",
+            "twitter:title": "Alles",
+            "language": "nl",
+            "adtr:loading": "",
+            "og:url": "https://upfront.nl/collections/alles",
+            "shopify-checkout-api-token": "2b15e8e399488389dd84ab5ea1f10c83",
+            "twitter:image": "http://upfront.nl/cdn/shop/files/Group_454_fac1b4da-88c5-4d44-a3a7-c6bdc92fa13e_1200x675.png?v=1719844699",
+            "ogUrl": "https://upfront.nl/collections/alles",
+            "og:image:width": "600",
+            "og:title": "Alles",
+            "ogSiteName": "Upfront",
+            "theme-color": ["", "#fff"],
+            "twitter:url": "https://upfront.nl/collections/alles",
+            "ogImage": "http://upfront.nl/cdn/shop/files/Group_454_fac1b4da-88c5-4d44-a3a7-c6bdc92fa13e_1200x675.png?v=1719844699",
+            "og:site_name": "Upfront",
+            "og:image:secure_url": "https://upfront.nl/cdn/shop/files/Group_454_fac1b4da-88c5-4d44-a3a7-c6bdc92fa13e_1200x675.png?v=1719844699",
+            "twitter:description": "Voeding is de brandstof voor al je prestaties, dus daar beginnen we: geen onzin claims, geen kleine lettertjes op de achterkant. Eerlijke, functionele ingrediënten, duidelijk vermeld op de voorkant van je verpakking.",
+            "facebook-domain-verification": [
+                "vq2u54jr07rwu32b4ykris1hy51cla",
+                "vq2u54jr07rwu32b4ykris1hy51cla"
+            ],
+            "adtr:collections": "618700800349",
+            "og:image": "http://upfront.nl/cdn/shop/files/Group_454_fac1b4da-88c5-4d44-a3a7-c6bdc92fa13e_1200x675.png?v=1719844699",
+            "twitter:card": "summary_large_image",
+            "og:updated_time": "1440432930",
+            "twitter:domain": "upfront.nl",
+            "color-scheme": "light dark",
+            "adtr:collection_titles": "Alles",
+            "title": "\n  \n    Alles\n  \n\n    – Upfront",
+            "ogTitle": "Alles",
+            "viewport": [
+                "width=device-width,initial-scale=1",
+                "width=device-width, initial-scale=1.0,\n                                 maximum-scale=1.0, user-scalable=no"
+            ],
+            "og:description": "Voeding is de brandstof voor al je prestaties, dus daar beginnen we: geen onzin claims, geen kleine lettertjes op de achterkant. Eerlijke, functionele ingrediënten, duidelijk vermeld op de voorkant van je verpakking.",
+            "scrapeId": "6e263eb9-d6b3-4152-8f48-74b755cebe8b",
+            "sourceURL": "upfront.nl/collections/alles?tw_source=google&tw_adid=608672602957&tw_campaign=17669236774&tw_kwdid=kwd-95073915&gad_source=1&gad_campaignid=17669236774&gbraid=0AAAAACczelgsY_LWLfASq9R3ksbcYLh6Z&gclid=CjwKCAjwq9rFBhAIEiwAGVAZP7sYPY5qQTQo1WPKRh_UPUBuTYZMWsu2VjWYCpfDsf_OGvQsZuDtnxoCEjYQAvD_BwE",
+            "url": "https://upfront.nl/collections/alles?tw_adid=608672602957&tw_campaign=17669236774&tw_kwdid=kwd-95073915&gad_campaignid=17669236774",
+            "statusCode": 200,
+            "contentType": "text/html; charset=utf-8",
+            "proxyUsed": "basic",
+            "cacheState": "hit",
+            "cachedAt": "2025-09-12T11:50:44.348Z",
+            "creditsUsed": 5
+        }
+    }
+}
