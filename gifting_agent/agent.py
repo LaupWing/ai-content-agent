@@ -43,7 +43,7 @@ def firecrawl_product_search(prompt: str, limit: int = 10) -> Dict[str, Any]:
     #     }
     # }
     payload = {
-        "query": prompt,
+        "query": "goku figurine above 1000 dollars",  # <-- dynamic, straight from the agent/user
         "sources": [
             "web",
             "images"
