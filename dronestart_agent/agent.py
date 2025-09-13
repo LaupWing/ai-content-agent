@@ -1,14 +1,28 @@
 from google.adk.agents import Agent
+from google.cloud import storage
+
+def get_txt_file(path: str, bucket_name: str) -> str:
+    """
+    Reads a .txt file from Firebase Storage (Google Cloud Storage).
+
+    Returns:
+        The text content of the file as a string.
+    """
+    client = storage.Client()  # uses Application Default Credentials (ADC)
+    bucket = client.bucket("dronestart-production.appspot.com")
+    blob = bucket.blob("handboeken/1fdG53b4RyP25wVOGkYCYUZjTam2/5BGNS1dqjXrTxoviRtya/1_1.txt")
+
+    if not blob.exists():
+        raise FileNotFoundError(f"File {path}.txt not found in bucket {bucket_name}")
+
+    return blob.download_as_text()
+
+
 
 root_agent = Agent(
-    name="fitness_coach",
+    name="dronestart_agent",
     model="gemini-2.0-flash",
-    description="Fitness and diet coach that can handle diet (analyze/swaps) and workouts (plans/steps).",
+    description="",
     instruction=(
-        "Route intent:\n"
-        "- Diet image/analysis/swaps → TRANSFER to 'diet_agent'.\n"
-        "- Workout plan (today/full) or exercise steps → TRANSFER to 'workouts_agent'.\n"
-        "Keep answers short and actionable. If unsure, ask one clarifying question."
     ),
-    sub_agents=[],
 )
