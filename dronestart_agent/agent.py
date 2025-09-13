@@ -1,6 +1,4 @@
 from google.adk.agents import Agent
-from .agents.diet.diet_agent import diet_agent
-from .agents.workouts.workouts_agent import workouts_agent
 
 root_agent = Agent(
     name="fitness_coach",
@@ -12,5 +10,5 @@ root_agent = Agent(
         "- Workout plan (today/full) or exercise steps → TRANSFER to 'workouts_agent'.\n"
         "Keep answers short and actionable. If unsure, ask one clarifying question."
     ),
-    sub_agents=[diet_agent, workouts_agent],
+    sub_agents=[],
 )
