@@ -10,7 +10,7 @@ def get_txt_file(path: str, bucket_name: str) -> str:
     """
     client = storage.Client()  # uses Application Default Credentials (ADC)
     bucket = client.bucket("dronestart-production.appspot.com")
-    blob = bucket.blob("handboeken/1fdG53b4RyP25wVOGkYCYUZjTam2/5BGNS1dqjXrTxoviRtya/1_1.txt")
+    blob = bucket.blob("handboeken/NG56Njq7iTWBUAqsxkIipa3J8R32/S2ySsDZHfcMP32IceFBh/6_2.txt")
 
     if not blob.exists():
         raise FileNotFoundError(f"File {path}.txt not found in bucket {bucket_name}")
