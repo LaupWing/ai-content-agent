@@ -20,6 +20,8 @@ def get_txt_file(path: str, bucket_name: str) -> str:
 
     return blob.download_as_text()
 
+bucket = "dronestart-production.appspot.com"
+path = "handboeken/1fdG53b4RyP25wVOGkYCYUZjTam2/5BGNS1dqjXrTxoviRtya/1_1"
 
-text = get_txt_file("notes/user123/today", " dronestart-production.appspot.com")
+text = get_txt_file(path, bucket)
 print(text)
