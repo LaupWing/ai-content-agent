@@ -1,38 +1,16 @@
 from google.adk.agents import Agent
-
-macro_scanner_agent = Agent(
-    name="macro_scanner_v1",
-    model="gemini-2.0-flash",
-    description="Vision-only macro estimator from a meal photo.",
-    instruction=(
-        "The user will include an image. RETURN ONLY STRICT JSON:\n"
-        "{items:[{name,grams,protein_g,carb_g,fat_g,kcal}],"
-        " totals:{protein_g,carb_g,fat_g,kcal}, confidence:number, notes:string}\n"
-        "- Identify visible foods, estimate grams and macros using typical macro density.\n"
-        "- If visibility is poor, explain in 'notes' and lower confidence.\n"
-        "- Do not output any text outside JSON."
-    )
-)
-
-swaps_agent = Agent(
-    name="food_swaps",
-    model="gemini-2.0-flash",
-    description="Suggest practical food swaps with kcal deltas; can use prior macro JSON.",
-    instruction=(
-        "If macro JSON is provided, base deltas on it. Return a short bullet list with each swap's "
-        "new kcal and Δkcal (negative is fewer), and a one-line summary."
-    ),
-)
+from .agents.diet.diet_agent import diet_agent
+from .agents.workouts.workouts_agent import workouts_agent
 
 root_agent = Agent(
-    name="diet_agent",
+    name="fitness_coach",
     model="gemini-2.0-flash",
-    description="Diet coach that can analyze meal photos OR recommend lower-calorie swaps.",
+    description="Fitness and diet coach that can handle diet (analyze/swaps) and workouts (plans/steps).",
     instruction=(
-        "Decide which specialist to use:\n"
-        "- If the user includes an IMAGE or asks to analyze a meal, TRANSFER to 'macro_scanner'.\n"
-        "- If the user asks for swaps/alternatives/less calories, TRANSFER to 'food_swaps'.\n"
-        "When relevant, pass along the previous macro JSON in context/state."
+        "Route intent:\n"
+        "- Diet image/analysis/swaps → TRANSFER to 'diet_agent'.\n"
+        "- Workout plan (today/full) or exercise steps → TRANSFER to 'workouts_agent'.\n"
+        "Keep answers short and actionable. If unsure, ask one clarifying question."
     ),
-    sub_agents=[macro_scanner_agent, swaps_agent],  # enables LLM-driven delegation
+    sub_agents=[diet_agent, workouts_agent],
 )
