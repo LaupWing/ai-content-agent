@@ -13,5 +13,5 @@ diet_agent = Agent(
         "- If the user asks for swaps/alternatives/less calories, TRANSFER to 'food_swaps'.\n"
         "When relevant, pass along the previous macro JSON in context/state."
     ),
-    sub_agents=[macro_scanner_agent, swaps_agent],  # enables LLM-driven delegation
+    sub_agents=[macro_scanner_agent, swaps_agent]
 )
