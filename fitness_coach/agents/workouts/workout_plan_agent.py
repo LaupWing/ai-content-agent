@@ -32,7 +32,7 @@ def get_full_plan(weeks: int = 1) -> dict:
 workout_plan_agent = Agent(
     name="workout_plan_agent",
     model="gemini-2.0-flash",
-    description="Provides workout plans for today or for a full schedule.",
+    description="You are a workout plan agent. Your only TASK is to provide workout plans for today or for a full schedule.",
     instruction=(
         "You are a workout planner.\n"
         "- If the user asks for today's workout (e.g., 'what do I do today?'), call the tool 'get_today_plan'.\n"

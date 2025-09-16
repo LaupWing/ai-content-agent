@@ -3,7 +3,7 @@ from google.adk.agents import Agent
 macro_scanner_agent = Agent(
     name="macro_scanner_v1",
     model="gemini-2.0-flash",
-    description="Vision-only macro estimator from a meal photo.",
+    description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
     instruction=(
         "The user will include an image. RETURN ONLY STRICT JSON:\n"
         "{items:[{name,grams,protein_g,carb_g,fat_g,kcal}],"
