@@ -1,6 +1,6 @@
 from google.adk.agents import Agent
-from .agents.diet.diet_agent import diet_agent
-from .agents.workouts.workouts_agent import workouts_agent
+from .agents.diet.macro_scanner_agent import macro_scanner_agent
+from .agents.workouts.workout_plan_agent import workout_plan_agent
 
 MODEL_GEMINI_2_0_FLASH = "gemini-2.0-flash"
 
@@ -28,5 +28,5 @@ root_agent = Agent(
         # OUT-OF-SCOPE
         "If a request is outside diet or workouts, say you only handle those two and ask a brief clarifier."
     ),
-    sub_agents=[diet_agent, workouts_agent],
+    sub_agents=[workout_plan_agent, macro_scanner_agent],
 )
