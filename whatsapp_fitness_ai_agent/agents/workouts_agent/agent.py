@@ -3,7 +3,6 @@ from __future__ import annotations
 from google.adk.agents import Agent
 
 from .tools import (
-    api_lookup_user,
     api_workouts_today,
     api_workouts_schema,
     api_workouts_log_by_id,
@@ -33,7 +32,6 @@ workouts_agent = Agent(
         " - If an API returns an error, explain briefly and ask for a correction.\n"
     ),
     tools=[
-        api_lookup_user,
         api_workouts_today,
         api_workouts_schema,
         api_workouts_log_by_id,
