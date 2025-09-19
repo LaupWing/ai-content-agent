@@ -20,7 +20,6 @@ workouts_agent = Agent(
     description="Handles workout intents: show today's workout, show full schema, log sets, list/delete logs.",
     instruction=(
         "You manage workout actions for a fitness app user chatting via WhatsApp.\n"
-        "ALWAYS do this first: call api_lookup_user(whatsapp_id) and if not registered, reply with a short onboarding tip and stop.\n"
         "Supported intents and which tool to call:\n"
         " • 'workout today' → api_workouts_today(whatsapp_id)\n"
         " • 'workout schema/plan' → api_workouts_schema(whatsapp_id)\n"
