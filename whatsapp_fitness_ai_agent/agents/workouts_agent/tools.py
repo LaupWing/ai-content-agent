@@ -5,20 +5,6 @@ from typing import Dict, Any
 API_BASE = os.getenv("LARAVEL_API_BASE_URL", "http://localhost:8000/api").rstrip("/")
 TIMEOUT = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
 
-
-def api_lookup_user(whatsapp_id: str) -> Dict[str, Any]:
-    """Check if a WhatsApp user is registered in the fitness app.
-
-    Args:
-        whatsapp_id (str): The WhatsApp ID/phone in E.164 format (e.g., "+31123456789").
-
-    Returns:
-        dict: Example: {"registered": true, "user": {...}} or {"registered": false}
-    """
-    r = requests.get(f"{API_BASE}/auth/whatsapp/lookup", params={"whatsapp_id": whatsapp_id}, timeout=TIMEOUT)
-    r.raise_for_status()
-    return r.json()
-
 def api_workouts_today(whatsapp_id: str) -> Dict[str, Any]:
     """Return today's planned workout for the user.
 
