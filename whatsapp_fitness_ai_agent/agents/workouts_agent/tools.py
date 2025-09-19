@@ -5,7 +5,6 @@ from typing import Dict, Any
 API_BASE = os.getenv("LARAVEL_API_BASE_URL", "http://localhost:8000/api").rstrip("/")
 TIMEOUT = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
 
-print(f"Using Laravel API base URL: {API_BASE}")
 
 def api_lookup_user(whatsapp_id: str) -> Dict[str, Any]:
     """Check if a WhatsApp user is registered in the fitness app.
