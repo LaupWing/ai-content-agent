@@ -1,20 +1,28 @@
 from __future__ import annotations
 import os, requests
 from typing import Dict, Any
+from google.adk.tools import ToolContext
 
 API_BASE = os.getenv("LARAVEL_API_BASE_URL", "http://localhost:8000/api").rstrip("/")
 TIMEOUT = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
 
-def api_workouts_today(whatsapp_id: str) -> Dict[str, Any]:
+def api_workouts_today(tool_context: ToolContext) -> Dict[str, Any]:
     """Return today's planned workout for the user.
 
     Args:
-        whatsapp_id (str): WhatsApp ID of the user.
+        tool_context (ToolContext): The tool context containing user information.
 
     Returns:
         dict: Plan meta + today's exercises.
     """
-    r = requests.get(f"{API_BASE}/workouts/today", params={"whatsapp_id": whatsapp_id}, timeout=TIMEOUT)
+    uid = tool_context.state.get("user_id")
+    print('here is the user id----------------:')
+    print(uid)
+    print('end of user id----------------:')
+    print('here is the tool context----------------:')
+    print(tool_context)
+    print('end of tool context----------------:')
+    r = requests.get(f"{API_BASE}/workouts/today", params={"whatsapp_id": "31123456789"}, timeout=TIMEOUT)
     r.raise_for_status()
     return r.json()
 
