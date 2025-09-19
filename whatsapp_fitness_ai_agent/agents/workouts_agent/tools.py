@@ -14,6 +14,9 @@ def api_workouts_today(whatsapp_id: str) -> Dict[str, Any]:
     Returns:
         dict: Plan meta + today's exercises.
     """
+    print('here is the whatsapp id----------------:')
+    print(whatsapp_id)
+    print('end of whatsapp id----------------:')
     r = requests.get(f"{API_BASE}/workouts/today", params={"whatsapp_id": whatsapp_id}, timeout=TIMEOUT)
     r.raise_for_status()
     return r.json()
