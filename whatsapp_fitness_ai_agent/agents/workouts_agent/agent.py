@@ -2,7 +2,7 @@
 from __future__ import annotations
 from google.adk.agents import Agent
 
-from agents.workouts_tools import (
+from .tools import (
     api_lookup_user,
     api_workouts_today,
     api_workouts_schema,
