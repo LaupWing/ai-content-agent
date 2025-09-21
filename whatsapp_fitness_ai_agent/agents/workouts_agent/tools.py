@@ -15,18 +15,18 @@ def api_workouts_today(tool_context: ToolContext) -> Dict[str, Any]:
     Returns:
         dict: Plan meta + today's exercises.
     """
-    uid = tool_context.state.get("user_id")
+    uid = tool_context.state.get("public_id")
     print('here is the user id----------------:')
     print(uid)
     print('end of user id----------------:')
     print('here is the tool context state----------------:')
     print(tool_context.state)
     print('end of tool context----------------:')
-    r = requests.get(f"{API_BASE}/workouts/today", params={"whatsapp_id": "31123456789"}, timeout=TIMEOUT)
+    r = requests.get(f"{API_BASE}/workouts/today", params={"public_id": uid}, timeout=TIMEOUT)
     r.raise_for_status()
     return r.json()
 
-def api_workouts_schema(whatsapp_id: str) -> Dict[str, Any]:
+def api_workouts_schema(public_id: str) -> Dict[str, Any]:
     """Return the user's full workout plan/schema.
 
     Args:
@@ -35,11 +35,11 @@ def api_workouts_schema(whatsapp_id: str) -> Dict[str, Any]:
     Returns:
         dict: Plan with days and exercises.
     """
-    r = requests.get(f"{API_BASE}/workouts/schema", params={"whatsapp_id": whatsapp_id}, timeout=TIMEOUT)
+    r = requests.get(f"{API_BASE}/workouts/schema", params={"public_id": public_id}, timeout=TIMEOUT)
     r.raise_for_status()
     return r.json()
 
-def api_workouts_log_by_id(whatsapp_id: str, exercise_id: int, sets: int, reps: int, weight: float, unit: str) -> Dict[str, Any]:
+def api_workouts_log_by_id(public_id: str, exercise_id: int, sets: int, reps: int, weight: float, unit: str) -> Dict[str, Any]:
     """Log a set for a predefined exercise by exercise_id.
 
     The 'unit' must be "kg" or "lb". If the user logged bodyweight, pass weight=0 and unit="kg".
@@ -56,7 +56,7 @@ def api_workouts_log_by_id(whatsapp_id: str, exercise_id: int, sets: int, reps: 
         dict: The created log payload and display echo.
     """
     payload = {
-        "whatsapp_id": whatsapp_id,
+        "public_id": public_id,
         "exercise_id": exercise_id,
         "sets": sets,
         "reps": reps,
