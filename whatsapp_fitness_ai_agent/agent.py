@@ -1,7 +1,7 @@
 # agents/root_agent.py
 from __future__ import annotations
 from google.adk.agents import Agent
-from .agents.workouts_agent.agent import workouts_agent
+from .sub_agents.workouts_agent.agent import workouts_agent
 
 MODEL_GEMINI_2_0_FLASH = "gemini-2.0-flash"
 
