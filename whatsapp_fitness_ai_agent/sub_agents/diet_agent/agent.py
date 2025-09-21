@@ -1,6 +1,7 @@
 # agents/diet_agent/agent.py
 from __future__ import annotations
-from google.adk.agents import Agent
+from google.adk.agents import Agent, AgentTool
+from .macro_scanner_agent import macro_scanner_agent
 
 from .tools import (
     api_diet_calories_today,
@@ -37,6 +38,7 @@ diet_agent = Agent(
         " - Keep responses short and friendly. Never mention internal tools or other agents."
     ),
     tools=[
+        AgentTool(agent = macro_scanner_agent),
         api_diet_calories_today,
         api_diet_macros_today,
         api_diet_add_food_entries,
