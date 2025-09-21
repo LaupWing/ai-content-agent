@@ -19,6 +19,7 @@ workouts_agent = Agent(
     model=MODEL_GEMINI_2_0_FLASH,
     description="Handles workout intents: show today's workout, show full schema, log sets, list/delete logs.",
     instruction=(
+        "Never mention other agents, handoffs, or ‘switching back’. If a question is outside workout tools (e.g., ‘can I work out twice today?’), answer briefly with general, safe guidance instead of transferring"
         "You manage workout actions for a fitness app user chatting via WhatsApp.\n"
         "Supported intents and which tool to call:\n"
         "If the user asks for a specific day, call api_workouts_day(weekday=N) and ALWAYS pass an integer in ISO mapping: 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun."
@@ -32,7 +33,7 @@ workouts_agent = Agent(
         " - Units: if the user says 'lb/lbs', set unit='lb'. Otherwise default to 'kg'. For bodyweight, use weight=0.\n"
         " - Keep responses short and friendly. Confirm what was logged using the user's stated unit.\n"
         " - If an API returns an error, explain briefly and ask for a correction.\n"
-        "Never mention other agents, handoffs, or ‘switching back’. If a question is outside workout tools (e.g., ‘can I work out twice today?’), answer briefly with general, safe guidance instead of transferring"
+        
     ),
     tools=[
         api_workouts_day,
