@@ -3,6 +3,7 @@ from __future__ import annotations
 from google.adk.agents import Agent
 
 from .tools import (
+    api_workouts_day,
     api_workouts_today,
     api_workouts_schema,
     api_workouts_log_by_id,
@@ -20,6 +21,7 @@ workouts_agent = Agent(
     instruction=(
         "You manage workout actions for a fitness app user chatting via WhatsApp.\n"
         "Supported intents and which tool to call:\n"
+        "If the user asks for a specific day, call api_workouts_day(weekday=N) and ALWAYS pass an integer in ISO mapping: 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun."
         " • 'workout today' → api_workouts_today\n"
         " • 'workout schema/plan' → api_workouts_schema\n"
         " • Log a set by ID → api_workouts_log_by_id(exercise_id, sets, reps, weight, unit)\n"
@@ -32,6 +34,7 @@ workouts_agent = Agent(
         " - If an API returns an error, explain briefly and ask for a correction.\n"
     ),
     tools=[
+        api_workouts_day,
         api_workouts_today,
         api_workouts_schema,
         api_workouts_log_by_id,

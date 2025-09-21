@@ -1,6 +1,6 @@
 from __future__ import annotations
 import os, requests
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from google.adk.tools import ToolContext
 
 API_BASE = os.getenv("LARAVEL_API_BASE_URL", "http://localhost:8000/api").rstrip("/")
@@ -112,5 +112,27 @@ def api_workouts_delete_log(whatsapp_id: str, log_id: int) -> Dict[str, Any]:
         dict: {"deleted": true}
     """
     r = requests.delete(f"{API_BASE}/workouts/log/{log_id}", params={"whatsapp_id": whatsapp_id}, timeout=TIMEOUT)
+    r.raise_for_status()
+    return r.json()
+
+def api_workouts_day(tool_context: ToolContext, weekday: Optional[int] = None) -> Dict[str, Any]:
+    """Return the planned workout for a given numeric weekday (1..7). If absent, backend treats it as 'today'.
+
+    Args:
+        tool_context: Provided by ADK; reads session.state['public_id'].
+        weekday: ISO weekday 1..7 (Mon..Sun). Example: 1=Mon, 7=Sun.
+
+    Returns:
+        dict: Plan meta + exercises for that day.
+    """
+    public_id = tool_context.state.get("public_id")
+    if not public_id:
+        raise ValueError("Missing public_id in session.state")
+
+    params = {"public_id": public_id}
+    if weekday is not None:
+        params["weekday"] = int(weekday)
+
+    r = requests.get(f"{API_BASE}/workouts/day", params=params, timeout=TIMEOUT)
     r.raise_for_status()
     return r.json()
