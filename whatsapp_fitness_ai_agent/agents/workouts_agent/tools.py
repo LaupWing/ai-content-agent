@@ -16,12 +16,7 @@ def api_workouts_today(tool_context: ToolContext) -> Dict[str, Any]:
         dict: Plan meta + today's exercises.
     """
     uid = tool_context.state.get("public_id")
-    print('here is the user id----------------:')
-    print(uid)
-    print('end of user id----------------:')
-    print('here is the tool context state----------------:')
-    print(tool_context.state)
-    print('end of tool context----------------:')
+    
     r = requests.get(f"{API_BASE}/workouts/today", params={"public_id": uid}, timeout=TIMEOUT)
     r.raise_for_status()
     return r.json()
