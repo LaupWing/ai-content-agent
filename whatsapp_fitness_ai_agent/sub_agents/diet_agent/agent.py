@@ -41,11 +41,11 @@ diet_agent = Agent(
     ),
     tools=[
         AgentTool(agent = macro_scanner_agent),
-        api_diet_calories_today,
-        api_diet_macros_today,
-        api_diet_add_food_entries,
-        api_diet_meals_today,
-        api_diet_meals,
-        api_diet_delete_meal,
+        # api_diet_calories_today,
+        # api_diet_macros_today,
+        # api_diet_add_food_entries,
+        # api_diet_meals_today,
+        # api_diet_meals,
+        # api_diet_delete_meal,
     ],
 )
