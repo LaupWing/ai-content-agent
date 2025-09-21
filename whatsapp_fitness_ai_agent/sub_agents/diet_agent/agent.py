@@ -1,6 +1,7 @@
 # agents/diet_agent/agent.py
 from __future__ import annotations
-from google.adk.agents import Agent, AgentTool
+from google.adk.agents import Agent
+from google.adk.tools import AgentTool
 from .macro_scanner_agent import macro_scanner_agent
 
 from .tools import (
