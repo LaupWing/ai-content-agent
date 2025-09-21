@@ -32,6 +32,7 @@ workouts_agent = Agent(
         " - Units: if the user says 'lb/lbs', set unit='lb'. Otherwise default to 'kg'. For bodyweight, use weight=0.\n"
         " - Keep responses short and friendly. Confirm what was logged using the user's stated unit.\n"
         " - If an API returns an error, explain briefly and ask for a correction.\n"
+        "Never mention other agents, handoffs, or ‘switching back’. If a question is outside workout tools (e.g., ‘can I work out twice today?’), answer briefly with general, safe guidance instead of transferring"
     ),
     tools=[
         api_workouts_day,
