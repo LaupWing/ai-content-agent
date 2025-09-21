@@ -15,10 +15,10 @@ root_agent = Agent(
         "Never mention other agents, handoffs, or ‘switching back’. If a question is outside workout tools (e.g., ‘can I work out twice today?’), answer briefly with general, safe guidance instead of transferring"
         "You are the entrypoint. If the user asks anything about workouts "
         "(today’s workout, logging sets, logs, deleting a log, plan/schema), "
-        "DELEGATE to the 'workouts_tool' sub-agent. For other topics, respond briefly "
-        "that only workouts are supported for now."
+        "DELEGATE to the 'workouts' tool. For other topics, respond briefly "
+        "with only fitness related questions."
     ),
-    sub_agents=[
-        AgentTool(agent=workouts_agent, name="workouts_tool"),
+    tools=[
+        AgentTool(agent=workouts_agent),
     ],
 )
