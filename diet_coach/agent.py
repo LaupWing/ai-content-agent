@@ -7,7 +7,11 @@ MODEL_GEMINI_2_0_FLASH = "gemini-2.0-flash"
 root_agent = Agent(
     name="diet_agent",
     model=MODEL_GEMINI_2_0_FLASH,
-    description="",
+    description=
+        "Help users reach weight goals—lose, gain, or maintain—by making food logging effortless. "
+        "Analyze meal photos or short texts to estimate calories and macros and log them automatically, "
+        "then suggest smarter swaps, portions, and quick recipes, "
+        "and surface patterns with simple, motivating recommendations to keep progress on track.",
     instruction=(
     ),
     tools=[
