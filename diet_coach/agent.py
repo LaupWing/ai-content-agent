@@ -1,6 +1,7 @@
 # agents/root_agent.py
 from __future__ import annotations
 from google.adk.agents import Agent
+from google.adk.tools import AgentTool
 from .sub_agents.macro_scanner import macro_scan_pipeline
 from . import prompt
 
@@ -16,6 +17,6 @@ root_agent = Agent(
         "and surface patterns with simple, motivating recommendations to keep progress on track.",
     instruction=prompt.DIET_COACH_PROMPT,
     tools=[
-
+        AgentTool(agent=macro_scan_pipeline),
     ],
 )
