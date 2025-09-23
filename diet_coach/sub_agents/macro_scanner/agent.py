@@ -39,7 +39,7 @@ def save_macro_scan(tool_context: ToolContext, scan_json: str, notes: str = "") 
 macro_save_agent = Agent(
     name="macro_save_v1",
     model="gemini-2.0-flash",
-    description="Saves the previously scanned macro JSON and replies with it.",
+    description="Confirms the scanned macro JSON with the user before saving.",
     instruction=(
         "You already have the macro JSON in state as {macro_scan}.\n"
         "1) Call save_macro_scan(scan={macro_scan}, notes='vision scan').\n"
