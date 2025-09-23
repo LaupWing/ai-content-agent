@@ -25,6 +25,20 @@ def save_macro_scan(tool_context: ToolContext, scan: Dict[str, Any], notes: str 
         return {"saved": r.ok, "backend_response": backend, "echo": scan}
     except requests.RequestException as e:
         return {"saved": False, "backend_response": {"error": str(e)}, "echo": scan}
+    
+macro_save_agent = Agent(
+    name="macro_save_v1",
+    model="gemini-2.0-flash",
+    description="Saves the previously scanned macro JSON and replies with it.",
+    instruction=(
+        "You already have the macro JSON in state as {macro_scan}.\n"
+        "1) Call save_macro_scan(scan={macro_scan}, notes='vision scan').\n"
+        "2) Then reply briefly that it was saved, and PRINT the JSON in a fenced code block.\n"
+        "Never mention tools or agents."
+    ),
+    tools=[save_macro_scan],
+)
+
 
 macro_scanner_agent = Agent(
     name="macro_scanner_v1",
