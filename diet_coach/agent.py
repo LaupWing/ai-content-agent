@@ -1,6 +1,7 @@
 # agents/root_agent.py
 from __future__ import annotations
 from google.adk.agents import Agent
+from . import prompt
 
 MODEL_GEMINI_2_0_FLASH = "gemini-2.0-flash"
 
