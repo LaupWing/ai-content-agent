@@ -3,7 +3,7 @@ from typing import Dict, Any
 from google.adk.tools import ToolContext
 import os, requests
 
-API_BASE = os.getenv("LARAVEL_API_BASE_URL", "http://localhost:8000/api").rstrip("/")
+API_BASE = os.getenv("LARAVEL_API_BASE_URL", "http://localhost:8001/api").rstrip("/")
 TIMEOUT  = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
 
 def api_diet_macros_today(tool_context: ToolContext) -> Dict[str, Any]:
