@@ -8,27 +8,22 @@ import os, requests, json
 SAVE_ENDPOINT = os.getenv("SAVE_ENDPOINT", "http://localhost:8000/api/debug/save_scan")
 TIMEOUT = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
 
-def save_macro_scan(tool_context: ToolContext, scan: Dict[str, Any], notes: str | None = None) -> Dict[str, Any]:
-    """Persist a macro scan result for the current user (reads session.state['public_id'])."""
-    print("save_macro_scan called with:", scan, notes)
-    
-    return {"saved": True, "backend_response": {"status": "mocked"}, "echo": scan}
-    # public_id = tool_context.state.get("public_id")
-    # if not public_id:
-    #     raise ValueError("Missing public_id in session.state")
+def save_macro_scan(tool_context: ToolContext, scan: Any, notes: str | None = None) -> Dict[str, Any]:
+    """Persist a macro scan result (reads session.state['public_id']). Returns {saved, backend_response, echo}."""
+    # Accept either a JSON string or a dict
+    if isinstance(scan, str):
+        try:
+            scan_obj = json.loads(scan)
+        except json.JSONDecodeError:
+            # If the model returned non-JSON, just echo the raw string
+            scan_obj = {"raw": scan}
+    else:
+        scan_obj = scan
 
-    # payload = {"public_id": public_id, "scan": scan}
-    # if notes: payload["notes"] = notes
+    print("save_macro_scan called with:", scan_obj, notes)
 
-    # try:
-    #     r = requests.post(SAVE_ENDPOINT, json=payload, timeout=TIMEOUT)
-    #     try:
-    #         backend = r.json()
-    #     except Exception:
-    #         backend = {"status_code": r.status_code, "text": r.text}
-    #     return {"saved": r.ok, "backend_response": backend, "echo": scan}
-    # except requests.RequestException as e:
-    #     return {"saved": False, "backend_response": {"error": str(e)}, "echo": scan}
+    # mock success for now
+    return {"saved": True, "backend_response": {"status": "mocked"}, "echo": scan_obj}
     
 macro_save_agent = Agent(
     name="macro_save_v1",
