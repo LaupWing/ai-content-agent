@@ -6,42 +6,41 @@ import os, requests, json
 from . import prompts
 
 
-SAVE_ENDPOINT = os.getenv("SAVE_ENDPOINT", "http://localhost:8000/api/debug/save_scan")
+API_BASE = os.getenv("SAVE_ENDPOINT", "http://localhost:8001/api")
 TIMEOUT = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
 
-def save_macro_scan(tool_context: ToolContext, scan_json: str, notes: str = "") -> Dict[str, Any]:
-    """
-    Persist a macro scan result for the current user.
-    AFC-friendly signature: only simple JSON types (str).
-    """
-    # Parse JSON safely
-    try:
-        scan = json.loads(scan_json)
-    except json.JSONDecodeError:
-        # If the model didn't produce valid JSON, store raw
-        scan = {"raw": scan_json}
+def api_diet_add_food_entries(
+    tool_context: ToolContext,
+    items_json: str,          # JSON string: e.g. '[{"name":"Oatmeal","grams":80,"calories":300}]'
+    label: str = "",
+    notes: str = "",
+    source: str = "manual",
+    date: str = "",
+) -> Dict[str, Any]:
+    """POST /diet/food_entries with whatever items you pass in. No normalization."""
+    public_id = tool_context.state.get("public_id")
+    if not public_id:
+        raise ValueError("Missing public_id in session.state")
 
-    # If you need the user identity:
-    # public_id = tool_context.state.get("public_id")  # ensure you set this in session.state
+    # Just parse to ensure it's a JSON array for the POST body.
+    items = json.loads(items_json)  # let it raise if malformed
 
-    # Mocked response (re-enable HTTP when ready)
-    # payload = {"public_id": public_id, "scan": scan, "notes": notes}
-    # r = requests.post(SAVE_ENDPOINT, json=payload, timeout=TIMEOUT)
-    # backend = r.json() if r.headers.get("content-type","").startswith("application/json") else {"status_code": r.status_code, "text": r.text}
-    backend = {"status": "mocked"}
-    print("--------------------------")
-    print("Here is the raw_json", scan)
-    print("Here is the backend response", backend)
-    print("--------------------------")
+    payload: Dict[str, Any] = {"public_id": public_id, "items": items}
+    if label:  payload["label"]  = label
+    if notes:  payload["notes"]  = notes
+    if source: payload["source"] = source
+    if date:   payload["date"]   = date
 
-    return {"saved": True, "backend_response": backend, "echo": scan}
+    r = requests.post(f"{API_BASE}/diet/food_entries", json=payload, timeout=TIMEOUT)
+    r.raise_for_status()
+    return r.json()
     
 macro_create_record_agent = Agent(
     name="macro_create_record_v1",
     model="gemini-2.0-flash",
     description="Confirms the scanned macro JSON with the user before saving.",
     instruction=prompts.MACRO_SAVE_PROMPT,
-    tools=[save_macro_scan],
+    tools=[api_diet_add_food_entries],  # wrap in FunctionTool if needed
 )
 
 macro_scanner_agent = Agent(
