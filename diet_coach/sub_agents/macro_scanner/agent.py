@@ -3,6 +3,7 @@ from google.adk.agents import SequentialAgent
 from typing import Dict, Any
 from google.adk.tools import ToolContext
 import os, requests, json
+from . import prompts
 
 
 SAVE_ENDPOINT = os.getenv("SAVE_ENDPOINT", "http://localhost:8000/api/debug/save_scan")
@@ -52,16 +53,7 @@ macro_scanner_agent = Agent(
     name="macro_scanner_v1",
     model="gemini-2.0-flash",
     description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
-    instruction=(
-        "The user will include an image. RETURN ONLY STRICT JSON:\n"
-        "{"
-        "items:["
-        "{name,grams,protein_gram,carb_gram,fat_gram,calories, quantity}],"
-        "totals:{protein_gram,carb_gram,fat_gram,calories}, confidence:number, notes:string}\n"
-        "- Identify visible foods, estimate grams and macros using typical macro density.\n"
-        "- If visibility is poor, explain in 'notes' and lower confidence.\n"
-        "- Do not output any text outside JSON."
-    ),
+    instruction=prompts.MACRO_SCANNER_PROMPT,
     output_key="macro_scan",
 )
 
