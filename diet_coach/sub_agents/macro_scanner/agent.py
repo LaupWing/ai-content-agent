@@ -36,8 +36,8 @@ def save_macro_scan(tool_context: ToolContext, scan_json: str, notes: str = "") 
 
     return {"saved": True, "backend_response": backend, "echo": scan}
     
-macro_save_agent = Agent(
-    name="macro_save_v1",
+macro_create_record_agent = Agent(
+    name="macro_create_record_v1",
     model="gemini-2.0-flash",
     description="Confirms the scanned macro JSON with the user before saving.",
     instruction=prompts.MACRO_SAVE_PROMPT,
@@ -56,5 +56,5 @@ macro_scanner_agent = Agent(
 macro_scan_pipeline = SequentialAgent(
     name="macro_scan_pipeline",
     description="Step 1: analyze photo → Step 2: save and show JSON.",
-    sub_agents=[macro_scanner_agent, macro_save_agent],
+    sub_agents=[macro_scanner_agent, macro_create_record_agent],
 )
