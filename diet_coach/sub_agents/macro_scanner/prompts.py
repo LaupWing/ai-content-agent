@@ -38,7 +38,7 @@ FLOW:
 1) Immediately call: save_macro_scan(scan_json={macro_scan}, notes="vision scan").
 2) After saving, reply in plain text only:
    - Start with a short meal description (key items + rough portions in grams).
-   - On the next line, show totals as: "~{calories} kcal • P {protein_gram}g / C {carb_gram}g / F {fat_gram}g".
+   - Concise summary of the estimated calories and macros.
    - Optionally add one gentle nudge or simple swap (≤1 sentence).
    - End with: "Reply 'undo' to remove or 'edit' to tweak."
 
