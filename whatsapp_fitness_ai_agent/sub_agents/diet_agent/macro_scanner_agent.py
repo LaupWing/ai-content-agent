@@ -1,4 +1,5 @@
 from google.adk.agents import Agent
+from google.adk.agents import SequentialAgent
 from typing import Dict, Any
 from google.adk.tools import ToolContext
 import os, requests, json
@@ -42,7 +43,7 @@ macro_save_agent = Agent(
     tools=[save_macro_scan],
 )
 
-macro_scan_photo_agent = Agent(
+macro_scanner_agent = Agent(
     name="macro_scanner_v1",
     model="gemini-2.0-flash",
     description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
@@ -58,17 +59,8 @@ macro_scan_photo_agent = Agent(
 )
 
 
-macro_scanner_agent = Agent(
-    name="macro_scanner_v1",
-    model="gemini-2.0-flash",
-    description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
-    instruction=(
-        "The user will include an image. RETURN ONLY STRICT JSON:\n"
-        "{items:[{name,grams,protein_g,carb_g,fat_g,kcal}],"
-        " totals:{protein_g,carb_g,fat_g,kcal}, confidence:number, notes:string}\n"
-        "- Identify visible foods, estimate grams and macros using typical macro density.\n"
-        "- If visibility is poor, explain in 'notes' and lower confidence.\n"
-        "- Do not output any text outside JSON."
-    ),
-    tools=[],
+macro_scan_pipeline = SequentialAgent(
+    name="macro_scan_pipeline",
+    description="Step 1: analyze photo → Step 2: save and show JSON.",
+    sub_agents=[macro_scanner_agent, macro_save_agent],
 )
