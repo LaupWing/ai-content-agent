@@ -55,6 +55,6 @@ macro_scanner_agent = Agent(
 
 macro_scan_pipeline = SequentialAgent(
     name="macro_scan_pipeline",
-    description="Step 1: analyze photo → Step 2: save and show JSON.",
+    description="Step 1: analyze photo → Step 2: save JSON.",
     sub_agents=[macro_scanner_agent, macro_create_record_agent],
 )
