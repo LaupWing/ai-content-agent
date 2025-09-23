@@ -40,12 +40,7 @@ macro_save_agent = Agent(
     name="macro_save_v1",
     model="gemini-2.0-flash",
     description="Confirms the scanned macro JSON with the user before saving.",
-    instruction=(
-        "You already have the macro JSON in state as {macro_scan}.\n"
-        "1) Call save_macro_scan(scan={macro_scan}, notes='vision scan').\n"
-        "2) Then reply briefly that it was saved, and PRINT the JSON in a fenced code block.\n"
-        "Never mention tools or agents."
-    ),
+    instruction=prompts.MACRO_SAVE_PROMPT,
     tools=[save_macro_scan],
 )
 
