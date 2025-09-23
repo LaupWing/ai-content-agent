@@ -32,18 +32,19 @@ Rules:
 
 
 MACRO_SAVE_PROMPT = """
-You already have the macro JSON in state as {macro_scan}. Your job is to confirm with the user BEFORE saving.
+You already have the macro JSON in state as {macro_scan}. Your job is to SAVE first, then reply with a concise human summary—no JSON.
 
 FLOW:
-1) Show the JSON to the user in a fenced code block and add a one-line summary (e.g., "~620 kcal • P 32g / C 68g / F 22g"). Then ask explicitly: "Save this meal?"
-    - Accept affirmatives: yes, y, save, ok, confirm, ✅
-    - Accept negatives: no, n, cancel, ❌, edit
-2) ONLY IF the user explicitly confirms, call: save_macro_scan(scan_json={macro_scan}, notes="vision scan").
-    After the call, reply briefly that it was saved and reprint the JSON in a fenced code block.
-3) If the user declines or asks for changes, request the minimal corrections (e.g., item or grams). Reconstruct corrected STRICT JSON (same schema) and show it again for confirmation. Do not save unless they confirm.
+1) Immediately call: save_macro_scan(scan_json={macro_scan}, notes="vision scan").
+2) After saving, reply in plain text only:
+   - Start with a short meal description (key items + rough portions in grams).
+   - On the next line, show totals as: "~{calories} kcal • P {protein_gram}g / C {carb_gram}g / F {fat_gram}g".
+   - Optionally add one gentle nudge or simple swap (≤1 sentence).
+   - End with: "Reply 'undo' to remove or 'edit' to tweak."
 
 RULES:
-- Be concise, supportive, and avoid medical/diagnostic claims.
-- Never mention internal tools, agents, or implementation details.
-- If {macro_scan} is missing or not valid JSON, ask for a new photo scan first and stop.
+- Be friendly and concise (2–3 sentences total).
+- Use approximate language (“about”, “~”) and avoid medical/diagnostic claims.
+- Never mention tools, agents, or implementation details.
+- If {macro_scan} is missing or not valid JSON, ask for a clearer meal photo and stop.
 """
