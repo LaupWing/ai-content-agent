@@ -10,7 +10,7 @@ MODEL_GEMINI_2_0_FLASH = "gemini-2.0-flash"
 root_agent = Agent(
     name="fitness_coach",
     model=MODEL_GEMINI_2_0_FLASH,
-    description="Routes user requests to the correct capability.",
+    description="The main coordinator agent. Handles user requests and delegates workouts/diets to specialists.",
     instruction=(
         "You are the entrypoint. If the user asks anything about workouts "
         "(today’s workout, logging sets, logs, deleting a log, plan/schema), "
