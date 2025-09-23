@@ -24,13 +24,12 @@ def api_diet_add_food_entries(
 
     # Just parse to ensure it's a JSON array for the POST body.
     items = json.loads(items_json)  # let it raise if malformed
-
     payload: Dict[str, Any] = {"public_id": public_id, "items": items}
     if label:  payload["label"]  = label
     if notes:  payload["notes"]  = notes
     if source: payload["source"] = source
     if date:   payload["date"]   = date
-
+    print("Payload to /diet/food_entries:", payload)
     r = requests.post(f"{API_BASE}/diet/food_entries", json=payload, timeout=TIMEOUT)
     r.raise_for_status()
     return r.json()
