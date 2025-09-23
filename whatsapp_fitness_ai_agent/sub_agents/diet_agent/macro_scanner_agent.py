@@ -8,22 +8,29 @@ import os, requests, json
 SAVE_ENDPOINT = os.getenv("SAVE_ENDPOINT", "http://localhost:8000/api/debug/save_scan")
 TIMEOUT = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
 
-def save_macro_scan(tool_context: ToolContext, scan: Any, notes: str | None = None) -> Dict[str, Any]:
-    """Persist a macro scan result (reads session.state['public_id']). Returns {saved, backend_response, echo}."""
-    # Accept either a JSON string or a dict
-    if isinstance(scan, str):
-        try:
-            scan_obj = json.loads(scan)
-        except json.JSONDecodeError:
-            # If the model returned non-JSON, just echo the raw string
-            scan_obj = {"raw": scan}
-    else:
-        scan_obj = scan
+def save_macro_scan(tool_context: ToolContext, scan_json: str, notes: str = "") -> Dict[str, Any]:
+    """
+    Persist a macro scan result for the current user.
+    AFC-friendly signature: only simple JSON types (str).
+    """
+    # Parse JSON safely
+    try:
+        scan = json.loads(scan_json)
+    except json.JSONDecodeError:
+        # If the model didn't produce valid JSON, store raw
+        scan = {"raw": scan_json}
 
-    print("save_macro_scan called with:", scan_obj, notes)
+    # If you need the user identity:
+    # public_id = tool_context.state.get("public_id")  # ensure you set this in session.state
 
-    # mock success for now
-    return {"saved": True, "backend_response": {"status": "mocked"}, "echo": scan_obj}
+    # Mocked response (re-enable HTTP when ready)
+    # payload = {"public_id": public_id, "scan": scan, "notes": notes}
+    # r = requests.post(SAVE_ENDPOINT, json=payload, timeout=TIMEOUT)
+    # backend = r.json() if r.headers.get("content-type","").startswith("application/json") else {"status_code": r.status_code, "text": r.text}
+    backend = {"status": "mocked"}
+    print("Here is the raw_json", scan)
+
+    return {"saved": True, "backend_response": backend, "echo": scan}
     
 macro_save_agent = Agent(
     name="macro_save_v1",
