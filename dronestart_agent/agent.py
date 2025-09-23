@@ -1,5 +1,7 @@
 from google.adk.agents import Agent
+from google.adk.tools import VertexAiSearchTool
 from google.cloud import storage
+import os
 
 def get_txt_file(path: str, bucket_name: str) -> str:
     """
@@ -27,13 +29,6 @@ root_agent = Agent(
     ),
 )
 
-
-# agents/root_agent.py
-import os
-from google.adk.tools import VertexAiSearchTool
-
-# Point this to your Vertex AI Search data store that indexes ONE fixed doc (or folder)
-# Example: projects/<PROJECT_ID>/locations/<REGION>/collections/default_collection/dataStores/<DATASTORE_ID>
 DATASTORE_PATH = os.getenv("VERTEX_SEARCH_DATASTORE", "projects/CHANGE_ME/locations/REGION/collections/default_collection/dataStores/DATASTORE_ID")
 
 vertex_search_tool = VertexAiSearchTool(data_store_id=DATASTORE_PATH)
