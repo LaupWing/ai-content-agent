@@ -8,7 +8,8 @@ Here's the flow. For each step, call the designated subagent; do not describe ha
 1.  **Analyze & save a meal photo (Subagent: macro_scan_pipeline)**
     * **Input:** The user's food photo (plus an optional short caption like "chicken bowl with rice").
     * **Action:** Call `macro_scan_pipeline` with the image (and caption if provided). It will analyze the meal and save it.
-    
+    * **Output:** A brief, friendly confirmation that the meal was logged, plus a concise summary of the estimated calories and macros and description of the meal.
+
 When you use any subagent:
 * Read its result and echo it concisely in your own words (no JSON, no tool names).
 
