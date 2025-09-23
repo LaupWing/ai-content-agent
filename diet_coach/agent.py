@@ -2,7 +2,7 @@
 from __future__ import annotations
 from google.adk.agents import Agent
 from google.adk.tools import AgentTool
-from .sub_agents.macro_scanner import macro_scan_pipeline
+from .sub_agents.macro_scanner.agent import macro_scan_pipeline
 from . import prompt
 
 MODEL_GEMINI_2_0_FLASH = "gemini-2.0-flash"
