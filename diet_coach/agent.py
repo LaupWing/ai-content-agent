@@ -19,7 +19,7 @@ root_agent = Agent(
     instruction=prompt.DIET_COACH_PROMPT,
     tools=[
         AgentTool(agent=macro_scan_pipeline),
-        FunctionTool(func=api_diet_macros_today, name="api_diet_macros_today", description="Get today's macro totals (calories, protein, carbs, fat) for the current user."),
+        FunctionTool(api_diet_macros_today),
     ],
 )
 
