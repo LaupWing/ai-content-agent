@@ -55,7 +55,7 @@ macro_scanner_agent = Agent(
         "- If visibility is poor, explain in 'notes' and lower confidence.\n"
         "- Do not output any text outside JSON."
     ),
-    tools=[],
+    output_key="macro_scan",
 )
 
 
