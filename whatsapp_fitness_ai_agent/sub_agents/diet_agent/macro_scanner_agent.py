@@ -1,4 +1,30 @@
 from google.adk.agents import Agent
+from typing import Dict, Any
+from google.adk.tools import ToolContext
+import os, requests, json
+
+
+SAVE_ENDPOINT = os.getenv("SAVE_ENDPOINT", "http://localhost:8000/api/debug/save_scan")
+TIMEOUT = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
+
+def save_macro_scan(tool_context: ToolContext, scan: Dict[str, Any], notes: str | None = None) -> Dict[str, Any]:
+    """Persist a macro scan result for the current user (reads session.state['public_id'])."""
+    public_id = tool_context.state.get("public_id")
+    if not public_id:
+        raise ValueError("Missing public_id in session.state")
+
+    payload = {"public_id": public_id, "scan": scan}
+    if notes: payload["notes"] = notes
+
+    try:
+        r = requests.post(SAVE_ENDPOINT, json=payload, timeout=TIMEOUT)
+        try:
+            backend = r.json()
+        except Exception:
+            backend = {"status_code": r.status_code, "text": r.text}
+        return {"saved": r.ok, "backend_response": backend, "echo": scan}
+    except requests.RequestException as e:
+        return {"saved": False, "backend_response": {"error": str(e)}, "echo": scan}
 
 macro_scanner_agent = Agent(
     name="macro_scanner_v1",
