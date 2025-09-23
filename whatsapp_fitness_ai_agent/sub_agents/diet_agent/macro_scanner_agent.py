@@ -28,7 +28,10 @@ def save_macro_scan(tool_context: ToolContext, scan_json: str, notes: str = "") 
     # r = requests.post(SAVE_ENDPOINT, json=payload, timeout=TIMEOUT)
     # backend = r.json() if r.headers.get("content-type","").startswith("application/json") else {"status_code": r.status_code, "text": r.text}
     backend = {"status": "mocked"}
+    print("--------------------------")
     print("Here is the raw_json", scan)
+    print("Here is the backend response", backend)
+    print("--------------------------")
 
     return {"saved": True, "backend_response": backend, "echo": scan}
     
