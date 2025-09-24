@@ -1,34 +1,28 @@
-import os
 from google.adk.agents import Agent
-from playwright.async_api import async_playwright
-
-async def fetch_with_playwright(url: str) -> dict:
-    """
-    Render a page with Playwright Async API and save screenshot in ./images.
-    """
-    try:
-        os.makedirs("images", exist_ok=True)
-        screenshot_path = os.path.join("images", "snap.png")
-
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False)
-            page = await browser.new_page(user_agent="Mozilla/5.0 (ADK Agent)")
-            print(f"Navigating to {url} ...")
-            await page.goto(url, wait_until="networkidle")
-            print("Page loaded.")
-            html = await page.content()
-            await page.screenshot(path=screenshot_path, full_page=True)
-            await browser.close()
-
-        return {"status": "success", "html": html, "screenshot_path": screenshot_path}
-    except Exception as e:
-        return {"status": "error", "error": str(e)}
 
 root_agent = Agent(
-    name="playwright_fetcher",
-    model="gemini-2.0-flash",
-    description="Fetches a website using Playwright (async)",
-    instruction="Call fetch_with_playwright(url=...) to get HTML and screenshot in ./images.",
-    tools=[fetch_with_playwright],
+    name="styleboard_creator",
+    model="gemini-1.5-flash",  # multimodal; reads the uploaded image
+    description="Creates a style seed from an attached image (palette, roles, vibe, fonts).",
+    instruction=(
+        "You are a brand stylist. The user will ATTACH one image in this chat.\n"
+        "Analyze the attached image and OUTPUT STRICT JSON ONLY with this shape:\n"
+        "{\n"
+        '  "palette": ["#RRGGBB", "..."],                // up to 6, most important first\n'
+        '  "roles": { "primary": "#...", "secondary": "#...", "accent": "#..." },\n'
+        '  "vibe": ["adjective1","adjective2","adjective3"],\n'
+        '  "fonts": { "heading": ["Google Font A","Google Font B"],\n'
+        '             "body": ["Google Font C","Google Font D"],\n'
+        '             "alt": ["Display Font"] },\n'
+        '  "notes": ["short suggestion 1","short suggestion 2"],\n'
+        '  "css_vars": { "--color-primary": "#...", "--color-secondary":"#...", "--color-accent":"#..." }\n'
+        "}\n"
+        "Rules:\n"
+        "- Use colors actually present in the image (hex).\n"
+        "- Pick roles from the palette.\n"
+        "- Use only Google Fonts in suggestions.\n"
+        "- NO extra text, explanations, or markdown — return JSON only.\n"
+        "- If no image is attached, return: {\"status\":\"error\",\"error\":\"no_image\"}\n"
+    ),
+    tools=[],  
 )
-
