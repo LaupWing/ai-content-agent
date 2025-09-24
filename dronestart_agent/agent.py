@@ -7,7 +7,7 @@ from google.genai import types
 
 API_KEY   = os.getenv("GOOGLE_API_KEY")            # <-- required
 MODEL     = os.getenv("FILES_MODEL", "gemini-2.0-flash")
-LOCAL_DOC = os.getenv("LOCAL_DOC", "path/to/your/file.txt")  # <-- set this
+LOCAL_DOC = os.getenv("LOCAL_DOC", "./1_9.txt")  # <-- set this
 
 def files_qa(question: str) -> Dict[str, Any]:
     """
