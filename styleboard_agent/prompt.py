@@ -1,0 +1,3 @@
+GOOGLE_ADS_PROMPT = """
+
+"""
