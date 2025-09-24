@@ -11,11 +11,7 @@ root_agent = Agent(
     model="gemini-2.0-flash",
     description="Answers questions about a single legal document indexed from Firebase Storage (GCS).",
     instruction=(
-        "You must first query the vertex_ai_search tool for every user question and base your answer "
-        "only on the retrieved passages from the indexed document. "
-        "If no relevant passage is found, say you couldn't find it in the document. "
-        "Be concise and include brief citations (section/heading/line) when available. "
-        "Do not rely on prior knowledge; do not fabricate content."
+        "You must first query the vertex_ai_search tool for every user question and base your answer on the retrieved results. "
     ),
     tools=[vertex_search_tool],
 )
