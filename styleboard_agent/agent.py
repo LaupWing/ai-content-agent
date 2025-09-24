@@ -1,19 +1,37 @@
-from google.adk.agents import Agent
+# pip install google-adk playwright
+# playwright install chromium
 
+from google.adk.agents import Agent, run_app
+
+# --- simple Playwright fetcher ---
+def fetch_with_playwright(url: str) -> dict:
+    """
+    Render a page with Playwright (Chromium) and return HTML + screenshot path.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        return {"status": "error", "error": "playwright not installed"}
+
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page(user_agent="Mozilla/5.0 (ADK Agent)")
+            page.goto(url, wait_until="networkidle", timeout=30000)
+            html = page.content()
+            screenshot_path = "/tmp/snap.png"
+            page.screenshot(path=screenshot_path, full_page=True)
+            browser.close()
+            return {"status": "success", "html": html, "screenshot_path": screenshot_path}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+# --- root agent ---
 root_agent = Agent(
-    name="quality_score_watcher",
+    name="playwright_fetcher",
     model="gemini-2.0-flash",
-    description=(
-        "Agent that inspects Google Ads Quality Score components and suggests "
-        "ad + landing-page copy improvements in Dutch for moving companies."
-    ),
-    instruction=(
-        "Je helpt bij het verbeteren van Google Ads prestaties voor het trefwoord "
-        "'verhuisbedrijf'. Gebruik de tool-output om te bepalen welke factor(en) "
-        "de Quality Score beperken: expected CTR, ad relevance of landing page "
-        "experience. Geef daarna concrete aanbevelingen en genereer beknopte NL-"
-        "advertentieteksten (3 varianten) en landingspagina-secties: H1, subkop, "
-        "bullet points en primaire CTA. Voeg voorbeeld-URL-slugs per stad toe."
-    ),
-    tools=[],
+    description="Fetches a website using Playwright",
+    instruction="Call fetch_with_playwright(url=...) to get HTML and a screenshot.",
+    tools=[fetch_with_playwright],
 )
+
