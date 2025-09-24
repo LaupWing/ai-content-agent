@@ -11,7 +11,7 @@ async def fetch_with_playwright(url: str) -> dict:
         screenshot_path = os.path.join("images", "snap.png")
 
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=False)
             page = await browser.new_page(user_agent="Mozilla/5.0 (ADK Agent)")
             await page.goto(url, wait_until="networkidle", timeout=30000)
             html = await page.content()
