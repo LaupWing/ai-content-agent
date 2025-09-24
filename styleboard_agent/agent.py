@@ -61,7 +61,7 @@ async def generate_logo_from_text(brief: str, tool_context: "ToolContext"):
 
 async def generate_logo_dalle(prompt: str, tool_context: ToolContext):
     url = "https://api.openai.com/v1/images/generations"
-    headers = {"Authorization": f"Bearer {OPENAI_KEY}"}
+    headers = {"Authorization": f"Bearer {OPENAI_KEY}", "Content-Type": "application/json"}
     data = {"model": "gpt-image-1", "prompt": prompt, "size": "512x512"}
 
     resp = requests.post(url, headers=headers, json=data)
