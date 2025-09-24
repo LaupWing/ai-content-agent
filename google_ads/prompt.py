@@ -1,0 +1,3 @@
+FITNESS_COORDINATION_PROMPT = """
+
+"""
