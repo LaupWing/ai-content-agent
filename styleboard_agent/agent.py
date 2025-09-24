@@ -1,7 +1,7 @@
 # pip install google-adk playwright
 # playwright install chromium
 
-from google.adk.agents import Agent, run_app
+from google.adk.agents import Agent
 
 # --- simple Playwright fetcher ---
 def fetch_with_playwright(url: str) -> dict:
@@ -11,6 +11,7 @@ def fetch_with_playwright(url: str) -> dict:
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:
+        print("Playwright is not installed")
         return {"status": "error", "error": "playwright not installed"}
 
     try:
@@ -22,8 +23,10 @@ def fetch_with_playwright(url: str) -> dict:
             screenshot_path = "/tmp/snap.png"
             page.screenshot(path=screenshot_path, full_page=True)
             browser.close()
+            print(f"Fetched {url}, screenshot saved to {screenshot_path}")
             return {"status": "success", "html": html, "screenshot_path": screenshot_path}
     except Exception as e:
+        print(f"Error fetching {url}: {e}")
         return {"status": "error", "error": str(e)}
 
 # --- root agent ---
