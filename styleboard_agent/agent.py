@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 from google.adk import Agent
 from google.adk.tools import ToolContext, load_artifacts
 from google.genai import Client, types
+import requests
+
+OPENAI_KEY = os.getenv("OPENAI_API_KEY")
 
 load_dotenv()
 
@@ -56,6 +59,25 @@ async def generate_logo_from_text(brief: str, tool_context: "ToolContext"):
     )
     return {"status": "success", "filename": filename}
 
+async def generate_logo_dalle(prompt: str, tool_context: ToolContext):
+    url = "https://api.openai.com/v1/images/generations"
+    headers = {"Authorization": f"Bearer {OPENAI_KEY}"}
+    data = {"model": "gpt-image-1", "prompt": prompt, "size": "512x512"}
+
+    resp = requests.post(url, headers=headers, json=data)
+    resp.raise_for_status()
+    img_url = resp.json()["data"][0]["url"]
+
+    # fetch the image bytes
+    img_bytes = requests.get(img_url).content
+    filename = "logo_dalle.png"
+
+    await tool_context.save_artifact(
+        filename,
+        types.Part.from_bytes(data=img_bytes, mime_type="image/png"),
+    )
+    return {"status": "success", "filename": filename}
+
 # ------- the agent -------
 logo_from_text_agent = Agent(
     model=MODEL_TEXT,
@@ -63,7 +85,7 @@ logo_from_text_agent = Agent(
     description="Generates a logo image from a freeform brand/style brief.",
     instruction="""
 You are a coordinator. The user will paste a short text brief describing colors, roles, vibe, fonts, and notes.
-Call the tool `generate_logo_from_text(brief=<entire user message>)` to create one logo image.
+Call the tool `generate_logo_dalle(brief=<entire user message>)` to create one logo image.
 After the tool finishes, return a tiny JSON like:
 {"status":"success","artifact":"logo.png"}
 
@@ -71,7 +93,7 @@ Rules:
 - Do not include base64 image data in text; rely on artifacts for the PNG.
 - If the user asks where the file is, tell them it's available in artifacts as 'logo.png'.
 """,
-    tools=[generate_logo_from_text, load_artifacts],
+    tools=[generate_logo_dalle, load_artifacts],
 )
 
 # If you prefer this as your root agent:
