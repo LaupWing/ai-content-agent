@@ -13,7 +13,9 @@ async def fetch_with_playwright(url: str) -> dict:
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=False)
             page = await browser.new_page(user_agent="Mozilla/5.0 (ADK Agent)")
-            await page.goto(url, wait_until="networkidle", timeout=30000)
+            print(f"Navigating to {url} ...")
+            await page.goto(url, wait_until="networkidle")
+            print("Page loaded.")
             html = await page.content()
             await page.screenshot(path=screenshot_path, full_page=True)
             await browser.close()
