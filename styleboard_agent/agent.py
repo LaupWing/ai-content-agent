@@ -15,5 +15,5 @@ root_agent = Agent(
         "advertentieteksten (3 varianten) en landingspagina-secties: H1, subkop, "
         "bullet points en primaire CTA. Voeg voorbeeld-URL-slugs per stad toe."
     ),
-    tools=[fetch_quality_score],
+    tools=[],
 )
