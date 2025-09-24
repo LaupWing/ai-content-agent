@@ -1,3 +1,3 @@
-GOOGLE_ADS_PROMPT = """
+STYLEBOARD_PROMPT = """
 
 """
