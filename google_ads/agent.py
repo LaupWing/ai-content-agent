@@ -78,14 +78,13 @@ root_agent = Agent(
         - CLS (Cumulative Layout Shift): of de pagina verspringt tijdens het laden (bijvoorbeeld tekst springt weg omdat een foto later inlaadt).  
 
         3) Belangrijkste verbeteringen (stap voor stap, 5–8 punten, in eenvoudige taal):  
-        - Gebruik voorbeelden en leg uit waarom:  
-            - “Compressie van grote afbeeldingen”: verklein zware foto’s zodat de pagina sneller opent, net zoals je een foto op WhatsApp kleiner maakt om sneller te versturen.  
-            - “Gebruik moderne afbeeldingsformaten (WebP/AVIF)”: die zijn kleiner en laden sneller, maar zien er voor bezoekers hetzelfde uit.  
-            - “Zet caching aan via je hostingpakket”: hierdoor onthoudt de browser onderdelen van je site, zodat terugkerende bezoekers veel sneller laden. Vaak is dit een simpele schakelaar in het hosting-dashboard.  
-            - “Beperk zware plug-ins of pop-ups”: elke extra tool of pop-up vertraagt je site. Minder franje betekent sneller laden.  
-            - “Reserveer ruimte voor foto’s en banners”: zo blijft tekst op zijn plek en springt de pagina niet omhoog of omlaag als een foto later laadt.  
-            - “Voorlaad het belangrijkste lettertype”: daardoor zie je meteen nette tekst in plaats van dat de letters ineens veranderen na 2 seconden.  
-            - “Verwijder ongebruikte apps of scripts”: oude functies die je niet meer gebruikt blijven vaak meedraaien en kosten laadtijd.  
+        - “Compressie van grote afbeeldingen”: verklein zware foto’s zodat de pagina sneller opent, net zoals je een foto op WhatsApp kleiner maakt om sneller te versturen.  
+        - “Gebruik moderne afbeeldingsformaten (WebP/AVIF)”: die zijn kleiner en laden sneller, maar zien er voor bezoekers hetzelfde uit.  
+        - “Zet caching aan via je hostingpakket”: hierdoor onthoudt de browser onderdelen van je site, zodat terugkerende bezoekers veel sneller laden. Vaak is dit een simpele schakelaar in het hosting-dashboard.  
+        - “Beperk zware plug-ins of pop-ups”: elke extra tool of pop-up vertraagt je site. Minder franje betekent sneller laden.  
+        - “Reserveer ruimte voor foto’s en banners”: zo blijft tekst op zijn plek en springt de pagina niet omhoog of omlaag als een foto later laadt.  
+        - “Voorlaad het belangrijkste lettertype”: daardoor zie je meteen nette tekst in plaats van dat de letters ineens veranderen na 2 seconden.  
+        - “Verwijder ongebruikte apps of scripts”: oude functies die je niet meer gebruikt blijven vaak meedraaien en kosten laadtijd.  
 
         4) Een korte checklist met hokjes [ ] zodat de gebruiker kan afvinken wat hij/zij gedaan heeft.  
         Bijvoorbeeld:  
@@ -95,8 +94,16 @@ root_agent = Agent(
         [ ] Onnodige plug-ins/apps verwijderen  
         [ ] Ruimte reserveren voor afbeeldingen  
 
+        5) Persoonlijke aanbevelingen op basis van de gemeten resultaten.  
+        - Geef concrete instructies, alsof je de gebruiker stap voor stap begeleidt.  
+        - Bijvoorbeeld:  
+            - “Ga naar je CSS bestand en voeg `img { max-width: 100%; height: auto; }` toe zodat afbeeldingen zich goed schalen op mobiel.”  
+            - “In WordPress: installeer de gratis plug-in ‘WP Super Cache’ en klik in het menu op ‘Enable Caching’.”  
+            - “Controleer in je hostingpanel (bijvoorbeeld cPanel of DirectAdmin) of er een optie ‘Gzip/Compression’ is en zet die aan.”  
+            - “Als je grote foto’s hebt in je hero-banner: open de afbeelding in een programma zoals TinyPNG of Squoosh en sla opnieuw op als WebP.”  
+        - Leg elke stap uit in gewone taal en geef altijd een concreet handvat dat de gebruiker meteen kan doen, zonder vage technische termen.  
+
         ⚠️ Als er een foutmelding komt (bijv. verkeerde URL of de pagina is geblokkeerd), leg dit duidelijk uit in gewone taal: “De test kon de site niet bereiken. Controleer of de URL juist is of dat de site niet door een wachtwoord is afgeschermd.”
-        """
-,
+    """,
     tools=[analyze_page_speed],
 )
