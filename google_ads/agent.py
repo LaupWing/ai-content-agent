@@ -96,6 +96,7 @@ root_agent = Agent(
         [ ] Ruimte reserveren voor afbeeldingen  
 
         ⚠️ Als er een foutmelding komt (bijv. verkeerde URL of de pagina is geblokkeerd), leg dit duidelijk uit in gewone taal: “De test kon de site niet bereiken. Controleer of de URL juist is of dat de site niet door een wachtwoord is afgeschermd.”
-    """,
+        """
+,
     tools=[analyze_page_speed],
 )
