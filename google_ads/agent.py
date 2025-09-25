@@ -1,147 +1,81 @@
-from google.adk.agents import Agent
-from google.cloud import vision
-import requests
-import json
+# file: speed_advice_agent/agent.py
+import os, requests
 from typing import Dict, Any
-import os
-from datetime import datetime
+from google.adk.agents import Agent
 
-
-def analyze_page_speed(url: str) -> Dict[str, Any]:
-    """Analyzes page speed using PageSpeed Insights API."""
-    try:
-        api_key = os.getenv('PAGESPEED_API_KEY')
-        api_url = f"https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
-        
-        params = {
-            'url': url,
-            'key': api_key,
-            'strategy': 'desktop',
-            'category': ['performance', 'accessibility', 'best-practices', 'seo']
-        }
-        
-        response = requests.get(api_url, params=params)
-        
-        if response.status_code == 200:
-            data = response.json()
-            lighthouse_result = data.get('lighthouseResult', {})
-            categories = lighthouse_result.get('categories', {})
-            
-            scores = {
-                'performance': categories.get('performance', {}).get('score', 0) * 100,
-                'accessibility': categories.get('accessibility', {}).get('score', 0) * 100,
-                'best_practices': categories.get('best-practices', {}).get('score', 0) * 100,
-                'seo': categories.get('seo', {}).get('score', 0) * 100
-            }
-            
-            # Core Web Vitals
-            audits = lighthouse_result.get('audits', {})
-            core_vitals = {
-                'largest_contentful_paint': audits.get('largest-contentful-paint', {}).get('displayValue', 'N/A'),
-                'first_input_delay': audits.get('max-potential-fid', {}).get('displayValue', 'N/A'),
-                'cumulative_layout_shift': audits.get('cumulative-layout-shift', {}).get('displayValue', 'N/A')
-            }
-            
-            return {
-                "status": "success",
-                "url": url,
-                "scores": scores,
-                "core_web_vitals": core_vitals,
-                "overall_performance": scores['performance'],
-                "timestamp": datetime.now().isoformat()
-            }
-        else:
-            return {"status": "error", "message": f"PageSpeed API error: {response.status_code}"}
-            
-    except Exception as e:
-        return {"status": "error", "message": f"Page speed analysis error: {str(e)}"}
-
-def check_mobile_friendly(url: str) -> Dict[str, Any]:
-    """Checks mobile friendliness using Google's Mobile-Friendly Test API."""
-    try:
-        api_key = os.getenv('PAGESPEED_API_KEY')  # Same key works for mobile-friendly test
-        api_url = "https://searchconsole.googleapis.com/v1/urlTestingTools/mobileFriendlyTest:run"
-        
-        headers = {'Content-Type': 'application/json'}
-        payload = {
-            'url': url,
-            'requestScreenshot': True
-        }
-        
-        response = requests.post(f"{api_url}?key={api_key}", 
-            headers=headers, 
-            json=payload
-        )
-        
-        if response.status_code == 200:
-            data = response.json()
-            
-            mobile_friendly = data.get('mobileFriendliness', 'UNKNOWN')
-            issues = data.get('mobileFriendlyIssues', [])
-            
-            return {
-                "status": "success",
-                "mobile_friendly": mobile_friendly == 'MOBILE_FRIENDLY',
-                "issues_count": len(issues),
-                "issues": [issue.get('rule', 'Unknown issue') for issue in issues[:5]],
-                "timestamp": datetime.now().isoformat()
-            }
-        else:
-            return {"status": "error", "message": f"Mobile-Friendly API error: {response.status_code}"}
-            
-    except Exception as e:
-        return {"status": "error", "message": f"Mobile-friendly check error: {str(e)}"}
-
-def generate_analysis_report(url: str, screenshot_data: Dict, speed_data: Dict, mobile_data: Dict) -> str:
-    """Generates a comprehensive analysis report."""
-    
-    report = f"""
-# Website Analysis Report for {url}
-
-## Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-
-## Screenshot Analysis
-- Screenshot captured: {screenshot_data.get('screenshot_captured', False)}
-- Text detected: {screenshot_data.get('text_detected', False)}
-- Content preview: {screenshot_data.get('text_preview', 'N/A')}
-
-## Performance Analysis
-- Overall Performance Score: {speed_data.get('scores', {}).get('performance', 'N/A')}/100
-- Accessibility Score: {speed_data.get('scores', {}).get('accessibility', 'N/A')}/100
-- Best Practices Score: {speed_data.get('scores', {}).get('best_practices', 'N/A')}/100
-- SEO Score: {speed_data.get('scores', {}).get('seo', 'N/A')}/100
-
-## Core Web Vitals
-- Largest Contentful Paint: {speed_data.get('core_web_vitals', {}).get('largest_contentful_paint', 'N/A')}
-- First Input Delay: {speed_data.get('core_web_vitals', {}).get('first_input_delay', 'N/A')}
-- Cumulative Layout Shift: {speed_data.get('core_web_vitals', {}).get('cumulative_layout_shift', 'N/A')}
-
-## Mobile Friendliness
-- Mobile Friendly: {mobile_data.get('mobile_friendly', False)}
-- Issues Found: {mobile_data.get('issues_count', 0)}
-- Issues: {', '.join(mobile_data.get('issues', []))}
-
-## Basic Recommendations
-1. {"✅ Great performance!" if speed_data.get('scores', {}).get('performance', 0) >= 90 else "⚠️ Consider optimizing page load speed"}
-2. {"✅ Mobile-friendly!" if mobile_data.get('mobile_friendly', False) else "⚠️ Fix mobile usability issues"}
-3. {"✅ Good accessibility!" if speed_data.get('scores', {}).get('accessibility', 0) >= 90 else "⚠️ Improve accessibility features"}
+def analyze_page_speed(url: str, strategy: str = "mobile") -> Dict[str, Any]:
     """
-    
-    return report
+    Minimal PageSpeed Insights caller.
+    Returns a small, human-friendly payload the agent can turn into advice.
+    """
+    api_key = os.getenv("PAGESPEED_API_KEY")  # Get one in Google Cloud Console
+    api = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
+    params = {
+        "url": url,
+        "key": api_key,
+        "strategy": strategy,            # "mobile" (default) or "desktop"
+        "category": ["performance","seo"]  # keep it lean
+    }
+    try:
+        r = requests.get(api, params=params, timeout=25)
+        r.raise_for_status()
+        data = r.json()
+        lh = data.get("lighthouseResult", {})
+        cats = lh.get("categories", {})
+        audits = lh.get("audits", {})
 
-# Create the root agent
+        def val(audit_key, field="numericValue", fallback=None):
+            a = audits.get(audit_key, {})
+            return a.get(field, fallback)
+
+        # Key metrics (ms / unit-normalized)
+        perf_score = int((cats.get("performance", {}).get("score", 0) or 0) * 100)
+        lcp_ms = val("largest-contentful-paint", "numericValue")  # milliseconds
+        tbt_ms = val("total-blocking-time", "numericValue")
+        cls = val("cumulative-layout-shift", "numericValue")
+
+        # Lightweight “opportunities” (top 4)
+        opps = []
+        for k, a in audits.items():
+            if a.get("details", {}).get("type") == "opportunity":
+                opps.append({
+                    "title": a.get("title"),
+                    "estimated_ms": a.get("details", {}).get("overallSavingsMs")
+                })
+        opps = sorted([o for o in opps if o["estimated_ms"]], key=lambda x: x["estimated_ms"], reverse=True)[:4]
+
+        return {
+            "status": "success",
+            "url": url,
+            "strategy": strategy,
+            "score": perf_score,
+            "metrics": {
+                "lcp_ms": lcp_ms,
+                "tbt_ms": tbt_ms,
+                "cls": cls,
+            },
+            "top_opportunities": opps,
+        }
+    except Exception as e:
+        return {"status": "error", "message": f"{type(e).__name__}: {e}"}
+
 root_agent = Agent(
-    name="website_analyzer_v1",
+    name="speed_advice_agent",
     model="gemini-2.0-flash",
-    description="A website analyzer that captures screenshots and performs basic technical analysis",
-    instruction="""
-    You are a website analyzer agent. When given a URL, you will:
-    1. Capture a screenshot of the page using Google Cloud Vision API
-    2. Analyze page speed using PageSpeed Insights API
-    3. Check mobile-friendliness using Google's Mobile-Friendly Test API
-    4. Generate a comprehensive analysis report with basic recommendations
-    
-    Always provide actionable insights and clear, non-technical explanations.
-    """,
-    tools=[analyze_page_speed, check_mobile_friendly, generate_analysis_report]
+    description="Takes a URL, runs PageSpeed Insights, and explains simple fixes.",
+    instruction=(
+        "You receive one input: a URL. Call the tool analyze_page_speed(url). "
+        "Then write a short, plain-language report for a non-developer. "
+        "Structure your answer as:\n\n"
+        "1) One-line verdict with the performance score.\n"
+        "2) What this means (brief): explain LCP (loading), TBT (interaction delay), CLS (layout jumps).\n"
+        "3) Top fixes (step-by-step, non-technical, bullet list of 5–8 items). "
+        "   Use everyday language like 'compress big images' rather than jargon. "
+        "   Map metric issues to actions (e.g., High LCP → optimize hero image; High CLS → set fixed sizes for images). "
+        "4) Quick checklist with boxes [ ] the user can tick.\n\n"
+        "Be concrete and vendor-agnostic. Mention examples (e.g., 'use WebP images', "
+        "'enable caching with your hosting panel', 'remove unused apps/plugins'). "
+        "If status is error, explain the likely cause (bad URL, blocked by robots, etc.) clearly."
+    ),
+    tools=[analyze_page_speed],
 )
