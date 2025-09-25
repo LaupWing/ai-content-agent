@@ -6,47 +6,6 @@ from typing import Dict, Any
 import os
 from datetime import datetime
 
-def capture_screenshot(url: str) -> Dict[str, Any]:
-    """Captures page screenshot using Google Cloud Vision API."""
-    try:
-        # Initialize Vision client
-        client = vision.ImageAnnotatorClient()
-        
-        # For this example, we'll use a web service to capture screenshot
-        # In production, you might use Puppeteer or similar headless browser
-        screenshot_api = f"https://api.screenshotlayer.com/api/capture"
-        params = {
-            'access_key': os.getenv('SCREENSHOTLAYER_API_KEY'),
-            'url': url,
-            'viewport': '1440x900',
-            'format': 'PNG'
-        }
-        
-        response = requests.get(screenshot_api, params=params)
-        
-        if response.status_code == 200:
-            # Analyze screenshot with Vision API
-            image = vision.Image(content=response.content)
-            
-            # Detect text in the image
-            text_response = client.text_detection(image=image)
-            texts = text_response.text_annotations
-            
-            # Basic analysis
-            text_content = texts[0].description if texts else "No text detected"
-            
-            return {
-                "status": "success",
-                "screenshot_captured": True,
-                "text_detected": len(texts) > 0,
-                "text_preview": text_content[:200] + "..." if len(text_content) > 200 else text_content,
-                "timestamp": datetime.now().isoformat()
-            }
-        else:
-            return {"status": "error", "message": f"Screenshot capture failed: {response.status_code}"}
-            
-    except Exception as e:
-        return {"status": "error", "message": f"Screenshot analysis error: {str(e)}"}
 
 def analyze_page_speed(url: str) -> Dict[str, Any]:
     """Analyzes page speed using PageSpeed Insights API."""
@@ -110,8 +69,9 @@ def check_mobile_friendly(url: str) -> Dict[str, Any]:
         }
         
         response = requests.post(f"{api_url}?key={api_key}", 
-                               headers=headers, 
-                               json=payload)
+            headers=headers, 
+            json=payload
+        )
         
         if response.status_code == 200:
             data = response.json()
@@ -183,5 +143,5 @@ root_agent = Agent(
     
     Always provide actionable insights and clear, non-technical explanations.
     """,
-    tools=[capture_screenshot, analyze_page_speed, check_mobile_friendly, generate_analysis_report]
+    tools=[analyze_page_speed, check_mobile_friendly, generate_analysis_report]
 )
