@@ -11,7 +11,7 @@ TIMEOUT = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
 
 def api_diet_add_food_entries(
     tool_context: ToolContext,
-    items_json: str,
+    items: str,
     label: str = "",
     notes: str = "",
     source: str = "manual",
@@ -22,7 +22,7 @@ def api_diet_add_food_entries(
     
     Args:
         tool_context: Context containing public_id
-        items_json: JSON array string of items, e.g. '[{"name":"Oatmeal","grams":80,"calories":300}]'
+        items: JSON array string of items, e.g. '[{"name":"Oatmeal","grams":80,"calories":300}]'
         label: Optional meal label
         notes: Optional notes
         source: Source type (default: "manual")
@@ -34,16 +34,16 @@ def api_diet_add_food_entries(
     Raises:
         ValueError: If public_id is missing
         requests.HTTPError: If API request fails
-        json.JSONDecodeError: If items_json is invalid
+        json.JSONDecodeError: If items is invalid
     """
     public_id = tool_context.state.get("public_id")
     if not public_id:
         raise ValueError("Missing public_id in session.state")
 
     # Parse and validate items JSON
-    items = json.loads(items_json)
+    items = json.loads(items)
     if not isinstance(items, list):
-        raise ValueError("items_json must be a JSON array")
+        raise ValueError("items must be a JSON array")
 
     # Build payload with only non-empty optional fields
     payload = {
