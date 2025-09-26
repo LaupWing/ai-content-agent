@@ -7,19 +7,13 @@ JSON output format:
         {
             "name": "string",
             "grams": number,
-            "protein_gram": number,
-            "carb_gram": number,
-            "fat_gram": number,
-            "calories": number,
+            "total_protein_gram": number,
+            "total_carb_gram": number,
+            "total_fat_gram": number,
+            "total_calories": number,
             "quantity": number
         }
     ],
-    "totals": {
-        "protein_gram": number,
-        "carb_gram": number,
-        "fat_gram": number,
-        "calories": number
-    },
     "confidence": number,
     "notes": "string"
 }
