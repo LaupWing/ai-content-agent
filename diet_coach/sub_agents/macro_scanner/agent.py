@@ -36,8 +36,20 @@ def api_diet_add_food_entries(
         requests.HTTPError: If API request fails
         json.JSONDecodeError: If items is invalid
     """
-    return items
     public_id = tool_context.state.get("public_id")
+    payload = {
+        "public_id": public_id,
+        "items": items,
+        **{k: v for k, v in {
+            "label": label,
+            "notes": notes,
+            "source": source,
+            "date": date,
+        }.items() if v}
+    }
+
+    print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
+    return items
     if not public_id:
         raise ValueError("Missing public_id in session.state")
 
