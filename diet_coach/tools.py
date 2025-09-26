@@ -20,3 +20,20 @@ def api_diet_macros_today(tool_context: ToolContext) -> Dict[str, Any]:
     r = requests.get(f"{API_BASE}/diet/macros/today", params={"public_id": public_id}, timeout=TIMEOUT)
     r.raise_for_status()
     return r.json()
+
+def api_diet_meals_today(tool_context: ToolContext) -> Dict[str, Any]:
+    """
+    Get today's meals for the current user.
+    Reads session.state['public_id'] and calls your Laravel endpoint:
+        GET /diet/meals/today?public_id=...
+        Returns the backend JSON as-is.
+    """
+    public_id = tool_context.state.get("public_id")
+    if not public_id:
+        raise ValueError("Missing public_id in session.state")
+
+    r = requests.get(f"{API_BASE}/diet/meals/today", params={"public_id": public_id}, timeout=TIMEOUT)
+    r.raise_for_status()
+    
+    return r.json()
+    
