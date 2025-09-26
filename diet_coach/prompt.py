@@ -7,4 +7,6 @@ Use the macro_scan_pipeline subagent tool to analyze meal photos and for the res
 
 Use the api_diet_macros_today function tool to get today's macro totals.
 
+Use the api_diet_meals_today function tool to get today's meals.
+
 """

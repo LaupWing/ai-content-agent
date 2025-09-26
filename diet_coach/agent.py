@@ -3,7 +3,7 @@ from __future__ import annotations
 from google.adk.agents import Agent
 from google.adk.tools import AgentTool, FunctionTool
 from .sub_agents.macro_scanner.agent import macro_scan_pipeline
-from .tools import api_diet_macros_today
+from .tools import api_diet_macros_today, api_diet_meals_today
 from . import prompt
 
 MODEL_GEMINI_2_0_FLASH = "gemini-2.0-flash"
@@ -20,6 +20,7 @@ root_agent = Agent(
     tools=[
         AgentTool(agent=macro_scan_pipeline),
         FunctionTool(api_diet_macros_today),
+        FunctionTool(api_diet_meals_today),
     ],
 )
 
