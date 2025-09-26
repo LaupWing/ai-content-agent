@@ -6,7 +6,7 @@ JSON output format:
     "items": [
         {
             "name": "string",
-            "grams": number,
+            "total_grams": number,
             "total_protein_gram": number,
             "total_carb_gram": number,
             "total_fat_gram": number,
