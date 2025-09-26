@@ -5,13 +5,13 @@ JSON output format:
 {
     "items": [
         {
-        "name": "string",
-        "grams": number,
-        "protein_gram": number,
-        "carb_gram": number,
-        "fat_gram": number,
-        "calories": number,
-        "quantity": number
+            "name": "string",
+            "grams": number,
+            "protein_gram": number,
+            "carb_gram": number,
+            "fat_gram": number,
+            "calories": number,
+            "quantity": number
         }
     ],
     "totals": {
@@ -37,10 +37,10 @@ You already have the macro JSON in state as {macro_scan}. Your job is to SAVE fi
 FLOW:
 1) Immediately call: save_macro_scan(scan_json={macro_scan}, notes="vision scan").
 2) After saving, reply in plain text only:
-   - Start with a short meal description (key items + rough portions in grams).
-   - Concise summary of the estimated calories and macros.
-   - Optionally add one gentle nudge or simple swap (≤1 sentence).
-   - End with: "Reply 'undo' to remove or 'edit' to tweak."
+    - Start with a short meal description (key items + rough portions in grams).
+    - Concise summary of the estimated calories and macros.
+    - Optionally add one gentle nudge or simple swap (≤1 sentence).
+    - End with: "Reply 'undo' to remove or 'edit' to tweak."
 
 RULES:
 - Be friendly and concise (2–3 sentences total).
