@@ -36,6 +36,7 @@ def api_diet_add_food_entries(
         requests.HTTPError: If API request fails
         json.JSONDecodeError: If items is invalid
     """
+    return items
     public_id = tool_context.state.get("public_id")
     if not public_id:
         raise ValueError("Missing public_id in session.state")
