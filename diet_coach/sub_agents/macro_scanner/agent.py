@@ -11,28 +11,62 @@ TIMEOUT = float(os.getenv("API_TIMEOUT_SECONDS", "12.0"))
 
 def api_diet_add_food_entries(
     tool_context: ToolContext,
-    items_json: str,          # JSON string: e.g. '[{"name":"Oatmeal","grams":80,"calories":300}]'
+    items_json: str,
     label: str = "",
     notes: str = "",
     source: str = "manual",
     date: str = "",
 ) -> Dict[str, Any]:
-    """POST /diet/food_entries with whatever items you pass in. No normalization."""
+    """
+    POST /diet/food_entries to add meal items.
+    
+    Args:
+        tool_context: Context containing public_id
+        items_json: JSON array string of items, e.g. '[{"name":"Oatmeal","grams":80,"calories":300}]'
+        label: Optional meal label
+        notes: Optional notes
+        source: Source type (default: "manual")
+        date: Optional date in Y-m-d format
+        
+    Returns:
+        API response as dict
+        
+    Raises:
+        ValueError: If public_id is missing
+        requests.HTTPError: If API request fails
+        json.JSONDecodeError: If items_json is invalid
+    """
     public_id = tool_context.state.get("public_id")
     if not public_id:
         raise ValueError("Missing public_id in session.state")
 
-    # Just parse to ensure it's a JSON array for the POST body.
-    items = json.loads(items_json)  # let it raise if malformed
-    payload: Dict[str, Any] = {"public_id": public_id, "items": items}
-    if label:  payload["label"]  = label
-    if notes:  payload["notes"]  = notes
-    if source: payload["source"] = source
-    if date:   payload["date"]   = date
-    print("Payload to /diet/food_entries:", payload)
-    r = requests.post(f"{API_BASE}/diet/food_entries", json=payload, timeout=TIMEOUT)
-    r.raise_for_status()
-    return r.json()
+    # Parse and validate items JSON
+    items = json.loads(items_json)
+    if not isinstance(items, list):
+        raise ValueError("items_json must be a JSON array")
+
+    # Build payload with only non-empty optional fields
+    payload = {
+        "public_id": public_id,
+        "items": items,
+        **{k: v for k, v in {
+            "label": label,
+            "notes": notes,
+            "source": source,
+            "date": date,
+        }.items() if v}
+    }
+
+    print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
+    
+    response = requests.post(
+        f"{API_BASE}/diet/food_entries",
+        json=payload,
+        timeout=TIMEOUT
+    )
+    response.raise_for_status()
+    
+    return response.json()
     
 macro_create_record_agent = Agent(
     name="macro_create_record_v1",
