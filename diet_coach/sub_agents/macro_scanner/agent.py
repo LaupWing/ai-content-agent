@@ -55,7 +55,6 @@ def api_diet_add_food_entries(
     payload["items"] = items
     payload["totals"] = totals
 
-    return payload
     if not public_id:
         raise ValueError("Missing public_id in session.state")
 
