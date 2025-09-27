@@ -7,9 +7,9 @@ JSON output format:
         {
             "name": "string",
             "total_grams": number,
-            "total_protein_gram": number,
-            "total_carb_gram": number,
-            "total_fat_gram": number,
+            "total_protein_grams": number,
+            "total_carb_grams": number,
+            "total_fat_grams": number,
             "total_calories": number,
             "quantity": number,
             "unit": "string",
