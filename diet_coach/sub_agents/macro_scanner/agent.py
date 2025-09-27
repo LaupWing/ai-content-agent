@@ -66,7 +66,7 @@ def api_diet_add_food_entries(
     print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
     
     response = requests.post(
-        f"{API_BASE}/diet/food_entries",
+        f"{API_BASE}/test",
         json=payload,
         timeout=TIMEOUT
     )
