@@ -19,10 +19,10 @@ def api_diet_summary_today(tool_context: ToolContext) -> Dict[str, Any]:
             "date": "2025-09-26",
             "meals": [...],  # Array of meals with items
             "totals": {
-                "calories": 825,
-                "protein_grams": 46.3,
-                "carbs_grams": 97,
-                "fat_grams": 29.3
+                "total_calories": 825,
+                "total_protein_grams": 46.3,
+                "total_carbs_grams": 97,
+                "total_fat_grams": 29.3
             },
             "meals_count": 2,
             "items_count": 3
