@@ -53,12 +53,12 @@ def api_diet_add_food_entries(
         **{k: v for k, v in {
             "label": label,
             "notes": notes,
-            "source": source,
+            "source": "manual",
             "date": date,
         }.items() if v}
     }
 
-    fields = ["total_grams", "total_protein_gram", "total_carb_gram", "total_fat_gram", "total_calories"]
+    fields = ["total_grams", "total_protein_grams", "total_carb_grams", "total_fat_grams", "total_calories"]
     totals = {field: sum(item.get(field, 0) for item in items) for field in fields}
     payload["items"] = items
     payload["totals"] = totals
