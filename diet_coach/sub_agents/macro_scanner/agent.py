@@ -46,7 +46,6 @@ def api_diet_add_food_entries(
     if not isinstance(items, list):
         raise ValueError("items must be a JSON array")
     
-    print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
     # Build payload with only non-empty optional fields
     payload = {
         "public_id": public_id,
@@ -63,6 +62,8 @@ def api_diet_add_food_entries(
     totals = {field: sum(item.get(field, 0) for item in items) for field in fields}
     payload["items"] = items
     payload["totals"] = totals
+
+    print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
     
     response = requests.post(
         f"{API_BASE}/diet/food_entries",
