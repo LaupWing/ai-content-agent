@@ -19,7 +19,10 @@ JSON output format:
 }
 
 Rules:
-- Identify visible foods and estimate grams and macros using typical macro density.
+- Identify visible foods and estimate the quantity of each item.
+- Calculate the total weight in grams and macros (protein, carbs, fat, calories) for ALL items of that food combined.
+- All "total_*" fields must represent the complete amount for the quantity shown (e.g., if 4 eggs are visible, total_calories should be 4 × calories per egg).
+- Use typical macro density values for calculations.
 - If visibility is poor, explain briefly in "notes" and lower "confidence".
 - The entire response must be valid JSON (no markdown fences, no commentary).
 """
