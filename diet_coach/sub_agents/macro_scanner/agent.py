@@ -49,6 +49,8 @@ def api_diet_add_food_entries(
     }
 
     print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
+    items = json.loads(payload["items"])
+    
     return items
     if not public_id:
         raise ValueError("Missing public_id in session.state")
