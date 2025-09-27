@@ -37,23 +37,6 @@ def api_diet_add_food_entries(
         json.JSONDecodeError: If items is invalid
     """
     public_id = tool_context.state.get("public_id")
-    payload = {
-        "public_id": public_id,
-        "items": items,
-        **{k: v for k, v in {
-            "label": label,
-            "notes": notes,
-            "source": source,
-            "date": date,
-        }.items() if v}
-    }
-
-    print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
-    items = json.loads(payload["items"])
-    fields = ["total_grams", "total_protein_gram", "total_carb_gram", "total_fat_gram", "total_calories"]
-    totals = {field: sum(item.get(field, 0) for item in items) for field in fields}
-    payload["items"] = items
-    payload["totals"] = totals
 
     if not public_id:
         raise ValueError("Missing public_id in session.state")
@@ -62,7 +45,8 @@ def api_diet_add_food_entries(
     items = json.loads(items)
     if not isinstance(items, list):
         raise ValueError("items must be a JSON array")
-
+    
+    print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
     # Build payload with only non-empty optional fields
     payload = {
         "public_id": public_id,
@@ -75,7 +59,10 @@ def api_diet_add_food_entries(
         }.items() if v}
     }
 
-    print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
+    fields = ["total_grams", "total_protein_gram", "total_carb_gram", "total_fat_gram", "total_calories"]
+    totals = {field: sum(item.get(field, 0) for item in items) for field in fields}
+    payload["items"] = items
+    payload["totals"] = totals
     
     response = requests.post(
         f"{API_BASE}/diet/food_entries",
