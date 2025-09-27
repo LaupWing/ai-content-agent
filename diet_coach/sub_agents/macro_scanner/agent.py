@@ -50,8 +50,12 @@ def api_diet_add_food_entries(
 
     print(f"POST /diet/food_entries: {json.dumps(payload, indent=2)}")
     items = json.loads(payload["items"])
-    
-    return items
+    fields = ["total_grams", "total_protein_gram", "total_carb_gram", "total_fat_gram", "total_calories"]
+    totals = {field: sum(item.get(field, 0) for item in items) for field in fields}
+    payload["items"] = items
+    payload["totals"] = totals
+
+    return payload
     if not public_id:
         raise ValueError("Missing public_id in session.state")
 
