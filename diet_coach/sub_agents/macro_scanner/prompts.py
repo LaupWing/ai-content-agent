@@ -11,7 +11,9 @@ JSON output format:
             "total_carb_gram": number,
             "total_fat_gram": number,
             "total_calories": number,
-            "quantity": number
+            "quantity": number,
+            "unit": "string",
+            "confidence": number
         }
     ],
     "confidence": number,
