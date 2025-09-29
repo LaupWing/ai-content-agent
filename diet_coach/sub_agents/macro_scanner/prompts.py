@@ -6,7 +6,7 @@ JSON output format:
     "items": [
         {
             "name": "string",
-            "total_grams": number,
+            "estimated_weight_grams": number,
             "total_protein_grams": number,
             "total_carbs_grams": number,
             "total_fat_grams": number,
@@ -22,12 +22,15 @@ JSON output format:
 }
 
 Rules:
-- Identify visible foods and estimate the quantity of each item.
-- Calculate the total weight in grams and macros (protein, carbs, fat, calories) for ALL items of that food combined.
-- All "total_*" fields must represent the complete amount for the quantity shown (e.g., if 4 eggs are visible, total_calories should be 4 × calories per egg).
-- Use typical macro density values for calculations.
-- If visibility is poor, explain briefly in "notes" and lower "confidence".
-- The entire response must be valid JSON (no markdown fences, no commentary).
+- Identify all visible foods/drinks
+- `quantity`: how many/how much (e.g., 4, 250, 1.5)
+- `unit`: the measurement unit (e.g., "eggs", "grams", "ml", "cups", "slices")
+- `estimated_weight_grams`: estimated total weight in grams (nullable for liquids if unknown)
+- `total_*`: nutritional values for the TOTAL quantity shown
+- For liquids: use ml as unit, estimate weight if possible (water: 1ml = 1g, milk: 1ml = 1.03g)
+- `confidence`: 0.0-1.0 based on visibility and accuracy
+- If visibility is poor, explain in "notes"
+- Return valid JSON only (no markdown, no commentary)
 """
 
 
