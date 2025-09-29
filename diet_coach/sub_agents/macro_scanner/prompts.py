@@ -17,7 +17,8 @@ JSON output format:
         }
     ],
     "confidence": number,
-    "notes": "string"
+    "notes": "string",
+    "label": "string"
 }
 
 Rules:
