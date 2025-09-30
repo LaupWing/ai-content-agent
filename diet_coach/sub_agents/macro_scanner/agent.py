@@ -4,6 +4,8 @@ from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
 from google.adk.tools import ToolContext
 import os, requests, json
+
+from diet_coach.tools import api_diet_summary_today
 from . import prompts
 
 API_BASE = os.getenv("SAVE_ENDPOINT", "http://localhost:8001/api")
@@ -109,12 +111,20 @@ def api_diet_add_food_entries(
     
     return response.json()
     
-macro_create_record_agent = Agent(
-    name="macro_create_record_v1",
+macro_save_agent = Agent(
+    name="macro_save_v1",
     model="gemini-2.5-flash",
     description="Confirms the scanned macro JSON with the user before saving.",
     instruction=prompts.MACRO_SAVE_PROMPT,
     tools=[api_diet_add_food_entries],  # wrap in FunctionTool if needed
+)
+    
+macro_day_summary_agent = Agent(
+    name="macro_day_summary_v1",
+    model="gemini-2.5-flash",
+    description="Retrieves the daily macro summary for the user.",
+    instruction=prompts.MACRO_DAY_SUMMARY_PROMPT,
+    tools=[api_diet_summary_today],  # wrap in FunctionTool if needed
 )
 
 macro_scanner_agent = Agent(
@@ -130,5 +140,5 @@ macro_scanner_agent = Agent(
 macro_scan_pipeline = SequentialAgent(
     name="macro_scan_pipeline",
     description="Step 1: analyze photo → Step 2: save JSON.",
-    sub_agents=[macro_scanner_agent, macro_create_record_agent],
+    sub_agents=[macro_scanner_agent, macro_save_agent, macro_day_summary_agent],
 )
