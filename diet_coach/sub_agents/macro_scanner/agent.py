@@ -131,6 +131,7 @@ macro_scanner_agent = Agent(
     model="gemini-2.0-flash",
     description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
     instruction=prompts.MACRO_SCANNER_PROMPT,
+    output_schema=MacroScanOutput,
     output_key="macro_scan",
 )
 
