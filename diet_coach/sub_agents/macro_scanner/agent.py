@@ -111,6 +111,15 @@ def api_diet_add_food_entries(
     
     return response.json()
     
+macro_scanner_agent = Agent(
+    name="macro_scanner_v1",
+    model="gemini-2.5-flash",
+    description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
+    instruction=prompts.MACRO_SCANNER_PROMPT,
+    output_schema=MacroScanOutput,
+    output_key="macro_scan",
+)
+
 macro_save_agent = Agent(
     name="macro_save_v1",
     model="gemini-2.5-flash",
@@ -127,14 +136,6 @@ macro_day_summary_agent = Agent(
     tools=[api_diet_summary_today],  # wrap in FunctionTool if needed
 )
 
-macro_scanner_agent = Agent(
-    name="macro_scanner_v1",
-    model="gemini-2.5-flash",
-    description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
-    instruction=prompts.MACRO_SCANNER_PROMPT,
-    output_schema=MacroScanOutput,
-    output_key="macro_scan",
-)
 
 
 macro_scan_pipeline = SequentialAgent(
