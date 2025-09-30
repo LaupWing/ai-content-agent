@@ -91,7 +91,7 @@ MACRO_SAVE_PROMPT = """
 You already have the macro JSON in state as {macro_scan}. Your job is to SAVE first, then reply with a concise human summary—no JSON.
 
 FLOW:
-1) Immediately call: api_diet_add_food_entries(scan_json={macro_scan}, notes="vision scan").
+1) Immediately call: api_diet_add_food_entries(scan_json={macro_scan}).
 2) After saving, reply in plain text only:
     - Start with a short meal description (key items + rough portions in grams).
     - Concise summary of the estimated calories and macros.

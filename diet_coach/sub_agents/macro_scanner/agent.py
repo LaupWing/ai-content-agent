@@ -55,8 +55,7 @@ class MacroScanOutput(BaseModel):
 
 def api_diet_add_food_entries(
     tool_context: ToolContext,
-    items: str,
-    notes: str = "",
+    macro_scan: Dict[str, Any],
 ) -> Dict[str, Any]:
     """
     POST /diet/food_entries to add meal items.
@@ -75,6 +74,8 @@ def api_diet_add_food_entries(
         json.JSONDecodeError: If items is invalid
     """
     public_id = tool_context.state.get("public_id")
+    items = json.dumps(macro_scan.get("items", []))
+    notes = macro_scan.get("notes", "")
 
     if not public_id:
         raise ValueError("Missing public_id in session.state")
