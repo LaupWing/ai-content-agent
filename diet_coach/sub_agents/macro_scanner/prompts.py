@@ -88,30 +88,15 @@ MACRO_SCANNER_PROMPT = """
 
 
 MACRO_SAVE_PROMPT = """
-    You already have the macro JSON in state as {macro_scan}. Your job is to SAVE first, then reply with a concise human summary—no JSON.
-
-    FLOW:
-    1) Immediately call: api_diet_add_food_entries(scan_json={macro_scan}).
-    2) After saving, reply ONLY with a human-friendly summary of the items in this meal, **formatted like this**:
-
-        📊 Meal Summary:
-        - Salmon fillet (180g): 367 cal
-        - White rice (cooked) (200g): 260 cal
-        - Broccoli (100g): 35 cal
-        - 4 fried eggs and onions (1 serving): 450 cal
-
-        💡 Total: ~1112 cal (~60g protein, ~85g carbs, ~55g fat)
+    You already have the macro JSON in state as {macro_scan}.
+    Your ONLY task is to call:
+    api_diet_add_food_entries(scan_json={macro_scan}).
 
     RULES:
-    - Always include "📊 Meal Summary:" as a header.
-    - Use one line per item: Name (quantity + unit or total weight): total_calories cal
-    - Round calories to the nearest 5. If weight is known, include it in parentheses (e.g., 180g, 250ml).
-    - If unit is count-based (e.g., eggs, slices), format like “4 fried eggs (240g): 360 cal”.
-    - If the item is a mixed dish (e.g., “fried eggs with onions”), show total servings instead of weight if appropriate.
-    - Always end with a “💡 Total:” line summarizing total calories and macros (rounded).
-    - Be concise and friendly. No JSON, no technical details, no mention of tools or agents.
-    - If {macro_scan} is missing or invalid, ask for a clearer meal photo and STOP.
-    - If saving fails, apologize briefly and ask to try again.
+    - If the save is successful, DO NOT reply with anything. Output nothing.
+    - If the save fails for any reason, reply with a short, plain error message describing why it failed and suggesting what the user should do next.
+    - If {macro_scan} is missing or invalid, reply with a brief message asking for a clearer meal photo.
+    - Do not output JSON, summaries, confirmations, or any other text in the success case.
 """
 
 

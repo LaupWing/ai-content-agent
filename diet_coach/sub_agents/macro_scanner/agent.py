@@ -123,7 +123,7 @@ macro_scanner_agent = Agent(
 macro_save_agent = Agent(
     name="macro_save_v1",
     model="gemini-2.5-flash",
-    description="Confirms the scanned macro JSON with the user before saving.",
+    description="Saves the scanned meal items to the user's diet log.",
     instruction=prompts.MACRO_SAVE_PROMPT,
     tools=[api_diet_add_food_entries],  # wrap in FunctionTool if needed
 )
