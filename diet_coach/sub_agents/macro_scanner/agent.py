@@ -110,6 +110,33 @@ def api_diet_add_food_entries(
     response.raise_for_status()
     
     return response.json()
+
+def macro_day_summary(tool_context: ToolContext, macro_scan: Dict[str, Any],) -> str:
+    """
+    Args:
+        tool_context: Context containing public_id
+        macro_scan: The macro scan result to summarize
+        
+    Returns:
+        Macro scan summary object as dict
+        
+    Raises:
+        ValueError: If public_id is missing
+    """
+    items = json.dumps(macro_scan.get("items", []))
+    items = json.loads(items)
+    notes = macro_scan.get("notes", "")
+    public_id = tool_context.state.get("public_id")
+    payload = {
+        "public_id": public_id,
+        "items": items
+    }
+
+    fields = ["estimated_weight_grams", "total_protein_grams", "total_carbs_grams", "total_fat_grams", "total_calories"]
+    totals = {field: sum(item.get(field, 0) for item in items) for field in fields}
+    payload["totals"] = totals
+
+    return payload
     
 macro_scanner_agent = Agent(
     name="macro_scanner_v1",

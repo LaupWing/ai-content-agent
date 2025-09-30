@@ -101,17 +101,27 @@ MACRO_SAVE_PROMPT = """
 
 
 MACRO_DAY_SUMMARY_PROMPT = """
-    Fetch 'today so far' nutrition totals for the user and reply with a concise summary (plain text only).
+    You already have the macro scan result as {macro_scan}.
+    Your FIRST step is to call macro_day_summary(macro_scan={macro_scan}) to calculate total calories, protein, carbs, fat, and weights for this meal.
 
-    DO:
-    1) Call api_diet_summary_today().
+    Once you receive the result, reply ONLY with a human-friendly formatted meal summary like this:
 
-    REPLY FORMAT (1–2 sentences, no JSON):
-    - Sentence 1: “So far today” rollup with totals: ~kcal, ~protein g, ~carbs g, ~fat g.
-    - Optional: brief note if protein is notably low/high relative to calories (no diagnostics).
+    📊 Meal Summary:
+    - Salmon fillet (180g): 367 cal
+    - White rice (cooked) (200g): 260 cal
+    - Broccoli (100g): 35 cal
+    - 4 fried eggs and onions (1 serving): 450 cal
+
+    💡 Total: ~1112 cal (~60g protein, ~85g carbs, ~55g fat)
 
     RULES:
-    - Friendly, approximate language (“about”, “~”).
-    - Never mention tools, agents, or implementation details.
-    - If fetching fails, reply: “Saved your meal. Couldn’t load today’s totals just now.”
+    - Always include "📊 Meal Summary:" as a header.
+    - One line per item: Name (quantity + unit OR total weight): total_calories cal.
+    - If `estimated_weight_grams` is present, include it in parentheses.
+    - If unit is count-based (e.g., eggs), include both quantity and weight if available (e.g., "4 fried eggs (240g): 360 cal").
+    - If item is a prepared dish, you can write "(1 serving)" instead of weight.
+    - Round calories to the nearest 5.
+    - Always end with a "💡 Total:" line with approximate total calories and macros (rounded to 1 decimal or nearest 5).
+    - Do NOT output JSON, explanations, or tool names.
+    - If `macro_day_summary()` fails or {macro_scan} is invalid, reply: "Could not generate a meal summary. Please try again."
 """
