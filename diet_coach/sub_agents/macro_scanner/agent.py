@@ -66,7 +66,7 @@ def api_diet_add_food_entries(
     
     Args:
         tool_context: Context containing public_id
-        items: JSON array string of items, e.g. '[{"name":"Oatmeal","grams":80,"calories":300}]'
+        items: JSON array string of items, e.g. 
         label: Optional meal label
         notes: Optional notes
         source: Source type (default: "manual")
@@ -128,7 +128,7 @@ macro_create_record_agent = Agent(
 
 macro_scanner_agent = Agent(
     name="macro_scanner_v1",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
     instruction=prompts.MACRO_SCANNER_PROMPT,
     output_schema=MacroScanOutput,
