@@ -136,8 +136,6 @@ macro_day_summary_agent = Agent(
     tools=[api_diet_summary_today],  # wrap in FunctionTool if needed
 )
 
-
-
 macro_scan_pipeline = SequentialAgent(
     name="macro_scan_pipeline",
     description="Step 1: analyze photo → Step 2: save JSON.",
