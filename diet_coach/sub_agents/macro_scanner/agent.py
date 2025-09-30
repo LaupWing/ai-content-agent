@@ -56,10 +56,7 @@ class MacroScanOutput(BaseModel):
 def api_diet_add_food_entries(
     tool_context: ToolContext,
     items: str,
-    label: str = "",
     notes: str = "",
-    source: str = "manual",
-    date: str = "",
 ) -> Dict[str, Any]:
     """
     POST /diet/food_entries to add meal items.
@@ -68,7 +65,6 @@ def api_diet_add_food_entries(
         tool_context: Context containing public_id
         items: JSON array string of items, e.g. 
         notes: Optional notes
-        source: Source type (default: "manual")
         
     Returns:
         API response as dict
@@ -95,7 +91,6 @@ def api_diet_add_food_entries(
         **{k: v for k, v in {
             "notes": notes,
             "source": "manual",
-            "date": date,
         }.items() if v}
     }
 
