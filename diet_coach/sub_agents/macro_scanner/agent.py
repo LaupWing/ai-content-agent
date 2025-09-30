@@ -135,6 +135,10 @@ def macro_day_summary(tool_context: ToolContext, macro_scan: Dict[str, Any],) ->
     fields = ["estimated_weight_grams", "total_protein_grams", "total_carbs_grams", "total_fat_grams", "total_calories"]
     totals = {field: sum(item.get(field, 0) for item in items) for field in fields}
     payload["totals"] = totals
+    if notes:
+        payload["notes"] = notes
+    
+    print(f"macro_day_summary payload: {json.dumps(payload, indent=2)}")
 
     return payload
     
@@ -160,11 +164,11 @@ macro_day_summary_agent = Agent(
     model="gemini-2.5-flash",
     description="Retrieves the daily macro summary for the user.",
     instruction=prompts.MACRO_DAY_SUMMARY_PROMPT,
-    tools=[api_diet_summary_today],  # wrap in FunctionTool if needed
+    tools=[macro_day_summary],  # wrap in FunctionTool if needed
 )
 
 macro_scan_pipeline = SequentialAgent(
     name="macro_scan_pipeline",
-    description="Step 1: analyze photo → Step 2: save JSON.",
+    description="Step 1: analyze photo → Step 2: save JSON. → Step 3: get meal summary",
     sub_agents=[macro_scanner_agent, macro_save_agent, macro_day_summary_agent],
 )
