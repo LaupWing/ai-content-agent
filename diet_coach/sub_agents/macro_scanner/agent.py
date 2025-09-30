@@ -89,7 +89,7 @@ def api_diet_add_food_entries(
     items = json.loads(items)
     if not isinstance(items, list):
         raise ValueError("items must be a JSON array")
-    
+    print(f"Parsed items: {json.dumps(items, indent=2)}")
     # Build payload with only non-empty optional fields
     payload = {
         "public_id": public_id,
