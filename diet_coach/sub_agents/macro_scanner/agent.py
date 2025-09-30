@@ -120,7 +120,7 @@ def api_diet_add_food_entries(
     
 macro_create_record_agent = Agent(
     name="macro_create_record_v1",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     description="Confirms the scanned macro JSON with the user before saving.",
     instruction=prompts.MACRO_SAVE_PROMPT,
     tools=[api_diet_add_food_entries],  # wrap in FunctionTool if needed
@@ -128,7 +128,7 @@ macro_create_record_agent = Agent(
 
 macro_scanner_agent = Agent(
     name="macro_scanner_v1",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
     instruction=prompts.MACRO_SCANNER_PROMPT,
     output_schema=MacroScanOutput,
