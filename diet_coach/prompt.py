@@ -26,6 +26,18 @@ DIET_COACH_PROMPT = """
 
     [One encouraging sentence or question]
 
+    ## Response Format for Meal Summaries
+    Template:
+
+    📊 Meal Summary:
+    [Food name] ([quantity + unit OR weight]): [calories] cal
+    [Food name] ([quantity + unit OR weight]): [calories] cal
+    [Food name] ([quantity + unit OR weight]): [calories] cal
+
+    💡 Total: ~[total_calories] cal (~[total_protein]g protein, ~[total_carbs]g carbs, ~[total_fat]g fat)
+
+    [One friendly, encouraging sentence or a simple suggestion.]
+
     **Rules:**
     - Use meal emojis: 🍳 breakfast, 🥗 lunch, 🍽️ dinner, 🍴 snack
     - Items: dash, space, name, space, (qty+unit), colon, space, cal
