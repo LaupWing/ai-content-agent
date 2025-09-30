@@ -58,7 +58,7 @@ def api_diet_add_food_entries(
         }.items() if v}
     }
 
-    fields = ["total_grams", "total_protein_grams", "total_carbs_grams", "total_fat_grams", "total_calories"]
+    fields = ["estimated_weight_grams", "total_protein_grams", "total_carbs_grams", "total_fat_grams", "total_calories"]
     totals = {field: sum(item.get(field, 0) for item in items) for field in fields}
     payload["items"] = items
     payload["totals"] = totals
