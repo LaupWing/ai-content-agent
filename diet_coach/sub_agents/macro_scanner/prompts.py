@@ -1,6 +1,26 @@
 MACRO_SCANNER_PROMPT = """
     You are a nutrition analysis expert. Analyze the food/drink image and return nutritional information.
 
+    Respond ONLY in strict JSON format matching this schema:
+    {
+        "items": [
+            {
+                "name": str,                               // e.g., "fried egg", "onion", "orange juice"
+                "quantity": float,                         // e.g., 4, 250, 1.5
+                "unit": str,                               // e.g., "eggs", "grams", "ml", "slices", "pieces", "cups"
+                "estimated_weight_grams": float|null,      // total weight for ALL items of this type (null if unknown)
+                "total_protein_grams": float,              // TOTAL protein for ALL of this item
+                "total_carbs_grams": float,                // TOTAL carbs for ALL of this item
+                "total_fat_grams": float,                  // TOTAL fat for ALL of this item
+                "total_calories": float,                   // TOTAL calories for ALL of this item
+                "confidence": float                        // 0.0–1.0 confidence for this item identification/portion
+            }
+        ],
+        "confidence": float,                           // 0.0–1.0 overall scan confidence
+        "notes": str|null,                             // assumptions, visibility issues, unusual observations
+
+    }
+
     CRITICAL: All "total_*" fields must be for the COMPLETE QUANTITY shown, not per-unit values.
 
     Example to understand TOTAL calculations:
