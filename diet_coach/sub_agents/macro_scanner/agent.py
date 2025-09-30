@@ -67,10 +67,8 @@ def api_diet_add_food_entries(
     Args:
         tool_context: Context containing public_id
         items: JSON array string of items, e.g. 
-        label: Optional meal label
         notes: Optional notes
         source: Source type (default: "manual")
-        date: Optional date in Y-m-d format
         
     Returns:
         API response as dict
@@ -95,7 +93,6 @@ def api_diet_add_food_entries(
         "public_id": public_id,
         "items": items,
         **{k: v for k, v in {
-            "label": label,
             "notes": notes,
             "source": "manual",
             "date": date,
