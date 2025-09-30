@@ -128,7 +128,7 @@ macro_create_record_agent = Agent(
 
 macro_scanner_agent = Agent(
     name="macro_scanner_v1",
-    model="gemini-2.5-flash",
+    model="gemini-2.0-flash",
     description="You are a macro scanner agent. Your only TASK is to analyze meal photos and return macro information in strict JSON format.",
     instruction=prompts.MACRO_SCANNER_PROMPT,
     output_schema=MacroScanOutput,
