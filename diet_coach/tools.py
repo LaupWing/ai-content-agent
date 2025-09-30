@@ -38,6 +38,5 @@ def api_diet_summary_today(tool_context: ToolContext) -> Dict[str, Any]:
         timeout=TIMEOUT
     )
     r.raise_for_status()
-    print("api_diet_summary_today response:", r.json())
     return r.json()
     
