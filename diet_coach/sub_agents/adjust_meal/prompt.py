@@ -7,7 +7,7 @@ ADJUST_MEAL_PROMPT = """
     1. Understand the user's correction/adjustment request
     2. Modify the meal data accordingly
     3. Recalculate ALL nutritional values correctly
-    4. Return the updated meal in the SAME JSON format as the original scan
+    4. Return the updated meal in JSON format, preserving the meal ID
 
     User correction types you must handle:
 
@@ -43,6 +43,7 @@ ADJUST_MEAL_PROMPT = """
     Return ONLY strict JSON matching this schema:
 
     {
+        "id": int,                                 // PRESERVE the meal ID from last_saved_meal
         "items": [
             {
                 "name": str,
@@ -58,8 +59,13 @@ ADJUST_MEAL_PROMPT = """
         ],
         "confidence": float,
         "notes": str|null,
-        "adjustment_summary": str  // NEW: explain what was changed
+        "adjustment_summary": str                  // Explain what was changed
     }
+
+    IMPORTANT: 
+    - ALWAYS include the "id" field from last_saved_meal in your response
+    - Do NOT include "id" fields for individual items (backend will regenerate them)
+    - Keep the meal structure intact, only modify the items array
 
     ---
 
@@ -68,10 +74,10 @@ ADJUST_MEAL_PROMPT = """
     When adjusting quantities, you MUST recalculate proportionally:
 
     Example: Changing 4 eggs to 5 eggs
-    Original: 4 eggs = 360 cal, 25.2g protein, 20g fat
+    Original: 4 eggs = 360 cal, 24g protein, 28g fat
     Calculation: 
-    - Per egg: 360÷4 = 90 cal, 25.2÷4 = 6.3g protein, 20÷4 = 5g fat
-    - New total: 90×5 = 450 cal, 6.3×5 = 31.5g protein, 5×5 = 25g fat
+    - Per egg: 360÷4 = 90 cal, 24÷4 = 6g protein, 28÷4 = 7g fat
+    - New total: 90×5 = 450 cal, 6×5 = 30g protein, 7×5 = 35g fat
 
     Example: Halving a portion
     Original: Chicken breast (200g) = 330 cal, 62g protein
@@ -88,10 +94,12 @@ ADJUST_MEAL_PROMPT = """
 
     1. **Parse user intent**: Understand what they want to change
     2. **Validate against last_saved_meal**: Ensure the item they're referring to exists
-    3. **Calculate new values**: Use proper nutrition data and multiply by quantity
-    4. **Maintain consistency**: Keep same units and format as original
-    5. **Update confidence**: Lower if user correction suggests initial scan was inaccurate
-    6. **Add adjustment_summary**: Brief explanation like "Changed eggs from 4 to 5, recalculated macros"
+    3. **Preserve meal ID**: ALWAYS include the "id" field from last_saved_meal
+    4. **Calculate new values**: Use proper nutrition data and multiply by quantity
+    5. **Maintain consistency**: Keep same units and format as original
+    6. **Update confidence**: Lower if user correction suggests initial scan was inaccurate
+    7. **Update notes**: Append information about the adjustment if relevant
+    8. **Add adjustment_summary**: Brief explanation like "Changed eggs from 4 to 5, recalculated macros"
 
     ---
 
@@ -99,7 +107,7 @@ ADJUST_MEAL_PROMPT = """
 
     If user request is unclear:
     - Ask clarifying question: "Which item would you like to adjust?"
-    - Suggest: "I see eggs and toast in your meal. Did you mean the eggs?"
+    - Suggest: "I see fried eggs and onions in your meal. Did you mean the eggs?"
 
     If item doesn't exist:
     - Reply: "I don't see [item] in your last meal. Would you like to add it?"
@@ -107,57 +115,134 @@ ADJUST_MEAL_PROMPT = """
     If last_saved_meal is missing:
     - Reply: "No previous meal found. Please scan a meal first before making adjustments."
 
+    If last_saved_meal has no ID:
+    - Reply: "Cannot adjust meal: missing meal ID. Please scan a new meal."
+
     ---
 
     ## Examples
 
     ### Example 1: Quantity adjustment
     User: "Make it 5 eggs"
-    last_saved_meal has: 4 eggs = 360 cal, 25.2g protein
+
+    last_saved_meal:
+    {
+        "id": 5,
+        "items": [
+            {
+                "id": 9,
+                "name": "fried egg",
+                "quantity": 4,
+                "unit": "eggs",
+                "total_calories": 360,
+                "total_protein_grams": 24,
+                ...
+            }
+        ]
+    }
 
     Response:
     {
+        "id": 5,
         "items": [
             {
-                "name": "fried eggs",
+                "name": "fried egg",
                 "quantity": 5,
                 "unit": "eggs",
-                "estimated_weight_grams": 300,
-                "total_protein_grams": 31.5,
-                "total_carbs_grams": 1.8,
-                "total_fat_grams": 25.0,
+                "estimated_weight_grams": 250,
+                "total_protein_grams": 30.0,
+                "total_carbs_grams": 3.0,
+                "total_fat_grams": 35.0,
                 "total_calories": 450,
                 "confidence": 0.90
             }
         ],
         "confidence": 0.90,
-        "notes": "Adjusted based on user correction",
-        "adjustment_summary": "Changed eggs from 4 to 5, recalculated all macros proportionally"
+        "notes": "Adjusted quantity based on user correction",
+        "adjustment_summary": "Changed fried eggs from 4 to 5, recalculated all macros proportionally"
     }
 
     ### Example 2: Adding item
-    User: "I also had a banana"
-    Response adds:
+    User: "I also had 50g of tomatoes"
+
+    Response:
     {
-        "name": "banana",
-        "quantity": 1,
-        "unit": "piece",
-        "estimated_weight_grams": 120,
-        "total_protein_grams": 1.3,
-        "total_carbs_grams": 27.0,
-        "total_fat_grams": 0.4,
-        "total_calories": 105,
-        "confidence": 0.85
+        "id": 5,
+        "items": [
+            {
+                "name": "fried egg",
+                "quantity": 4,
+                "unit": "eggs",
+                "estimated_weight_grams": 200,
+                "total_protein_grams": 24,
+                "total_carbs_grams": 2.4,
+                "total_fat_grams": 28,
+                "total_calories": 360,
+                "confidence": 0.9
+            },
+            {
+                "name": "onions",
+                "quantity": 50,
+                "unit": "grams",
+                "estimated_weight_grams": 50,
+                "total_protein_grams": 0.55,
+                "total_carbs_grams": 4.5,
+                "total_fat_grams": 0.05,
+                "total_calories": 20,
+                "confidence": 0.6
+            },
+            {
+                "name": "tomatoes",
+                "quantity": 50,
+                "unit": "grams",
+                "estimated_weight_grams": 50,
+                "total_protein_grams": 0.45,
+                "total_carbs_grams": 1.9,
+                "total_fat_grams": 0.1,
+                "total_calories": 9,
+                "confidence": 0.95
+            }
+        ],
+        "confidence": 0.85,
+        "notes": "Adjusted quantity based on user correction. Added tomatoes.",
+        "adjustment_summary": "Added 50g of tomatoes to the meal"
     }
 
-    ### Example 3: Item replacement
-    User: "That's whole wheat bread, not white"
-    Response: Replace white bread item with whole wheat, adjust macros (more fiber, slightly different calories)
+    ### Example 3: Removing item
+    User: "Remove the onions"
+
+    Response:
+    {
+        "id": 5,
+        "items": [
+            {
+                "name": "fried egg",
+                "quantity": 4,
+                "unit": "eggs",
+                "estimated_weight_grams": 200,
+                "total_protein_grams": 24,
+                "total_carbs_grams": 2.4,
+                "total_fat_grams": 28,
+                "total_calories": 360,
+                "confidence": 0.9
+            }
+        ],
+        "confidence": 0.90,
+        "notes": "Removed onions per user request",
+        "adjustment_summary": "Removed onions from the meal"
+    }
+
+    ### Example 4: Item replacement
+    User: "That's whole wheat bread, not white bread"
+
+    Response: Replace the bread item entirely with whole wheat version, recalculate macros
 
     ---
 
     ## CRITICAL Reminders
 
+    ✅ ALWAYS include the meal "id" from last_saved_meal
+    ✅ NEVER include "id" for individual items (backend will regenerate)
     ✅ ALWAYS recalculate totals when quantity changes
     ✅ ALWAYS use nutritionally accurate values per food type
     ✅ ALWAYS maintain the "total_*" convention (not per-unit)
