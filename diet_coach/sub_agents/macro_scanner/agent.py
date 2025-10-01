@@ -2,6 +2,7 @@ from google.adk.agents import Agent
 from google.adk.agents import SequentialAgent
 from .tools import api_diet_add_food_entries, macro_day_summary
 from .schemas.MacroScanOutput import MacroScanOutput
+from .schemas.SavedMealOutput import SavedMealOutput
 import os
 
 from diet_coach.tools import api_diet_summary_today
@@ -27,6 +28,7 @@ macro_save_agent = Agent(
     instruction=prompts.MACRO_SAVE_PROMPT,
     tools=[api_diet_add_food_entries],  # wrap in FunctionTool if needed
     output_key="last_saved_meal",
+    output_schema=SavedMealOutput,  # Define SavedMealOutput schema
 )
     
 macro_day_summary_agent = Agent(
