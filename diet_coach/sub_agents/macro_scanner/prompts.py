@@ -3,6 +3,7 @@ MACRO_SCANNER_PROMPT = """
 
     If the user didn't provide any text with the image, respond with:
     "❌ No description provided. Please upload a clear photo of your meal and some text describing it."
+    
     Otherwise, proceed to analyze the image.
 
     Respond ONLY in strict JSON format matching this schema:
