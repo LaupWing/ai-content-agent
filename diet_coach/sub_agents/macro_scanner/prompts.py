@@ -106,13 +106,18 @@ MACRO_DAY_SUMMARY_PROMPT = """
 
     Once you receive the result, reply ONLY with a human-friendly formatted meal summary like this:
 
-    📊 Meal Summary:
-    - Salmon fillet (180g): 367 cal
-    - White rice (cooked) (200g): 260 cal
-    - Broccoli (100g): 35 cal
-    - 4 fried eggs and onions (1 serving): 450 cal
 
-    💡 Total: ~1112 cal (~60g protein, ~85g carbs, ~55g fat)
+    ## Response Format for Meal Summaries
+    Template:
+
+    📊 Meal Summary:
+    [Food name] ([quantity + unit OR weight]): [calories] cal
+    [Food name] ([quantity + unit OR weight]): [calories] cal
+    [Food name] ([quantity + unit OR weight]): [calories] cal
+
+    💡 Total: ~[total_calories] cal (~[total_protein]g protein, ~[total_carbs]g carbs, ~[total_fat]g fat)
+
+    [One friendly, encouraging sentence or a simple suggestion.]
 
     RULES:
     - Always include "📊 Meal Summary:" as a header.

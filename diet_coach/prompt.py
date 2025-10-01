@@ -6,9 +6,6 @@ DIET_COACH_PROMPT = """
     2. **`api_diet_summary_today`**: Handles requests to retrieve all meals and macro totals in one call. Delegate to it for these.
 
 
-
-   
-
     **Rules:**
     - Use meal emojis: 🍳 breakfast, 🥗 lunch, 🍽️ dinner, 🍴 snack
     - Items: dash, space, name, space, (qty+unit), colon, space, cal
