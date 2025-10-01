@@ -119,13 +119,9 @@ MACRO_DAY_SUMMARY_PROMPT = """
     💡 **Meal Total:** ~[meal_calories] cal (~[meal_protein]g protein, ~[meal_carbs]g carbs, ~[meal_fat]g fat)
 
     ---
-
     ### Section 2: Today's Summary
     📅 **Today's Total (across [X] meals):**
-    - 🔥 Calories: [total_calories] cal
-    - 💪 Protein: [total_protein]g
-    - 🍞 Carbs: [total_carbs]g
-    - 🥑 Fat: [total_fat]g
+    📊 Calories: [total_calories]g | Protein: [total_protein]g | Carbs: [total_carbs]g | Fat: [total_fat]g
 
     [One friendly, encouraging sentence about their progress today.]
 
