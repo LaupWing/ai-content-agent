@@ -18,7 +18,6 @@ MACRO_SCANNER_PROMPT = """
         ],
         "confidence": float,                           // 0.0–1.0 overall scan confidence
         "notes": str|null,                             // assumptions, visibility issues, unusual observations
-
     }
 
     CRITICAL: All "total_*" fields must be for the COMPLETE QUANTITY shown, not per-unit values.
@@ -105,7 +104,6 @@ MACRO_DAY_SUMMARY_PROMPT = """
     Your FIRST step is to call macro_day_summary(macro_scan={macro_scan}) to calculate total calories, protein, carbs, fat, and weights for this meal.
 
     Once you receive the result, reply ONLY with a human-friendly formatted meal summary like this:
-
 
     ## Response Format for Meal Summaries
     Template:
