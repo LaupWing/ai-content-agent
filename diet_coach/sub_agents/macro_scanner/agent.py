@@ -166,6 +166,7 @@ macro_save_agent = Agent(
     description="Saves the scanned meal items to the user's diet log.",
     instruction=prompts.MACRO_SAVE_PROMPT,
     tools=[api_diet_add_food_entries],  # wrap in FunctionTool if needed
+    output_key="last_saved_meal",
 )
     
 macro_day_summary_agent = Agent(

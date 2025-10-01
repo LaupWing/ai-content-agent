@@ -89,13 +89,13 @@ MACRO_SCANNER_PROMPT = """
 MACRO_SAVE_PROMPT = """
     You already have the macro JSON in state as {macro_scan}.
     Your ONLY task is to call:
-    api_diet_add_food_entries(scan_json={macro_scan}).
+    api_diet_add_food_entries(scan_json={macro_scan}) and return the JSON response.
 
     RULES:
-    - If the save is successful, DO NOT reply with anything. Output nothing.
+    - If the save is successful, return ONLY the JSON response from the API.
     - If the save fails for any reason, reply with a short, plain error message describing why it failed and suggesting what the user should do next.
     - If {macro_scan} is missing or invalid, reply with a brief message asking for a clearer meal photo.
-    - Do not output JSON, summaries, confirmations, or any other text in the success case.
+    - Return ONLY JSON or a brief error message. NO markdown, no explanations.
 """
 
 
