@@ -101,30 +101,72 @@ MACRO_SAVE_PROMPT = """
 
 MACRO_DAY_SUMMARY_PROMPT = """
     You already have the macro scan result as {macro_scan}.
-    Your FIRST step is to call macro_day_summary(macro_scan={macro_scan}) to calculate total calories, protein, carbs, fat, and weights for this meal.
 
-    Once you receive the result, reply ONLY with a human-friendly formatted meal summary like this:
+    Your FIRST step is to call macro_day_summary(macro_scan={macro_scan}) to:
+    1. Calculate totals for THIS meal
+    2. Get the full day summary (all meals today)
 
-    ## Response Format for Meal Summaries
-    Template:
+    Once you receive the result, reply with a human-friendly formatted response with TWO sections:
 
-    📊 Meal Summary:
+    ## Response Format
+
+    ### Section 1: This Meal
+    📊 **This Meal:**
     [Food name] ([quantity + unit OR weight]): [calories] cal
     [Food name] ([quantity + unit OR weight]): [calories] cal
     [Food name] ([quantity + unit OR weight]): [calories] cal
 
-    💡 Total: ~[total_calories] cal (~[total_protein]g protein, ~[total_carbs]g carbs, ~[total_fat]g fat)
+    💡 **Meal Total:** ~[meal_calories] cal (~[meal_protein]g protein, ~[meal_carbs]g carbs, ~[meal_fat]g fat)
 
-    [One friendly, encouraging sentence or a simple suggestion.]
+    ---
 
-    RULES:
-    - Always include "📊 Meal Summary:" as a header.
-    - One line per item: Name (quantity + unit OR total weight): total_calories cal.
-    - If `estimated_weight_grams` is present, include it in parentheses.
-    - If unit is count-based (e.g., eggs), include both quantity and weight if available (e.g., "4 fried eggs (240g): 360 cal").
-    - If item is a prepared dish, you can write "(1 serving)" instead of weight.
-    - Round calories to the nearest 5.
-    - Always end with a "💡 Total:" line with approximate total calories and macros (rounded to 1 decimal or nearest 5).
-    - Do NOT output JSON, explanations, or tool names.
-    - If `macro_day_summary()` fails or {macro_scan} is invalid, reply: "Could not generate a meal summary. Please try again."
+    ### Section 2: Today's Summary
+    📅 **Today's Total (across [X] meals):**
+    - 🔥 Calories: [total_calories] cal
+    - 💪 Protein: [total_protein]g
+    - 🍞 Carbs: [total_carbs]g
+    - 🥑 Fat: [total_fat]g
+
+    [One friendly, encouraging sentence about their progress today.]
+
+    ---
+
+    ## RULES:
+
+    ### For "This Meal" section:
+    - Always include "📊 **This Meal:**" as header
+    - One line per item: Name (quantity + unit OR weight): calories cal
+    - If `estimated_weight_grams` exists, show it: "4 fried eggs (240g): 360 cal"
+    - If unit is count-based AND weight exists, show both: "2 slices bread (60g): 170 cal"
+    - If no weight, just show quantity + unit: "1 cup coffee: 5 cal"
+    - Round calories to nearest 5
+    - End with "💡 **Meal Total:**" line showing meal totals (use data from `meal.totals`)
+
+    ### For "Today's Summary" section:
+    - Always include "📅 **Today's Total (across X meals):**" header
+    - Use `day_summary.meals_count` for [X]
+    - Show all 4 macros with emoji icons
+    - Use data from `day_summary.totals`:
+    - total_calories
+    - total_protein_grams
+    - total_carbs_grams
+    - total_fat_grams
+    - Round to nearest whole number
+
+    ### Encouraging messages (pick based on context):
+    - If it's their first meal: "Great start to the day! 🌅"
+    - If they're hitting protein goals: "Excellent protein intake today! 💪"
+    - If calories are balanced: "You're right on track! Keep it up! ⭐"
+    - If it's a light meal: "A nice light meal to keep you energized! ✨"
+    - If it's evening: "Finishing strong today! 🌙"
+
+    ### Error handling:
+    - If `macro_day_summary()` fails, reply: "❌ Could not generate meal summary. Please try again."
+    - If `macro_scan` is invalid, reply: "❌ Invalid meal data. Please rescan your meal."
+
+    ### Format notes:
+    - Do NOT output raw JSON, tool names, or technical explanations
+    - Use markdown formatting (**, emojis)
+    - Keep it friendly and conversational
+    - Always separate the two sections with "---"
 """
