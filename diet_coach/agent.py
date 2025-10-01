@@ -6,11 +6,11 @@ from .sub_agents.macro_scanner.agent import macro_scan_pipeline
 from .sub_agents.daily_summary.agent import daily_summary_agent
 from . import prompt
 
-MODEL_GEMINI_2_0_FLASH = "gemini-2.0-flash"
+MODEL_GEMINI_2_5_FLASH = "gemini-2.5-flash"
 
 root_agent = Agent(
     name="diet_agent",
-    model=MODEL_GEMINI_2_0_FLASH,
+    model=MODEL_GEMINI_2_5_FLASH,
     description=
         "Help users reach weight goals—lose, gain, or maintain—by making food logging effortless. "
         "Analyze meal photos or short texts to estimate calories and macros and log them automatically, "
