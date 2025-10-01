@@ -1,4 +1,4 @@
-MACRO_SCANNER_PROMPT = """
+MACRO_DAY_SUMMARY_PROMPT = """
     ## Response Format for Daily Summaries
     When users ask about their intake ("what did I eat?", "how many calories?"), ALWAYS format responses like this:
     **Template:**
