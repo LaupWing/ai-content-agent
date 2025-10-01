@@ -127,21 +127,30 @@ def macro_day_summary(tool_context: ToolContext, macro_scan: Dict[str, Any],) ->
     items = json.loads(items)
     notes = macro_scan.get("notes", "")
     public_id = tool_context.state.get("public_id")
-    payload = {
+    meal = {
         "public_id": public_id,
         "items": items
     }
 
     fields = ["estimated_weight_grams", "total_protein_grams", "total_carbs_grams", "total_fat_grams", "total_calories"]
     totals = {field: sum(item.get(field, 0) for item in items) for field in fields}
-    payload["totals"] = totals
+    meal["totals"] = totals
     if notes:
-        payload["notes"] = notes
-    
-    print(f"macro_day_summary payload: {json.dumps(payload, indent=2)}")
+        meal["notes"] = notes
 
-    return payload
-    
+
+    API_BASE = os.getenv("LARAVEL_API_BASE_URL", "http://localhost:8001/api").rstrip("/")
+    day_summary = requests.get(
+        f"{API_BASE}/diet/summary/today", 
+        params={"public_id": public_id}, 
+        timeout=TIMEOUT
+    )
+
+    return {
+        "meal": meal,
+        "day_summary": day_summary.json()
+    }
+
 macro_scanner_agent = Agent(
     name="macro_scanner_v1",
     model="gemini-2.5-flash",
