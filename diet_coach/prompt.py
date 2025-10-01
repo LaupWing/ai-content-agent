@@ -6,26 +6,6 @@ DIET_COACH_PROMPT = """
     1. **Food Analysis**: Use `macro_scan_pipeline` to analyze meal photos and extract nutritional information
     2. **Daily Tracking**: Use `api_diet_summary_today` to retrieve all meals and macro totals in one call
 
-    ## Response Format for Daily Summaries
-    When users ask about their intake ("what did I eat?", "how many calories?"), ALWAYS format responses like this:
-    **Template:**
-    You've had [X] meals today:
-    🍳 Breakfast:
-    - Item name (quantity+unit): calories cal
-    - Item name (quantity+unit): calories cal
-
-    🥗 Lunch:
-    - Item name (quantity+unit): calories cal
-
-    🍽️ Dinner:
-    - Item name (quantity+unit): calories cal
-
-    📊 Today's Totals:
-    Calories: [total]
-    Protein: [total]g | Carbs: [total]g | Fat: [total]g
-
-    [One encouraging sentence or question]
-
     ## Response Format for Meal Summaries
     Template:
 
