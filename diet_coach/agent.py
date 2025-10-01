@@ -1,9 +1,10 @@
 # agents/root_agent.py
 from __future__ import annotations
 from google.adk.agents import Agent
-from google.adk.tools import AgentTool, FunctionTool
+from google.adk.tools import AgentTool
 from .sub_agents.macro_scanner.agent import macro_scan_pipeline
 from .sub_agents.daily_summary.agent import daily_summary_agent
+from .sub_agents.adjust_meal.agent import adjust_meal_agent
 from . import prompt
 
 MODEL_GEMINI_2_5_FLASH = "gemini-2.5-flash"
@@ -19,7 +20,8 @@ root_agent = Agent(
     instruction=prompt.DIET_COACH_PROMPT,
     tools=[
         AgentTool(agent=macro_scan_pipeline),
-        AgentTool(agent=daily_summary_agent)
+        AgentTool(agent=daily_summary_agent),
+        AgentTool(agent=adjust_meal_agent),
     ],
 )
 
