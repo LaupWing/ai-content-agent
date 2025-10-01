@@ -19,8 +19,7 @@ MACRO_DAY_SUMMARY_PROMPT = """
     - Item name (quantity+unit): calories cal
 
     📊 Today's Totals:
-    Calories: [total]
-    Protein: [total]g | Carbs: [total]g | Fat: [total]g
+    Calories: [total_calories]g | Protein: [total_protein]g | Carbs: [total_carbs]g | Fat: [total_fat]g
 
     [One encouraging sentence or question]
     [Give an fact why eating healthy is important.]
