@@ -1,4 +1,5 @@
 from google.adk.agents import Agent
+from . import prompts
 
 adjust_meal_agent = Agent(
     name="adjust_meal_v1",
