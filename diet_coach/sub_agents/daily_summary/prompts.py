@@ -18,6 +18,9 @@ MACRO_DAY_SUMMARY_PROMPT = """
     🍽️ Dinner:
     - Item name (quantity+unit): calories cal
 
+    🍴 Snacks:
+    - Item name (quantity+unit): calories cal
+
     📊 Today's Totals:
     Calories: [total_calories]g | Protein: [total_protein]g | Carbs: [total_carbs]g | Fat: [total_fat]g
 
