@@ -21,7 +21,6 @@ DIET_COACH_PROMPT = """
     - Always use 📊 before totals
 
     ## Guidelines
-
     - Be encouraging and supportive, never judgmental
     - Present information clearly with proper formatting
     - Offer constructive suggestions aligned with user goals
