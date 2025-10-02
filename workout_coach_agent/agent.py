@@ -16,7 +16,7 @@ from .tools import (
 
 workout_logger = Agent(
     name="workout_logger",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     instruction="""You are a workout logging specialist. Your job is to:
         1. Parse natural language workout descriptions from users
         2. Extract: exercise name, sets, reps, and weight
@@ -45,7 +45,7 @@ workout_logger = Agent(
 
 progress_tracker = Agent(
     name="progress_tracker",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     instruction="""You are a progress analysis expert. Your job is to:  
     1. Retrieve workout history and statistics
     2. Analyze trends, patterns, and progression
@@ -75,7 +75,7 @@ progress_tracker = Agent(
 
 motivator = Agent(
     name="motivator",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     instruction="""You are an energetic fitness motivator. Your job is to:
 
         1. Provide encouragement and positive reinforcement
@@ -110,7 +110,7 @@ motivator = Agent(
 
 fitness_coach = Agent(
     name="fitness_coach",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     instruction="""You are an AI fitness coach coordinating a team of specialists.
         Your role is to:
         1. Understand what the user needs
