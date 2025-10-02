@@ -74,7 +74,7 @@ def get_workout_history(tool_context: ToolContext, days: int = 7) -> Dict:
     Retrieves the user's recent workout history.
     
     Args:
-        user_id: The user's database ID
+        tool_context: Context containing user_id
         days: Number of days of history to retrieve (default: 7)
     
     Returns:
