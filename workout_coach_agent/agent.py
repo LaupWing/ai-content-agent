@@ -2,6 +2,7 @@
 Workout Coach Agent - Multi-agent system for workout logging and coaching
 """
 from google.adk.agents import Agent
+from google.adk.tools import AgentTool
 from .tools import (
     log_workout,
     get_workout_history,
@@ -142,7 +143,11 @@ fitness_coach = Agent(
         Your tone: Professional coach, supportive, knowledgeable, efficient
     """,
     description="Main fitness coaching coordinator that routes to specialist agents",
-    tools=[workout_logger, progress_tracker, motivator]
+    tools=[
+        AgentTool(agent=workout_logger),
+        AgentTool(agent=progress_tracker),
+        AgentTool(agent=motivator)
+    ]
 )
 
 
