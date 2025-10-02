@@ -5,6 +5,7 @@ Tools for the fitness coach agent to interact with Laravel backend
 import httpx
 import os
 from typing import Dict, List, Optional
+from google.adk.tools import ToolContext
 
 # Get Laravel API config from environment
 LARAVEL_API_URL = os.getenv("LARAVEL_API_URL", "http://localhost:8001/api")
@@ -68,7 +69,7 @@ def log_workout(
     return _make_laravel_request("POST", "workouts/log", data)
 
 
-def get_workout_history(user_id: int, days: int = 7) -> Dict:
+def get_workout_history(tool_context: ToolContext, days: int = 7) -> Dict:
     """
     Retrieves the user's recent workout history.
     
@@ -82,7 +83,9 @@ def get_workout_history(user_id: int, days: int = 7) -> Dict:
     Example:
         get_workout_history(2, 14)  # Last 2 weeks
     """
+    user_id = tool_context.state.get("user_id")
     params = {"user_id": user_id, "days": days}
+
     return _make_laravel_request("GET", "workouts/history", params)
 
 
