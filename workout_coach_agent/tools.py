@@ -32,7 +32,7 @@ def _make_laravel_request(method: str, endpoint: str, data: Optional[Dict] = Non
 
 
 def log_workout(
-    user_id: int,
+    tool_context: ToolContext,
     exercise_name: str,
     sets: int,
     reps: int,
@@ -56,6 +56,7 @@ def log_workout(
     Example:
         log_workout(2, "Bench Press", 3, 8, 60.0, "Felt great!")
     """
+    user_id = tool_context.state.get("user_id")
     data = {
         "user_id": user_id,
         "workout_data": {
@@ -92,12 +93,12 @@ def get_workout_history(tool_context: ToolContext, days: int = 7) -> Dict:
     return _make_laravel_request("GET", "workouts/history", params)
 
 
-def get_workout_summary(user_id: int, days: int = 7) -> Dict:
+def get_workout_summary(tool_context: ToolContext, days: int = 7) -> Dict:
     """
     Gets a statistical summary of the user's training.
     
     Args:
-        user_id: The user's database ID
+        tool_context: Context containing user_id
         days: Number of days to analyze (default: 7)
     
     Returns:
@@ -106,6 +107,7 @@ def get_workout_summary(user_id: int, days: int = 7) -> Dict:
     Example:
         get_workout_summary(2, 30)  # Last month's stats
     """
+    user_id = tool_context.state.get("user_id")
     params = {"user_id": user_id, "days": days}
     return _make_laravel_request("GET", "workouts/summary", params)
 
