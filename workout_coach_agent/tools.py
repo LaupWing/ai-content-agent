@@ -4,7 +4,7 @@ Tools for the fitness coach agent to interact with Laravel backend
 """
 import httpx
 import os
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 from google.adk.tools import ToolContext
 
 # Get Laravel API config from environment
