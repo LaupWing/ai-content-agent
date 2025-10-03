@@ -7,7 +7,9 @@ from .tools import (
     log_workout,
     get_workout_history,
     get_workout_summary,
-    search_exercises
+    search_exercises,
+    get_active_workout_plan,
+    get_todays_workout
 )
 
 # ═══════════════════════════════════════════════════════════
@@ -39,7 +41,7 @@ workout_logger = Agent(
         Tone: Supportive, energetic, knowledgeable
     """,
     description="Parses natural language and logs workouts to database",
-    tools=[log_workout, search_exercises]
+    tools=[log_workout, search_exercises, get_todays_workout]
 )
 
 
@@ -69,7 +71,7 @@ progress_tracker = Agent(
     Tone: Analytical but motivating, data-driven, insightful
     """,
     description="Analyzes workout data and provides progress insights",
-    tools=[get_workout_history, get_workout_summary]
+    tools=[get_workout_history, get_workout_summary, get_active_workout_plan]
 )
 
 
