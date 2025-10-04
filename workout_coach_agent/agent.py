@@ -3,14 +3,6 @@ Workout Coach Agent - Multi-agent system for workout logging and coaching
 """
 from google.adk.agents import Agent
 from google.adk.tools import AgentTool
-from .tools import (
-    log_workout,
-    get_workout_history,
-    get_workout_summary,
-    search_exercises,
-    get_active_workout_plan,
-    get_todays_workout
-)
 from . import prompt
 from .sub_agents.hype.agent import hype
 from .sub_agents.analysis.agent import analyst
