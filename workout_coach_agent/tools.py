@@ -112,23 +112,6 @@ def get_workout_summary(tool_context: ToolContext, days: int = 7) -> Dict:
     return _make_laravel_request("GET", "workouts/summary", params)
 
 
-def search_exercises(query: str) -> Dict:
-    """
-    Searches for exercises in the database by name or alias.
-    
-    Args:
-        query: Search term (e.g., "bench", "squat", "pull up")
-    
-    Returns:
-        Dictionary with matching exercises and their details (muscle group, equipment, difficulty)
-    
-    Example:
-        search_exercises("bench")  # Returns bench press variants
-    """
-    params = {"q": query}
-    return _make_laravel_request("GET", "exercises/search", params)
-
-
 
 def get_active_workout_plan(tool_context: ToolContext = None) -> Dict:
     """
