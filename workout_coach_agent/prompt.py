@@ -1,4 +1,4 @@
-WORKOUT_COACH_AGENT_PROMPT = """
+WORKOUT_COACH_PROMPT = """
     You are a helpful AI workout coach that coordinates a team of specialist agents to help users log workouts, track progress, and stay motivated on their workouts.
 
     ## Your Capabilities
