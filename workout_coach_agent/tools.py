@@ -1,7 +1,3 @@
-# fitness_coach_adk/fitness_coach/tools.py
-"""
-Tools for the fitness coach agent to interact with Laravel backend
-"""
 import httpx
 import os
 from typing import Dict, Optional
@@ -29,48 +25,6 @@ def _make_laravel_request(method: str, endpoint: str, data: Optional[Dict] = Non
         return response.json()
     except Exception as e:
         return {"error": str(e)}
-
-
-def log_workout(
-    tool_context: ToolContext,
-    exercise_name: str,
-    sets: int,
-    reps: int,
-    weight_kg: float,
-    notes: Optional[str] = None
-) -> Dict:
-    """
-    Logs a workout exercise to the user's training log.
-    
-    Args:
-        user_id: The user's database ID
-        exercise_name: Name of the exercise (e.g., "Bench Press", "Squat")
-        sets: Number of sets performed
-        reps: Number of repetitions per set
-        weight_kg: Weight used in kilograms
-        notes: Optional notes about the workout (e.g., "Felt strong", "Lower back tight")
-    
-    Returns:
-        Dictionary with confirmation and workout details
-    
-    Example:
-        log_workout(2, "Bench Press", 3, 8, 60.0, "Felt great!")
-    """
-    user_id = tool_context.state.get("user_id")
-    data = {
-        "user_id": user_id,
-        "workout_data": {
-            "exercises": [{
-                "name": exercise_name,
-                "sets": sets,
-                "reps": reps,
-                "weight_kg": weight_kg,
-                "notes": notes,
-            }]
-        }
-    }
-    
-    return _make_laravel_request("POST", "workouts/log", data)
 
 
 def get_workout_history(tool_context: ToolContext, days: int = 7) -> Dict:
@@ -110,67 +64,3 @@ def get_workout_summary(tool_context: ToolContext, days: int = 7) -> Dict:
     user_id = tool_context.state.get("user_id")
     params = {"user_id": user_id, "days": days}
     return _make_laravel_request("GET", "workouts/summary", params)
-
-
-
-def get_active_workout_plan(tool_context: ToolContext = None) -> Dict:
-    """
-    Gets the user's currently active workout plan.
-    
-    Args:
-        tool_context: Automatically injected by ADK
-    
-    Returns:
-        Dictionary with plan details including name, goal, schedule, and exercises
-    
-    Example response:
-        {
-            "has_plan": true,
-            "plan": {
-                "name": "Push/Pull/Legs 6-Day",
-                "goal": "hypertrophy",
-                "schedule": {"monday": "push", "tuesday": "pull", ...}
-            }
-        }
-    """
-    if tool_context and 'user_id' in tool_context.state:
-        user_id = tool_context.state['user_id']
-    else:
-        return {"error": "User ID not found"}
-    
-    params = {"user_id": user_id}
-    return _make_laravel_request("GET", "workout-plans/active", params)
-
-
-def get_todays_workout(tool_context: ToolContext = None) -> Dict:
-    """
-    Gets today's scheduled workout from the user's active plan.
-    
-    Args:
-        tool_context: Automatically injected by ADK
-    
-    Returns:
-        Dictionary with today's exercises, sets, reps, and target weights
-    
-    Example response:
-        {
-            "has_workout": true,
-            "day": "monday",
-            "plan_name": "PPL Split",
-            "exercises": [
-                {
-                    "exercise": {"name": "Bench Press"},
-                    "target_sets": 4,
-                    "target_reps": "8-10",
-                    "target_weight_kg": 60
-                }
-            ]
-        }
-    """
-    if tool_context and 'user_id' in tool_context.state:
-        user_id = tool_context.state['user_id']
-    else:
-        return {"error": "User ID not found"}
-    
-    params = {"user_id": user_id}
-    return _make_laravel_request("GET", "workout-plans/today", params)
