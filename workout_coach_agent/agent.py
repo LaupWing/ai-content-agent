@@ -11,7 +11,7 @@ from .tools import (
     get_active_workout_plan,
     get_todays_workout
 )
-from . import prompts
+from . import prompt
 
 # ═══════════════════════════════════════════════════════════
 # SPECIALIZED AGENTS
@@ -114,7 +114,7 @@ motivator = Agent(
 workout_coach = Agent(
     name="workout_coach",
     model="gemini-2.5-flash",
-    instruction=prompts.WORKOUT_COACH_PROMPT,
+    instruction=prompt.WORKOUT_COACH_AGENT_PROMPT,
     description="Main workout coaching coordinator that routes to specialist agents",
     tools=[
         AgentTool(agent=workout_logger),
