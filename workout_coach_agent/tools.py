@@ -1,7 +1,6 @@
 import httpx
 import os
 from typing import Dict, Optional
-from google.adk.tools import ToolContext
 
 # Get Laravel API config from environment
 LARAVEL_API_URL = os.getenv("LARAVEL_API_URL", "http://localhost:8001/api")
@@ -25,42 +24,3 @@ def _make_laravel_request(method: str, endpoint: str, data: Optional[Dict] = Non
         return response.json()
     except Exception as e:
         return {"error": str(e)}
-
-
-def get_workout_history(tool_context: ToolContext, days: int = 7) -> Dict:
-    """
-    Retrieves the user's recent workout history.
-    
-    Args:
-        tool_context: Context containing user_id
-        days: Number of days of history to retrieve (default: 7)
-    
-    Returns:
-        Dictionary containing list of workouts with exercises, dates, and performance data
-    
-    Example:
-        get_workout_history(2, 14)  # Last 2 weeks
-    """
-    user_id = tool_context.state.get("user_id")
-    params = {"user_id": user_id, "days": days}
-
-    return _make_laravel_request("GET", "workouts/history", params)
-
-
-def get_workout_summary(tool_context: ToolContext, days: int = 7) -> Dict:
-    """
-    Gets a statistical summary of the user's training.
-    
-    Args:
-        tool_context: Context containing user_id
-        days: Number of days to analyze (default: 7)
-    
-    Returns:
-        Dictionary with total workouts, volume, sets, average duration, and exercise list
-    
-    Example:
-        get_workout_summary(2, 30)  # Last month's stats
-    """
-    user_id = tool_context.state.get("user_id")
-    params = {"user_id": user_id, "days": days}
-    return _make_laravel_request("GET", "workouts/summary", params)
