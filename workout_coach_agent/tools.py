@@ -87,10 +87,7 @@ def get_workout_history(tool_context: ToolContext, days: int = 7) -> Dict:
     Example:
         get_workout_history(2, 14)  # Last 2 weeks
     """
-    print("Fetching workout history...", tool_context.state)
     user_id = tool_context.state.get("user_id")
-    print("User ID:", user_id)
-    print("------------")
     params = {"user_id": user_id, "days": days}
 
     return _make_laravel_request("GET", "workouts/history", params)
