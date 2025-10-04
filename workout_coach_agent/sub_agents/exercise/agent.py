@@ -1,7 +1,7 @@
 from typing import Dict
 from google.adk import Agent
 from . import prompt
-from tools import _make_laravel_request
+from workout_coach_agent.tools import _make_laravel_request
 
 def search_exercises(query: str) -> Dict:
     """

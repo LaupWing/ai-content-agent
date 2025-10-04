@@ -7,6 +7,8 @@ from . import prompt
 from .sub_agents.hype.agent import hype
 from .sub_agents.analysis.agent import analyst
 from .sub_agents.logger.agent import logger
+from .sub_agents.exercise.agent import exercise
+from .sub_agents.planner.agent import planner
 
 
 # ═══════════════════════════════════════════════════════════
@@ -20,8 +22,10 @@ workout_coach = Agent(
     description="Main workout coaching coordinator that routes to specialist agents",
     tools=[
         AgentTool(agent=logger),
-        # AgentTool(agent=analyst),
-        # AgentTool(agent=hype)
+        AgentTool(agent=analyst),
+        AgentTool(agent=hype),
+        AgentTool(agent=exercise),
+        AgentTool(agent=planner),
     ]
 )
 

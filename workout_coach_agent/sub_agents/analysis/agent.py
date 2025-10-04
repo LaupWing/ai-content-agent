@@ -1,7 +1,7 @@
 from google.adk.agents import Agent
 from google.adk.tools import ToolContext
 from typing import Dict
-from tools import _make_laravel_request
+from workout_coach_agent.tools import _make_laravel_request
 from . import prompt 
 
 def get_workout_history(tool_context: ToolContext, days: int = 7) -> Dict:
