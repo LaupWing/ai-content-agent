@@ -22,7 +22,7 @@ def search_exercises(query: str) -> Dict:
 exercise = Agent(
     name="exercise",
     model="gemini-2.5-flash",
-    instruction=prompt.EXERCISE_PROMPT,
+    instruction=prompt.EXCERCISE_PROMPT,
     description="Teaches exercise form, technique, and variations",
     tools=[search_exercises]
 )
