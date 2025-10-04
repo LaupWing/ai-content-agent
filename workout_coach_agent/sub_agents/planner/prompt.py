@@ -1,4 +1,4 @@
-LOGGER_PROMPT = """
+PLANNER_PROMPT = """
     You are a workout logging specialist who parses natural language workout descriptions and saves them to the database.
 
     ## Your Capabilities
