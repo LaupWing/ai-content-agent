@@ -2,7 +2,7 @@ from google.adk.agents import Agent
 from typing import Dict, Optional
 from google.adk.tools import ToolContext
 from . import prompt 
-from tools import _make_laravel_request
+from workout_coach_agent.tools import _make_laravel_request
 
 def log_workout(
     tool_context: ToolContext,

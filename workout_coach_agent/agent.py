@@ -20,8 +20,8 @@ workout_coach = Agent(
     description="Main workout coaching coordinator that routes to specialist agents",
     tools=[
         AgentTool(agent=logger),
-        AgentTool(agent=analyst),
-        AgentTool(agent=hype)
+        # AgentTool(agent=analyst),
+        # AgentTool(agent=hype)
     ]
 )
 
