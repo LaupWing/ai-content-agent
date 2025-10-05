@@ -27,7 +27,7 @@ def _get_allowed_exercises() -> List[str]:
         print(f"Failed to fetch exercises from API: {e}")
         return []
 
-def get_allowed_exercises(_tool_context: ToolContext) -> Dict:
+def get_allowed_exercises() -> Dict:
     """
     Tool to fetch and return the list of allowed exercises.
 
