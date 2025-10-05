@@ -13,9 +13,10 @@ def _get_allowed_exercises() -> List[str]:
     """
     try:
         response = _make_laravel_request("GET", "exercises", None)
-        # Assuming the API returns {"data": [{"name": "Bench Press", ...}, ...]}
-        # Adjust the parsing based on your actual API response structure
-        if isinstance(response, dict) and "data" in response:
+        # API returns {"exercises": [{"name": "Bench Press", ...}, ...]}
+        if isinstance(response, dict) and "exercises" in response:
+            return [exercise.get("name") for exercise in response["exercises"] if exercise.get("name")]
+        elif isinstance(response, dict) and "data" in response:
             return [exercise.get("name") for exercise in response["data"] if exercise.get("name")]
         elif isinstance(response, list):
             return [exercise.get("name") for exercise in response if exercise.get("name")]
@@ -26,7 +27,7 @@ def _get_allowed_exercises() -> List[str]:
         print(f"Failed to fetch exercises from API: {e}")
         return []
 
-def get_allowed_exercises(tool_context: ToolContext) -> Dict:
+def get_allowed_exercises(_tool_context: ToolContext) -> Dict:
     """
     Tool to fetch and return the list of allowed exercises.
 
@@ -193,8 +194,6 @@ recorder_agent = Agent(
 # Main logger as SequentialAgent - validator first, then recorder
 logger = SequentialAgent(
     name="logger",
-    model="gemini-2.5-flash",
-    instruction="You coordinate workout logging by first validating exercises, then recording them.",
-    description="Validates and logs workouts to database",
-    agents=[validator_agent, recorder_agent]
+    sub_agents=[validator_agent, recorder_agent],
+    description="Validates and logs workouts to database"
 )
