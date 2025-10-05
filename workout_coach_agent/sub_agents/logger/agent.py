@@ -1,4 +1,4 @@
-from google.adk.agents import Agent
+from google.adk.agents import Agent, SequentialAgent
 from typing import Dict, Optional, List
 from google.adk.tools import ToolContext
 from . import prompt
@@ -26,41 +26,63 @@ def _get_allowed_exercises() -> List[str]:
         print(f"Failed to fetch exercises from API: {e}")
         return []
 
-def _build_logger_instruction() -> str:
+def get_allowed_exercises(tool_context: ToolContext) -> Dict:
     """
-    Builds the logger agent instruction with dynamically fetched exercises.
+    Tool to fetch and return the list of allowed exercises.
 
     Returns:
-        Complete instruction string with allowed exercises list
+        Dictionary containing the allowed exercises list
+    """
+    exercises = _get_allowed_exercises()
+    return {
+        "allowed_exercises": exercises,
+        "count": len(exercises)
+    }
+
+def _build_validator_instruction() -> str:
+    """
+    Builds the validator agent instruction with dynamically fetched exercises.
+
+    Returns:
+        Instruction string for the validator agent
     """
     allowed_exercises = _get_allowed_exercises()
 
-    base_instruction = prompt.LOGGER_PROMPT
-
     if allowed_exercises:
         exercises_list = "\n".join([f"    - {exercise}" for exercise in allowed_exercises])
-        exercise_constraint = f"""
-            ## IMPORTANT: Exercise Validation
+        return f"""
+You are an exercise validator. Your job is to verify that exercises mentioned by the user are in the approved exercise list.
 
-            You MUST ONLY log exercises from this approved list. Focus on the basics - consistency matters more than variety.
+## Allowed Exercises:
+{exercises_list}
 
-            **Allowed Exercises:**
-            {exercises_list}
+## Your Responsibilities:
 
-            **Validation Rules:**
-            - If the user mentions an exercise NOT on this list, politely inform them it's not in the approved exercise list
-            - Suggest the closest matching exercise from the approved list
-            - DO NOT log exercises that aren't on this list
-            - The exercise name must match EXACTLY (case-insensitive) with one from the approved list
+1. **Parse the user's workout description** to extract all exercise names mentioned
+2. **Validate each exercise** against the approved list (case-insensitive matching)
+3. **If ALL exercises are valid**: Extract and structure the workout data (exercise, sets, reps, weight, notes) and pass it forward
+4. **If ANY exercise is invalid**:
+   - Inform the user which exercise(s) are not approved
+   - Suggest the closest matching exercise from the approved list
+   - DO NOT proceed with logging - stop here and ask the user to correct
 
-            **Example Response for Invalid Exercise:**
-            User: "I did tricep kickbacks 3x12 at 10kg"
-            You: "Tricep kickbacks isn't in your approved exercise list. Did you mean Tricep Extensions or Dips? Here are the allowed exercises for triceps: [list relevant exercises]"
-        """
-        return base_instruction + exercise_constraint
+## Output Format:
+
+**For valid exercises**, respond with structured data:
+```
+VALID: <exercise_name> | <sets> | <reps> | <weight_kg> | <notes>
+```
+
+**For invalid exercises**, respond:
+```
+INVALID: <exercise_name> is not in the approved list. Did you mean <closest_match>?
+Approved exercises: [list relevant ones]
+```
+
+Focus on the basics - consistency matters more than variety.
+"""
     else:
-        # Fallback if API fails
-        return base_instruction
+        return "You are an exercise validator. Validate exercises against the approved list using the get_allowed_exercises tool."
 
 def log_workout(
     tool_context: ToolContext,
@@ -150,10 +172,29 @@ def edit_latest_exercise(
 
     return _make_laravel_request("PATCH", "workouts/exercises/latest", data)
 
-logger = Agent(
+# Validator agent - validates exercises against approved list
+validator_agent = Agent(
+    name="validator",
+    model="gemini-2.5-flash",
+    instruction=_build_validator_instruction(),
+    description="Validates that exercises are in the approved list",
+    tools=[]  # No tools needed, validation is done in the instruction
+)
+
+# Recorder agent - logs validated workouts to database
+recorder_agent = Agent(
+    name="recorder",
+    model="gemini-2.5-flash",
+    instruction=prompt.LOGGER_PROMPT,
+    description="Records validated workout data to database",
+    tools=[log_workout, edit_latest_exercise]
+)
+
+# Main logger as SequentialAgent - validator first, then recorder
+logger = SequentialAgent(
     name="logger",
     model="gemini-2.5-flash",
-    instruction=_build_logger_instruction(),
-    description="Parses natural language and logs workouts to database",
-    tools=[log_workout, edit_latest_exercise]
+    instruction="You coordinate workout logging by first validating exercises, then recording them.",
+    description="Validates and logs workouts to database",
+    agents=[validator_agent, recorder_agent]
 )
