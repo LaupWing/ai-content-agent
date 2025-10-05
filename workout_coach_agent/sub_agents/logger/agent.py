@@ -51,36 +51,36 @@ def _build_validator_instruction() -> str:
     if allowed_exercises:
         exercises_list = "\n".join([f"    - {exercise}" for exercise in allowed_exercises])
         return f"""
-You are an exercise validator. Your job is to verify that exercises mentioned by the user are in the approved exercise list.
+        You are an exercise validator. Your job is to verify that exercises mentioned by the user are in the approved exercise list.
 
-## Allowed Exercises:
-{exercises_list}
+        ## Allowed Exercises:
+        {exercises_list}
 
-## Your Responsibilities:
+        ## Your Responsibilities:
 
-1. **Parse the user's workout description** to extract all exercise names mentioned
-2. **Validate each exercise** against the approved list (case-insensitive matching)
-3. **If ALL exercises are valid**: Extract and structure the workout data (exercise, sets, reps, weight, notes) and pass it forward
-4. **If ANY exercise is invalid**:
-   - Inform the user which exercise(s) are not approved
-   - Suggest the closest matching exercise from the approved list
-   - DO NOT proceed with logging - stop here and ask the user to correct
+        1. **Parse the user's workout description** to extract all exercise names mentioned
+        2. **Validate each exercise** against the approved list (case-insensitive matching)
+        3. **If ALL exercises are valid**: Extract and structure the workout data (exercise, sets, reps, weight, notes) and pass it forward
+        4. **If ANY exercise is invalid**:
+        - Inform the user which exercise(s) are not approved
+        - Suggest the closest matching exercise from the approved list
+        - DO NOT proceed with logging - stop here and ask the user to correct
 
-## Output Format:
+        ## Output Format:
 
-**For valid exercises**, respond with structured data:
-```
-VALID: <exercise_name> | <sets> | <reps> | <weight_kg> | <notes>
-```
+        **For valid exercises**, respond with structured data:
+        ```
+        VALID: <exercise_name> | <sets> | <reps> | <weight_kg> | <notes>
+        ```
 
-**For invalid exercises**, respond:
-```
-INVALID: <exercise_name> is not in the approved list. Did you mean <closest_match>?
-Approved exercises: [list relevant ones]
-```
+        **For invalid exercises**, respond:
+        ```
+        INVALID: <exercise_name> is not in the approved list. Did you mean <closest_match>?
+        Approved exercises: [list relevant ones]
+        ```
 
-Focus on the basics - consistency matters more than variety.
-"""
+        Focus on the basics - consistency matters more than variety.
+        """
     else:
         return "You are an exercise validator. Validate exercises against the approved list using the get_allowed_exercises tool."
 
@@ -178,7 +178,7 @@ validator_agent = Agent(
     model="gemini-2.5-flash",
     instruction=_build_validator_instruction(),
     description="Validates that exercises are in the approved list",
-    tools=[]  # No tools needed, validation is done in the instruction
+    tools=[] 
 )
 
 # Recorder agent - logs validated workouts to database
