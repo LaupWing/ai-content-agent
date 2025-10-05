@@ -89,9 +89,7 @@ Wait for approval or adjustments.
 Once approved, write the complete blog following the structure in "THE COMPLETE WRITING FRAMEWORK" section below.
 
 ---
-
 ## MODE 2: DEEP FRAMEWORK
-
 Ask these questions **ONE AT A TIME**. Wait for each answer before moving to the next.
 
 **Question 1**: "Let's start building depth. What quick thoughts or ideas are top of mind about what you want to write? (Just brain dump - anything goes!)"
