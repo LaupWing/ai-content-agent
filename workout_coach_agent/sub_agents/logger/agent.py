@@ -33,13 +33,11 @@ def log_workout(
     data = {
         "user_id": user_id,
         "workout_data": {
-            "exercises": [{
-                "name": exercise_name,
-                "sets": sets,
-                "reps": reps,
-                "weight_kg": weight_kg,
-                "notes": notes,
-            }]
+            "exercise_name": exercise_name,
+            "sets": sets,
+            "reps": reps,
+            "weight_kg": weight_kg,
+            "notes": notes,
         }
     }
 
