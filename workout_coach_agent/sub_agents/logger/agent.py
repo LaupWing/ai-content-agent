@@ -167,7 +167,6 @@ def log_workout(
     }
 
     response = _make_laravel_request("POST", "workouts/log", data)
-    print(f"Logged workout response: {response}")
 
     # Clean up the response
     cleaned_response = _clean_workout_response(response)
