@@ -122,8 +122,9 @@ def log_workout(
         "user_id": user_id,
         "exercises": exercises
     }
-
-    return _make_laravel_request("POST", "workouts/log", data)
+    json = _make_laravel_request("POST", "workouts/log", data)
+    print(f"Logged workout response: {json}")
+    return json
 
 def edit_latest_exercise(
     tool_context: ToolContext,
