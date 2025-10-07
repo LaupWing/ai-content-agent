@@ -173,12 +173,23 @@ def log_workout(
 
     # Save to context state with today's date as key
     today = datetime.now().strftime("%Y-%m-%d")
-    tool_context.state[f"last_workout_{today}"] = cleaned_response
+    date_key = f"last_workout_{today}"
 
-    # Also save as 'last_workout' for easy access
-    tool_context.state["last_workout"] = cleaned_response
+    # Check if workout already exists for today
+    existing_workout = tool_context.state.get(date_key)
 
-    return cleaned_response
+    if existing_workout and existing_workout.get("workout_date") == today:
+        # Append exercises to existing workout
+        existing_workout["exercises"].extend(cleaned_response["exercises"])
+        existing_workout["total_volume_kg"] += cleaned_response["total_volume_kg"]
+        tool_context.state[date_key] = existing_workout
+        tool_context.state["last_workout"] = existing_workout
+        return existing_workout
+    else:
+        # New day, replace with new workout
+        tool_context.state[date_key] = cleaned_response
+        tool_context.state["last_workout"] = cleaned_response
+        return cleaned_response
 
 def edit_latest_exercise(
     tool_context: ToolContext,
