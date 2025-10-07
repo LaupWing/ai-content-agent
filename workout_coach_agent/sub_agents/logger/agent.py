@@ -194,7 +194,7 @@ def log_workout(
         tool_context.state["last_workout"] = cleaned_response
         return cleaned_response
 
-def edit_latest_exercise(
+def edit_workout(
     tool_context: ToolContext,
     exercise_name: str,
     sets: Optional[int] = None,
@@ -203,31 +203,39 @@ def edit_latest_exercise(
     notes: Optional[str] = None
 ) -> Dict:
     """
-    Edits the most recent logged instance of a specific exercise.
+    Edits a workout exercise from today's session.
 
-    Use this when the user wants to correct their latest workout entry for a specific exercise.
-    For example: "bench press was 110kg not 105kg" or "actually I did 4 sets of squats"
+    IMPORTANT: Only call this function when the user explicitly wants to EDIT/CORRECT an existing exercise.
+    Do NOT call this for new workout entries - use log_workout for new entries.
 
-    This tool now uses the workout_exercise_id from the context state for precise editing,
-    making it possible to edit specific exercises even when multiple exercises were logged.
+    Use this when the user wants to correct an exercise they already logged today:
+    - "bench press was 110kg not 105kg"
+    - "actually I did 4 sets of squats"
+    - "change the bench to 100kg"
+
+    This tool uses the workout_exercise_id from context state for precise editing.
 
     Args:
         tool_context: Context containing user_id and last workout data
         exercise_name: Name of the exercise to edit (e.g., "Bench Press", "Squat")
-        sets: New number of sets (optional, only updates if provided)
-        reps: New number of reps (optional, only updates if provided)
-        weight_kg: New weight in kilograms (optional, only updates if provided)
-        notes: New notes (optional, only updates if provided)
+        sets: New number of sets (optional, only include if changing)
+        reps: New number of reps (optional, only include if changing)
+        weight_kg: New weight in kilograms (optional, only include if changing)
+        notes: New notes (optional, only include if changing)
 
     Returns:
         Dictionary with updated exercise details
 
     Example:
-        edit_latest_exercise("Bench Press", weight_kg=110.0)
+        # User says: "bench was 120kg not 110kg"
+        edit_workout("Bench Press", weight_kg=120.0)
+
+        # User says: "actually did 4 sets of squats"
+        edit_workout("Squats", sets=4)
     """
     user_id = tool_context.state.get("user_id")
 
-    # Try to get the workout_exercise_id from state for more precise editing
+    # Get the workout_exercise_id from state
     last_workout = tool_context.state.get("last_workout", {})
     workout_exercise_id = None
 
@@ -237,28 +245,32 @@ def edit_latest_exercise(
                 workout_exercise_id = exercise.get("workout_exercise_id")
                 break
 
-    # Build updates dictionary with only provided values
-    updates = {}
+    if not workout_exercise_id:
+        return {
+            "success": False,
+            "error": f"Could not find {exercise_name} in today's workout. Can only edit exercises logged today."
+        }
+
+    # Build array with exercise updates - only include fields that are being changed
+    exercise_update = {
+        "workout_exercise_id": workout_exercise_id
+    }
+
     if sets is not None:
-        updates["sets"] = sets
+        exercise_update["sets"] = sets
     if reps is not None:
-        updates["reps"] = reps
+        exercise_update["reps"] = reps
     if weight_kg is not None:
-        updates["weight_kg"] = weight_kg
+        exercise_update["weight_kg"] = weight_kg
     if notes is not None:
-        updates["notes"] = notes
+        exercise_update["notes"] = notes
 
     data = {
         "user_id": user_id,
-        "exercise_name": exercise_name,
-        "updates": updates
+        "exercises": [exercise_update]
     }
 
-    # If we have the workout_exercise_id, include it for precise editing
-    if workout_exercise_id:
-        data["workout_exercise_id"] = workout_exercise_id
-
-    return _make_laravel_request("PATCH", "workouts/exercises/latest", data)
+    return _make_laravel_request("PATCH", "workouts/exercises/edit", data)
 
 # Validator agent - validates exercises against approved list
 validator_agent = Agent(
@@ -275,7 +287,7 @@ recorder_agent = Agent(
     model="gemini-2.5-flash",
     instruction=prompt.LOGGER_PROMPT,
     description="Records validated workout data to database",
-    tools=[log_workout, edit_latest_exercise]
+    tools=[log_workout, edit_workout]
 )
 
 # Main logger as SequentialAgent - validator first, then recorder
