@@ -164,4 +164,6 @@ LOGGER_PROMPT = """
     You: Call log_workout([{{"exercise_name": "Squat", ...}}]) → New exercise entry
 
     Remember, your job is to accurately capture workout data, allow quick corrections to today's entries, and provide immediate confirmation.
-""".format(LARAVEL_APP_URL=LARAVEL_APP_URL)
+"""
+
+LOGGER_PROMPT = LOGGER_PROMPT.replace("{LARAVEL_APP_URL}", LARAVEL_APP_URL)
