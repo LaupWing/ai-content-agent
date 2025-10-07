@@ -87,39 +87,40 @@ def _build_validator_instruction() -> str:
 
 def log_workout(
     tool_context: ToolContext,
-    exercise_name: str,
-    sets: int,
-    reps: int,
-    weight_kg: float,
-    notes: Optional[str] = None
+    exercises: List[Dict[str, any]]
 ) -> Dict:
     """
-    Logs a workout exercise to the user's training log.
+    Logs one or more workout exercises to the user's training log in a single request.
 
     Args:
-        user_id: The user's database ID
-        exercise_name: Name of the exercise (e.g., "Bench Press", "Squat")
-        sets: Number of sets performed
-        reps: Number of repetitions per set
-        weight_kg: Weight used in kilograms
-        notes: Optional notes about the workout (e.g., "Felt strong", "Lower back tight")
+        tool_context: Context containing user_id
+        exercises: List of exercise dictionaries, each containing:
+            - exercise_name (str): Name of the exercise (e.g., "Bench Press", "Squat")
+            - sets (int): Number of sets performed
+            - reps (int): Number of repetitions per set
+            - weight_kg (float): Weight used in kilograms
+            - notes (str, optional): Optional notes about the workout
 
     Returns:
-        Dictionary with confirmation and workout details
+        Dictionary with confirmation and workout details for all logged exercises
 
-    Example:
-        log_workout(2, "Bench Press", 3, 8, 60.0, "Felt great!")
+    Examples:
+        # Single exercise
+        log_workout([
+            {"exercise_name": "Bench Press", "sets": 3, "reps": 8, "weight_kg": 60.0, "notes": "Felt great!"}
+        ])
+
+        # Multiple exercises
+        log_workout([
+            {"exercise_name": "Bench Press", "sets": 3, "reps": 8, "weight_kg": 80.0},
+            {"exercise_name": "Squat", "sets": 5, "reps": 5, "weight_kg": 100.0},
+            {"exercise_name": "Rows", "sets": 3, "reps": 10, "weight_kg": 60.0}
+        ])
     """
     user_id = tool_context.state.get("user_id")
     data = {
         "user_id": user_id,
-        "workout_data": {
-            "exercise_name": exercise_name,
-            "sets": sets,
-            "reps": reps,
-            "weight_kg": weight_kg,
-            "notes": notes,
-        }
+        "exercises": exercises
     }
 
     return _make_laravel_request("POST", "workouts/log", data)
