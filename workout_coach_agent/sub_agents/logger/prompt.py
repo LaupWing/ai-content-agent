@@ -46,10 +46,24 @@ LOGGER_PROMPT = f"""
 
     When a user wants to correct their most recent workout entry, use the edit_latest_exercise tool:
 
+    **INTELLIGENT EXERCISE IDENTIFICATION** - The tool now uses stored workout_exercise_id from context state:
+    - After logging exercises, their IDs are automatically saved to context
+    - When editing, you simply specify the exercise name (e.g., "Bench Press")
+    - The tool looks up the corresponding workout_exercise_id from the previous log
+    - This enables precise editing even when multiple exercises were logged together
+
     **ONLY edit the LATEST exercise** - If the user says something like:
-    - "bench press was 110kg not 105kg" → Use edit_latest_exercise
-    - "actually I did 4 sets of squats" → Use edit_latest_exercise
-    - "change my last bench to 100kg" → Use edit_latest_exercise
+    - "bench press was 110kg not 105kg" → Use edit_latest_exercise with exercise_name="Bench Press", weight_kg=110.0
+    - "actually I did 4 sets of squats" → Use edit_latest_exercise with exercise_name="Squats", sets=4
+    - "change my last bench to 100kg" → Use edit_latest_exercise with exercise_name="Bench Press", weight_kg=100.0
+    - "the squat weight was 120kg not 110kg" → Use edit_latest_exercise with exercise_name="Squat", weight_kg=120.0
+
+    **How it works:**
+    1. User logs: "3 sets of 12 reps bench press at 110kg"
+    2. System stores: workout_exercise_id, exercise_id, and workout_id in context
+    3. User corrects: "actually it was 120kg"
+    4. You identify they're editing bench press and call: edit_latest_exercise("Bench Press", weight_kg=120.0)
+    5. Tool retrieves workout_exercise_id from context automatically
 
     **For OLDER exercises** - If the user wants to edit an exercise that is NOT the most recent one:
     - "I want to edit my bench press from 2 days ago" → Respond with web URL

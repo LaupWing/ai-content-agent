@@ -13,14 +13,14 @@ def _clean_workout_response(response: Dict) -> Dict:
         response: Raw API response from workout logging
 
     Returns:
-        Cleaned dictionary with essential workout info
+        Cleaned dictionary with essential workout info including IDs for editing
     """
     if not response.get("success") or not response.get("workout"):
         return response
 
     workout = response["workout"]
 
-    # Group exercises by name and aggregate their sets
+    # Group exercises by name and aggregate their sets, keeping track of IDs
     exercises_summary = {}
     for exercise_entry in workout.get("workout_exercises", []):
         exercise = exercise_entry.get("exercise", {})
@@ -32,7 +32,9 @@ def _clean_workout_response(response: Dict) -> Dict:
                 "sets": 0,
                 "reps": exercise_entry.get("reps"),
                 "weight_kg": exercise_entry.get("weight_kg"),
-                "is_pr": False
+                "is_pr": False,
+                "workout_exercise_id": exercise_entry.get("id"),  # ID of the workout_exercise record
+                "exercise_id": exercise.get("id")  # ID of the exercise itself
             }
 
         exercises_summary[name]["sets"] += 1
@@ -42,6 +44,7 @@ def _clean_workout_response(response: Dict) -> Dict:
     return {
         "success": True,
         "message": response.get("message", "Workout logged!"),
+        "workout_id": workout.get("id"),  # ID of the workout record
         "workout_date": workout.get("workout_date", "").split("T")[0],
         "total_volume_kg": workout.get("total_volume_kg", 0),
         "exercises": list(exercises_summary.values())
@@ -205,8 +208,11 @@ def edit_latest_exercise(
     Use this when the user wants to correct their latest workout entry for a specific exercise.
     For example: "bench press was 110kg not 105kg" or "actually I did 4 sets of squats"
 
+    This tool now uses the workout_exercise_id from the context state for precise editing,
+    making it possible to edit specific exercises even when multiple exercises were logged.
+
     Args:
-        tool_context: Context containing user_id
+        tool_context: Context containing user_id and last workout data
         exercise_name: Name of the exercise to edit (e.g., "Bench Press", "Squat")
         sets: New number of sets (optional, only updates if provided)
         reps: New number of reps (optional, only updates if provided)
@@ -220,6 +226,16 @@ def edit_latest_exercise(
         edit_latest_exercise("Bench Press", weight_kg=110.0)
     """
     user_id = tool_context.state.get("user_id")
+
+    # Try to get the workout_exercise_id from state for more precise editing
+    last_workout = tool_context.state.get("last_workout", {})
+    workout_exercise_id = None
+
+    if last_workout and "exercises" in last_workout:
+        for exercise in last_workout["exercises"]:
+            if exercise.get("name", "").lower() == exercise_name.lower():
+                workout_exercise_id = exercise.get("workout_exercise_id")
+                break
 
     # Build updates dictionary with only provided values
     updates = {}
@@ -237,6 +253,10 @@ def edit_latest_exercise(
         "exercise_name": exercise_name,
         "updates": updates
     }
+
+    # If we have the workout_exercise_id, include it for precise editing
+    if workout_exercise_id:
+        data["workout_exercise_id"] = workout_exercise_id
 
     return _make_laravel_request("PATCH", "workouts/exercises/latest", data)
 
