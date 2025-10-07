@@ -1,8 +1,51 @@
 from google.adk.agents import Agent, SequentialAgent
 from typing import Dict, Optional, List
 from google.adk.tools import ToolContext
+from datetime import datetime
 from . import prompt
 from workout_coach_agent.tools import _make_laravel_request
+
+def _clean_workout_response(response: Dict) -> Dict:
+    """
+    Cleans up the workout log response to only essential information.
+
+    Args:
+        response: Raw API response from workout logging
+
+    Returns:
+        Cleaned dictionary with essential workout info
+    """
+    if not response.get("success") or not response.get("workout"):
+        return response
+
+    workout = response["workout"]
+
+    # Group exercises by name and aggregate their sets
+    exercises_summary = {}
+    for exercise_entry in workout.get("workout_exercises", []):
+        exercise = exercise_entry.get("exercise", {})
+        name = exercise.get("name", "Unknown")
+
+        if name not in exercises_summary:
+            exercises_summary[name] = {
+                "name": name,
+                "sets": 0,
+                "reps": exercise_entry.get("reps"),
+                "weight_kg": exercise_entry.get("weight_kg"),
+                "is_pr": False
+            }
+
+        exercises_summary[name]["sets"] += 1
+        if exercise_entry.get("is_pr"):
+            exercises_summary[name]["is_pr"] = True
+
+    return {
+        "success": True,
+        "message": response.get("message", "Workout logged!"),
+        "workout_date": workout.get("workout_date", "").split("T")[0],
+        "total_volume_kg": workout.get("total_volume_kg", 0),
+        "exercises": list(exercises_summary.values())
+    }
 
 def _get_allowed_exercises() -> List[str]:
     """
@@ -122,9 +165,21 @@ def log_workout(
         "user_id": user_id,
         "exercises": exercises
     }
-    json = _make_laravel_request("POST", "workouts/log", data)
-    print(f"Logged workout response: {json}")
-    return json
+
+    response = _make_laravel_request("POST", "workouts/log", data)
+    print(f"Logged workout response: {response}")
+
+    # Clean up the response
+    cleaned_response = _clean_workout_response(response)
+
+    # Save to context state with today's date as key
+    today = datetime.now().strftime("%Y-%m-%d")
+    tool_context.state[f"last_workout_{today}"] = cleaned_response
+
+    # Also save as 'last_workout' for easy access
+    tool_context.state["last_workout"] = cleaned_response
+
+    return cleaned_response
 
 def edit_latest_exercise(
     tool_context: ToolContext,
