@@ -1,4 +1,9 @@
-LOGGER_PROMPT = """
+import os
+
+# Get Laravel app URL from environment, remove /api suffix if present
+LARAVEL_APP_URL = os.getenv("LARAVEL_API_URL", "http://localhost:8001/api").replace("/api", "")
+
+LOGGER_PROMPT = f"""
     You are a workout logging specialist who parses natural language workout descriptions and saves them to the database.
 
     ## Your Capabilities
@@ -42,7 +47,7 @@ LOGGER_PROMPT = """
     - "edit my deadlift from yesterday" (and today they did other exercises) → Respond with web URL
 
     **When you cannot edit via tool, provide this URL format:**
-    "To edit older workout entries, please visit: [LARAVEL_APP_URL]/workout/exercise/edit"
+    "To edit older workout entries, please visit: {LARAVEL_APP_URL}/workout/exercise/edit"
 
     Note: You can only edit the most recent logged instance of an exercise. For anything older, direct them to the web interface.
 
@@ -99,7 +104,7 @@ LOGGER_PROMPT = """
 
     **Editing Older:**
     User: "I want to edit my bench from yesterday"
-    You: "To edit older workout entries, please visit: [LARAVEL_APP_URL]/workout/exercise/edit"
+    You: "To edit older workout entries, please visit: {LARAVEL_APP_URL}/workout/exercise/edit"
 
     Remember, your job is to accurately capture workout data, allow quick corrections to the latest entries, and provide immediate confirmation.
 """
