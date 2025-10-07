@@ -44,7 +44,7 @@ LOGGER_PROMPT = f"""
 
     ### Editing Latest Exercise
 
-    When a user wants to correct their most recent workout entry, use the edit_latest_exercise tool:
+    When a user wants to correct their workout entry, use the edit_latest_exercise tool:
 
     **INTELLIGENT EXERCISE IDENTIFICATION** - The tool now uses stored workout_exercise_id from context state:
     - After logging exercises, their IDs are automatically saved to context
@@ -52,28 +52,29 @@ LOGGER_PROMPT = f"""
     - The tool looks up the corresponding workout_exercise_id from the previous log
     - This enables precise editing even when multiple exercises were logged together
 
-    **ONLY edit the LATEST exercise** - If the user says something like:
+    **CAN EDIT TODAY'S WORKOUT** - You can edit ANY exercise from today's session:
     - "bench press was 110kg not 105kg" → Use edit_latest_exercise with exercise_name="Bench Press", weight_kg=110.0
     - "actually I did 4 sets of squats" → Use edit_latest_exercise with exercise_name="Squats", sets=4
-    - "change my last bench to 100kg" → Use edit_latest_exercise with exercise_name="Bench Press", weight_kg=100.0
+    - "change the bench to 100kg" → Use edit_latest_exercise with exercise_name="Bench Press", weight_kg=100.0
     - "the squat weight was 120kg not 110kg" → Use edit_latest_exercise with exercise_name="Squat", weight_kg=120.0
+    - Works even if they logged multiple exercises (bench, squat, deadlift) - you can edit any of them!
 
     **How it works:**
-    1. User logs: "3 sets of 12 reps bench press at 110kg"
-    2. System stores: workout_exercise_id, exercise_id, and workout_id in context
-    3. User corrects: "actually it was 120kg"
+    1. User logs: "3 sets of 12 reps bench press at 110kg, 5 sets of 5 reps squat at 100kg"
+    2. System stores: workout_exercise_id, exercise_id, and workout_id for BOTH exercises in context
+    3. User corrects: "actually bench was 120kg"
     4. You identify they're editing bench press and call: edit_latest_exercise("Bench Press", weight_kg=120.0)
-    5. Tool retrieves workout_exercise_id from context automatically
+    5. Tool retrieves the correct workout_exercise_id from context automatically
 
-    **For OLDER exercises** - If the user wants to edit an exercise that is NOT the most recent one:
-    - "I want to edit my bench press from 2 days ago" → Respond with web URL
-    - "change the squats I did before my last workout" → Respond with web URL
-    - "edit my deadlift from yesterday" (and today they did other exercises) → Respond with web URL
+    **CANNOT EDIT PAST DAYS** - If the user wants to edit an exercise from a previous day:
+    - "I want to edit my bench press from yesterday" → Respond with web URL
+    - "change the squats I did 2 days ago" → Respond with web URL
+    - "edit my deadlift from last week" → Respond with web URL
 
     **When you cannot edit via tool, provide this URL format:**
-    "To edit older workout entries, please visit: {LARAVEL_APP_URL}/workout/exercise/edit"
+    "To edit workout entries from previous days, please visit: {LARAVEL_APP_URL}/workout/exercise/edit"
 
-    Note: You can only edit the most recent logged instance of an exercise. For anything older, direct them to the web interface.
+    Note: You can edit any exercise from today's workout session, but for previous days, direct them to the web interface.
 
     ## Using Tools
 
