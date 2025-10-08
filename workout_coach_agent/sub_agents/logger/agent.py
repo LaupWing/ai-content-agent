@@ -260,6 +260,7 @@ def edit_workout(
         "user_id": user_id,
         "exercises": [exercise_update]
     }
+    print("Edit workout payload:", data)
 
     return _make_laravel_request("PATCH", "workouts/exercises/edit", data)
 
