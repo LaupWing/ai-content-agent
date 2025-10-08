@@ -19,9 +19,7 @@ def _clean_workout_response(response: Dict) -> Dict:
         return response
 
     workout = response["workout"]
-    print("Raw workout response:", workout)
-    # Group exercises by name and aggregate their sets, keeping track of IDs
-    exercises_summary = {}
+    
     exercises = []
     for exercise_entry in workout.get("workout_exercises", []):
         exercise = exercise_entry.get("exercise", {})
@@ -38,7 +36,7 @@ def _clean_workout_response(response: Dict) -> Dict:
         "workout_id": workout.get("id"),  # ID of the workout record
         "workout_date": workout.get("workout_date", "").split("T")[0],
         "total_volume_kg": workout.get("total_volume_kg", 0),
-        "exercises": list(exercises_summary.values())
+        "exercises": exercises
     }
 
 def _get_allowed_exercises() -> List[str]:
