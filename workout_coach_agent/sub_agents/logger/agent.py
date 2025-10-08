@@ -22,24 +22,15 @@ def _clean_workout_response(response: Dict) -> Dict:
     print("Raw workout response:", workout)
     # Group exercises by name and aggregate their sets, keeping track of IDs
     exercises_summary = {}
+    exercises = []
     for exercise_entry in workout.get("workout_exercises", []):
         exercise = exercise_entry.get("exercise", {})
         name = exercise.get("name", "Unknown")
-
-        if name not in exercises_summary:
-            exercises_summary[name] = {
-                "name": name,
-                "sets": 0,
-                "reps": exercise_entry.get("reps"),
-                "weight_kg": exercise_entry.get("weight_kg"),
-                "is_pr": False,
-                "workout_exercise_id": exercise_entry.get("id"),  # ID of the workout_exercise record
-                "exercise_id": exercise.get("id")  # ID of the exercise itself
-            }
-
-        exercises_summary[name]["sets"] += 1
-        if exercise_entry.get("is_pr"):
-            exercises_summary[name]["is_pr"] = True
+        exercises.append({
+            "workout_exercise_id": exercise_entry.get("id"),
+            "name": name,
+            "set_number": exercise_entry.get("set_number"),
+        })
 
     return {
         "success": True,
