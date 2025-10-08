@@ -28,6 +28,8 @@ def _clean_workout_response(response: Dict) -> Dict:
             "workout_exercise_id": exercise_entry.get("id"),
             "name": name,
             "set_number": exercise_entry.get("set_number"),
+            "weight_kg": exercise_entry.get("weight_kg"),
+            "reps": exercise_entry.get("reps"),
         })
 
     return {
