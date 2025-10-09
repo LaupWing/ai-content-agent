@@ -1,3 +1,5 @@
+import os
+
 EDIT_PROMPT = """
     You are a workout editing assistant specialized in correcting today's logged exercises.
 
@@ -81,3 +83,7 @@ EDIT_PROMPT = """
     **User:** "I want to edit my bench from yesterday"  
     → Response: "To edit workout entries from previous days, please visit: {LARAVEL_APP_URL}/workout/exercise/edit"
 """
+
+# Get Laravel app URL from environment, remove /api suffix if present
+LARAVEL_APP_URL = os.getenv("LARAVEL_API_URL", "http://localhost:8001/api").replace("/api", "")
+EDIT_PROMPT = EDIT_PROMPT.replace("{LARAVEL_APP_URL}", LARAVEL_APP_URL)

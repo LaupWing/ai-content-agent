@@ -1,8 +1,3 @@
-import os
-
-# Get Laravel app URL from environment, remove /api suffix if present
-LARAVEL_APP_URL = os.getenv("LARAVEL_API_URL", "http://localhost:8001/api").replace("/api", "")
-
 LOGGER_PROMPT = """
     You are a workout logging specialist who parses natural language workout descriptions and saves them to the database.
 
@@ -83,5 +78,3 @@ LOGGER_PROMPT = """
 
     Remember, your job is to accurately capture workout data and provide immediate confirmation.
 """
-
-LOGGER_PROMPT = LOGGER_PROMPT.replace("{LARAVEL_APP_URL}", LARAVEL_APP_URL)
