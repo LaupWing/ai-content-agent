@@ -46,40 +46,46 @@ def edit_workout(
     """
     user_id = tool_context.state.get("user_id")
 
-    # Get the workout_exercise_id from state
+    # Get all workout_exercise_ids for the named exercise from state
     last_workout = tool_context.state.get("last_workout", {})
-    workout_exercise_id = None
+    workout_exercise_ids = []
 
     if last_workout and "exercises" in last_workout:
         for exercise in last_workout["exercises"]:
             if exercise.get("name", "").lower() == exercise_name.lower():
-                workout_exercise_id = exercise.get("workout_exercise_id")
-                break
+                workout_exercise_ids.append(exercise.get("workout_exercise_id"))
 
-    if not workout_exercise_id:
+    if not workout_exercise_ids:
         return {
             "success": False,
             "error": f"Could not find {exercise_name} in today's workout. Can only edit exercises logged today."
         }
 
-    # Build array with exercise updates - only include fields that are being changed
-    exercise_update = {
-        "workout_exercise_id": workout_exercise_id
-    }
+    # Build array with exercise updates - one per workout_exercise_id
+    # Only include fields that are being changed
+    exercises_to_update = []
 
-    if sets is not None:
-        exercise_update["sets"] = sets
-    if reps is not None:
-        exercise_update["reps"] = reps
-    if weight_kg is not None:
-        exercise_update["weight_kg"] = weight_kg
-    if notes is not None:
-        exercise_update["notes"] = notes
+    for workout_exercise_id in workout_exercise_ids:
+        exercise_update = {
+            "workout_exercise_id": workout_exercise_id
+        }
+
+        if sets is not None:
+            exercise_update["sets"] = sets
+        if reps is not None:
+            exercise_update["reps"] = reps
+        if weight_kg is not None:
+            exercise_update["weight_kg"] = weight_kg
+        if notes is not None:
+            exercise_update["notes"] = notes
+
+        exercises_to_update.append(exercise_update)
 
     data = {
         "user_id": user_id,
-        "exercises": [exercise_update]
+        "exercises": exercises_to_update
     }
+    print("edit_workout data:", data)
 
     return _make_laravel_request("PATCH", "workouts/exercises/edit", data)
 
