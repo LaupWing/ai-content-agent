@@ -68,7 +68,35 @@ def edit_workout(
         "exercises": exercises_to_update
     }
 
-    return _make_laravel_request("PATCH", "workouts/exercises/edit", data)
+    response = _make_laravel_request("PATCH", "workouts/exercises/edit", data)
+
+    # Update state to keep it in sync with the backend
+    if response.get("success"):
+        last_workout = tool_context.state.get("last_workout", {})
+
+        if last_workout and "exercises" in last_workout:
+            # Update the exercises in state with the new values
+            for exercise in last_workout["exercises"]:
+                if exercise.get("workout_exercise_id") in workout_exercise_ids:
+                    # Update fields that were changed
+                    if sets is not None:
+                        exercise["set_number"] = sets
+                    if reps is not None:
+                        exercise["reps"] = reps
+                    if weight_kg is not None:
+                        exercise["weight_kg"] = weight_kg
+                    if notes is not None:
+                        exercise["notes"] = notes
+
+            # Update both state keys
+            today = last_workout.get("workout_date", "")
+            if today:
+                date_key = f"last_workout_{today}"
+                tool_context.state[date_key] = last_workout
+
+            tool_context.state["last_workout"] = last_workout
+
+    return response
 
 
 # Edit agent - handles corrections to today's logged exercises
