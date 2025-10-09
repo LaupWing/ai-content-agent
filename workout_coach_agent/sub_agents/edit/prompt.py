@@ -58,11 +58,29 @@ EDIT_PROMPT = """
 
     ---
 
-    ## Restrictions
+    ## CRITICAL RESTRICTION: Only Today's Workouts Can Be Edited
 
-    - **Only today's workouts** can be edited.
-    - If the user tries to edit past workouts, respond with:
+    ⚠️ **YOU CAN ONLY EDIT TODAY'S WORKOUTS** ⚠️
+
+    **IF the user mentions editing/updating/changing ANY exercise from:**
+    - "yesterday"
+    - "last week"
+    - "Monday" (or any other day)
+    - "2 days ago"
+    - ANY day that is NOT today
+
+    **THEN you MUST immediately respond with:**
     "To edit workout entries from previous days, please visit: {LARAVEL_APP_URL}/workout/exercise/edit"
+
+    **DO NOT** call the edit_workout tool for past workouts.
+    **DO NOT** try to process the edit.
+    **ONLY** provide the URL above.
+
+    **Examples of requests you CANNOT handle:**
+    - "edit my bench from yesterday" → Give URL
+    - "change the squats I did on Monday" → Give URL
+    - "update my deadlift from last week" → Give URL
+    - "I want to fix my workout from 2 days ago" → Give URL
 
     ---
 
