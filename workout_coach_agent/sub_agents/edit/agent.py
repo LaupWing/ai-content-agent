@@ -49,7 +49,8 @@ def edit_workout(
     # Get all workout_exercise_ids for the named exercise from state
     last_workout = tool_context.state.get("last_workout", {})
     workout_exercise_ids = []
-
+    print("exercise_name to edit:", exercise_name)
+    print("Last workout from state:", last_workout)
     if last_workout and "exercises" in last_workout:
         for exercise in last_workout["exercises"]:
             if exercise.get("name", "").lower() == exercise_name.lower():
