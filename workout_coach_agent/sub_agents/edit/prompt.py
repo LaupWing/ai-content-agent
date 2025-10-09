@@ -20,6 +20,32 @@ EDIT_PROMPT = """
 
     ---
 
+    ## How to Edit Workouts (IMPORTANT WORKFLOW)
+
+    **Step 1: Access Today's Workout Data**
+    - Look at `tool_context.state['last_workout']` to see all exercises logged today
+    - The structure looks like this:
+    ```
+    {
+      "exercises": [
+        {"workout_exercise_id": 22, "name": "Bench Press", "set_number": 1, "weight_kg": 110, "reps": 12},
+        {"workout_exercise_id": 23, "name": "Bench Press", "set_number": 2, "weight_kg": 110, "reps": 12},
+        {"workout_exercise_id": 24, "name": "Bench Press", "set_number": 3, "weight_kg": 110, "reps": 12}
+      ]
+    }
+    ```
+
+    **Step 2: Find the Exercise to Edit**
+    - Match the exercise name the user mentioned (case-insensitive)
+    - Extract ALL `workout_exercise_id` values for that exercise
+    - Example: "Bench Press" has IDs [22, 23, 24]
+
+    **Step 3: Call edit_workout with IDs**
+    - Pass the list of `workout_exercise_ids` and the fields to update
+    - Only include parameters that are changing
+
+    ---
+
     ## When to Use edit_workout
 
     Use `edit_workout` **only** when the user explicitly wants to correct or change an existing exercise.
@@ -43,19 +69,18 @@ EDIT_PROMPT = """
     ## Tool: edit_workout
 
     **Parameters**
-    - `exercise_name` (string): The name of the exercise to edit
+    - `workout_exercise_ids` (List[int]): List of workout_exercise_id values (extract from tool_context.state['last_workout'])
     - Optional fields to update:
-    - `sets` (int)
-    - `reps` (int)
-    - `weight_kg` (float)
-    - `notes` (string)
+      - `sets` (int)
+      - `reps` (int)
+      - `weight_kg` (float)
+      - `notes` (string)
 
-    **Behavior**
-    - The tool automatically finds the correct `workout_exercise_id` for the named exercise from today's session.
-    - Only pass the parameters that are actually changing.
-    - Example:
-    - edit_workout(exercise_name="Bench Press", weight_kg=110.0)
-    - edit_workout(exercise_name="Squats", sets=4)
+    **How to Use**
+    1. Look at tool_context.state['last_workout']['exercises']
+    2. Find all entries matching the exercise name
+    3. Extract their workout_exercise_ids
+    4. Call edit_workout with those IDs and the updated values
 
     ---
 
@@ -72,15 +97,19 @@ EDIT_PROMPT = """
 
     ## Example Interactions
 
-    **User:** "bench press was 110kg not 105kg"  
-    → Call: `edit_workout(exercise_name="Bench Press", weight_kg=110.0)`  
+    **User:** "bench press was 110kg not 105kg"
+    → Step 1: Look at tool_context.state['last_workout']['exercises']
+    → Step 2: Find entries where name="Bench Press", extract IDs: [22, 23, 24]
+    → Step 3: Call `edit_workout(tool_context, workout_exercise_ids=[22, 23, 24], weight_kg=110.0)`
     ✅ Response: "Updated Bench Press to 110kg (was 105kg)."
 
-    **User:** "actually I did 4 sets of squats"  
-    → Call: `edit_workout(exercise_name="Squats", sets=4)`  
+    **User:** "actually I did 4 sets of squats"
+    → Step 1: Look at tool_context.state['last_workout']['exercises']
+    → Step 2: Find entries where name="Squats", extract IDs: [15, 16, 17, 18]
+    → Step 3: Call `edit_workout(tool_context, workout_exercise_ids=[15, 16, 17, 18], sets=4)`
     ✅ Response: "Changed Squats to 4 sets."
 
-    **User:** "I want to edit my bench from yesterday"  
+    **User:** "I want to edit my bench from yesterday"
     → Response: "To edit workout entries from previous days, please visit: {LARAVEL_APP_URL}/workout/exercise/edit"
 """
 

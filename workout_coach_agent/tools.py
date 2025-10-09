@@ -17,6 +17,8 @@ def _make_laravel_request(method: str, endpoint: str, data: Optional[Dict] = Non
             response = httpx.get(url, headers=headers, params=data, timeout=10.0)
             print(f"GET {url} - params: {data} - status: {response.status_code}")
             print(response.url)
+        elif method == "PATCH":
+            response = httpx.patch(url, headers=headers, json=data, timeout=10.0)
         else:
             response = httpx.post(url, headers=headers, json=data, timeout=10.0)
         
