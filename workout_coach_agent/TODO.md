@@ -1,3 +1,3 @@
--   [ ] Excercise from database
--   [ ] Edit the exercise
--   [ ] Open an website whever the user asks to edit another exercise
+-   [x] Excercise from database
+-   [x] Edit the exercise
+-   [x] Open an website whever the user asks to edit another exercise
