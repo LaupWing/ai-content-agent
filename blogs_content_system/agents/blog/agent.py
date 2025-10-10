@@ -4,7 +4,7 @@ Writes complete blogs from headlines or topics
 """
 
 from google.adk.agents import Agent
-from schemas import BlogOutput
+from ...schemas import BlogOutput
 from .prompt import BLOG_WRITER_INSTRUCTIONS
 
 blog_writer_agent = Agent(

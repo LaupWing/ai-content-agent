@@ -4,7 +4,7 @@ Improves existing blog drafts - restructures, enhances, fixes
 """
 
 from google.adk.agents import Agent
-from schemas import BlogOutput
+from ...schemas import BlogOutput
 from .prompt import POLISH_AGENT_INSTRUCTIONS
 
 polish_agent = Agent(

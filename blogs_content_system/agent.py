@@ -4,10 +4,10 @@ Decides which specialized agent to use based on input
 """
 
 from google.adk.agents import Agent
-from agents.headline.agent import headline_agent
-from agents.blog.agent import blog_writer_agent
-from agents.polish.agent import polish_agent
-from schemas import BlogOutput
+from .agents.headline.agent import headline_agent
+from .agents.blog.agent import blog_writer_agent
+from .agents.polish.agent import polish_agent
+from .schemas import BlogOutput
 
 ROOT_AGENT_INSTRUCTIONS = """You are the blog creation orchestrator. You coordinate between specialized writing agents.
 

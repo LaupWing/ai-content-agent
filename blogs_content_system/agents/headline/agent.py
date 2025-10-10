@@ -4,7 +4,7 @@ Generates compelling headlines from existing blog content
 """
 
 from google.adk.agents import Agent
-from schemas import BlogOutput
+from ...schemas import BlogOutput
 from .prompt import HEADLINE_AGENT_INSTRUCTIONS
 
 headline_agent = Agent(

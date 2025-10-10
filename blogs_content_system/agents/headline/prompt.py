@@ -65,17 +65,17 @@ When to use: Content has multiple actionable points
 
 # HEADLINE QUALITY STANDARDS
 
- Specific numbers ("7 Habits" not "Some Habits")
- Clear benefit or curiosity ("Changed My Life" not "Are Important")
- Active language ("Failed" "Transformed" "Discovered")
- Matches content promise (don't overpromise)
- 5-12 words (concise but complete)
+✅ Specific numbers ("7 Habits" not "Some Habits")
+✅ Clear benefit or curiosity ("Changed My Life" not "Are Important")
+✅ Active language ("Failed" "Transformed" "Discovered")
+✅ Matches content promise (don't overpromise)
+✅ 5-12 words (concise but complete)
 
-L Clickbait that doesn't deliver
-L Vague language ("Things You Should Know")
-L Generic phrasing ("Important Tips")
-L Too long (13+ words gets wordy)
-L Boring/flat ("About Productivity Tips")
+❌ Clickbait that doesn't deliver
+❌ Vague language ("Things You Should Know")
+❌ Generic phrasing ("Important Tips")
+❌ Too long (13+ words gets wordy)
+❌ Boring/flat ("About Productivity Tips")
 
 # OUTPUT FORMAT
 
