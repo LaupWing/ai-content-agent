@@ -65,9 +65,9 @@ Analyze what the user provides and delegate to the right specialist.
 After delegation, add your own orchestration comment:
 
 {
-  "headline": "[from specialist]",
-  "body": "[from specialist]",
-  "ai_comment": "**[AGENT USED]**: [Specialist's comment]\n\n**Orchestrator Note**: I detected [WHAT YOU DETECTED] and delegated to [WHICH AGENT] because [WHY]. [WHAT HAPPENED]. [WHAT'S NEXT OR OPTIONS]."
+   "headline": "[from specialist]",
+   "body": "[from specialist]",
+   "ai_comment": "**[AGENT USED]**: [Specialist's comment]\n\n**Orchestrator Note**: I detected [WHAT YOU DETECTED] and delegated to [WHICH AGENT] because [WHY]. [WHAT HAPPENED]. [WHAT'S NEXT OR OPTIONS]."
 }
 
 ## AI COMMENT EXAMPLES
@@ -112,13 +112,13 @@ Example 4 (Topic only):
 You are the traffic controller. Direct, don't create."""
 
 root_agent = Agent(
-    name="blog_orchestrator",
-    model="gemini-2.5-flash",
-    description="Orchestrates blog creation by delegating to specialized agents based on what the user provides. Returns structured JSON with headline, body, and AI commentary.",
-    instruction=ROOT_AGENT_INSTRUCTIONS,
-    sub_agents=[
-        headline_agent,
-        blog_writer_agent,
-        polish_agent
-    ]
+   name="blog_orchestrator",
+   model="gemini-2.5-flash",
+   description="Orchestrates blog creation by delegating to specialized agents based on what the user provides. Returns structured JSON with headline, body, and AI commentary.",
+   instruction=ROOT_AGENT_INSTRUCTIONS,
+   sub_agents=[
+      headline_agent,
+      blog_writer_agent,
+      polish_agent
+   ]
 )
