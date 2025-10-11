@@ -1,130 +1,227 @@
 # Blog Content System
 
-Simple multi-agent blog writer with Quick and Thoughtout modes.
+Proper ADK multi-agent architecture with session state management.
+
+## Architecture
+
+```
+root_agent (blog_orchestrator)
+├── Manages session state: mode, blog_content, topic
+├── Routes based on mode
+│
+├─ quick_blog_agent (sub-agent)
+│  └─ Fast, one-shot blog generation
+│
+└─ thoughtout_blog_agent (sub-agent)
+   └─ Interactive, step-by-step generation
+```
+
+## How It Works (ADK Way)
+
+### 1. Session State
+```python
+# State stored in session:
+{
+  "mode": "quick" or "thoughtout",
+  "blog_content": "...",
+  "topic": "..."
+}
+```
+
+### 2. Agent Flow
+```
+User: "Write a blog about productivity"
+  ↓
+Root checks state: is mode set?
+  ↓ (if not set)
+Root: "Quick mode or Thoughtout mode?"
+  ↓
+User: "Quick"
+  ↓
+Root sets state: mode = "quick"
+  ↓
+Root transfers to quick_blog_agent
+  ↓
+Quick agent generates blog
+  ↓
+Root stores result in state
+  ↓
+User gets blog
+```
+
+### 3. No Prompt Injection
+❌ **Bad (old way):** Injecting prompts into one agent
+✅ **Good (ADK way):** Two sub-agents, root routes via state
 
 ## File Structure
 
 ```
 blogs_content_system/
-├── agent.py                      # Root orchestrator (start here)
+├── agent.py                      # Root + sub-agents
 ├── prompts/
 │   ├── modes/
-│   │   ├── quick_mode.py        # Quick mode prompt
-│   │   └── thoughtout_mode.py   # Thoughtout mode prompt
-│   └── archive/                 # Manual archiving (when you iterate)
-└── AGENT_ARCHITECTURE.md        # System design reference
+│   │   ├── quick_mode.py        # Quick agent instructions
+│   │   └── thoughtout_mode.py   # Thoughtout agent instructions
+│   └── archive/                 # Manual versioning
+└── AGENT_ARCHITECTURE.md        # Design reference
 ```
 
-## How to Use
+## Usage
 
-### 1. Start ADK Web UI
+### Start ADK Web UI
 
 ```bash
 adk web agent.py
 ```
 
-This opens the UI at `http://localhost:8000` (or whatever port ADK uses)
+### Test Flow
 
-### 2. Test in the UI
-
-**First message:**
+**First Message:**
 ```
 Write a blog about productivity
 ```
 
-**Agent will ask:**
+**Root Agent Response:**
 ```
-Quick mode (fast) or Thoughtout mode (step-by-step)?
+Quick mode (fast, I decide everything) or Thoughtout mode (interactive, you guide the direction)?
 ```
 
-**You respond:**
+**You Choose:**
 ```
 Quick
 ```
-or
+
+**What Happens:**
+1. Root sets `state["mode"] = "quick"`
+2. Root transfers to `quick_blog_agent`
+3. Quick agent generates blog immediately
+4. Root stores blog in `state["blog_content"]`
+5. You get complete blog
+
+**Next Request in Same Session:**
 ```
-Thoughtout
-```
-
-### 3. Expected Behavior
-
-**Quick Mode:**
-- Agent generates complete blog immediately
-- No questions, just delivers
-
-**Thoughtout Mode:**
-- Agent shows 5 headline options
-- You choose one
-- Agent asks for optional context
-- Then generates blog
-
-## How It Works
-
-```
-root_agent (orchestrator)
-  └─ blog_writer (handles both modes)
+Write another blog about goals
 ```
 
-1. Root agent asks for mode preference
-2. Root agent delegates to blog_writer with mode context
-3. Blog writer generates based on mode
-4. Context maintained in session
+**What Happens:**
+1. Root checks state: mode is already "quick"
+2. Root transfers directly to `quick_blog_agent`
+3. No need to ask for mode again!
 
-## Making Changes
+## Key ADK Concepts Used
 
-### Update Prompts
-
-Edit these files:
-- `prompts/modes/quick_mode.py`
-- `prompts/modes/thoughtout_mode.py`
-
-### Archive Old Version
-
-When you want to save a version:
-```bash
-cp prompts/modes/quick_mode.py prompts/archive/quick_mode_v1_YYYYMMDD.py
+### Sub-Agents
+```python
+root_agent = Agent(
+    name="blog_orchestrator",
+    sub_agents=[quick_blog_agent, thoughtout_blog_agent]
+)
 ```
 
-Then edit the current version.
-
-### Test Changes
-
-Just restart ADK Web:
-```bash
-# Ctrl+C to stop
-adk web agent.py
+### State Management
+```python
+# Root agent instructions mention:
+ctx.session.state.get("mode")
+ctx.session.state["mode"] = "quick"
 ```
 
-New session will use updated prompts.
+### Transfer to Sub-Agent
+```python
+# Root agent will call:
+transfer_to_agent("quick_blog_writer")
+# or
+transfer_to_agent("thoughtout_blog_writer")
+```
 
-## Next Steps
+## Why This Structure?
 
-Once blog generation works:
+### ✅ Proper ADK Pattern
+- Sub-agents registered with parent
+- State managed via session
+- Clean separation of concerns
 
-1. **Add Edit Agent** (see AGENT_ARCHITECTURE.md)
-2. **Add ShortForm Agent** (tweets)
-3. **Add MultiPart Agent** (threads)
+### ✅ Each Agent Has One Job
+- `quick_blog_agent`: Generate fast
+- `thoughtout_blog_agent`: Generate interactively
+- `root_agent`: Route and coordinate
 
-But test blog generation first!
+### ✅ Scalable
+Easy to add more agents later:
+```python
+root_agent = Agent(
+    name="blog_orchestrator",
+    sub_agents=[
+        quick_blog_agent,
+        thoughtout_blog_agent,
+        edit_agent,           # Add later
+        shortform_agent,      # Add later
+        multipart_agent       # Add later
+    ]
+)
+```
+
+### ✅ State Persists
+Mode choice persists across conversation:
+```
+User: "Write about productivity" → Chooses quick mode
+User: "Write about goals"        → Uses quick mode (remembered)
+User: "Write about habits"        → Uses quick mode (still remembered)
+```
+
+## Testing Tips
+
+### Test Mode Persistence
+```
+1. Start new session
+2. "Write blog about productivity"
+3. Choose "Quick"
+4. Blog generates
+5. "Write blog about goals"
+6. Should NOT ask for mode again
+```
+
+### Test Sub-Agent Routing
+```
+1. New session
+2. "Write blog about X"
+3. Choose "Thoughtout"
+4. Should transfer to thoughtout_blog_agent
+5. Should show 5 headline options
+```
+
+### Check State in ADK Web UI
+ADK Web should show session state in the UI (look for state panel)
 
 ## Troubleshooting
 
-**Agent doesn't call blog_writer:**
-- Check root_agent instructions
-- Make sure you're asking for blog generation
+**Root agent not asking for mode:**
+- Check root agent instructions
+- Make sure it checks state first
 
-**Wrong mode used:**
-- Check conversation context
-- Root agent should capture mode choice
+**Root agent not transferring to sub-agent:**
+- Check sub_agents list is correct
+- Verify agent names match
 
-**Prompts too long:**
-- ADK might truncate
-- Check model context limits
+**Mode not persisting:**
+- Check state is being set: `ctx.session.state["mode"] = "quick"`
+- Verify same session (not creating new session)
+
+**Sub-agent not generating:**
+- Check prompts in `prompts/modes/`
+- Test sub-agent individually if needed
+
+## Next Steps
+
+Once this works:
+1. ✅ Test both modes thoroughly
+2. ⏳ Add edit_agent as sub-agent
+3. ⏳ Add shortform_agent for tweets
+4. ⏳ Add multipart_agent for threads
 
 ## Current Status
 
-✅ Root orchestrator
-✅ Blog writer (both modes)
+✅ Root orchestrator with state management
+✅ Two sub-agents (quick, thoughtout)
+✅ Proper ADK architecture
 ⏳ Edit agent (not yet)
-⏳ ShortForm agent (not yet)
-⏳ MultiPart agent (not yet)
+⏳ Derivative agents (not yet)
