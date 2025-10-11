@@ -1,0 +1,156 @@
+{
+  "test_topics": [
+    {
+      "id": "productivity_remote",
+      "topic": "productivity for remote workers",
+      "category": "productivity",
+      "difficulty": "medium",
+      "expected_qualities": [
+        "Practical tips for remote work",
+        "Addresses common remote work challenges",
+        "Actionable steps",
+        "Personal or relatable examples"
+      ]
+    },
+    {
+      "id": "goal_setting",
+      "topic": "why most people fail at goal setting",
+      "category": "self-improvement",
+      "difficulty": "medium",
+      "expected_qualities": [
+        "Challenges common wisdom",
+        "Data or statistics if possible",
+        "Clear framework or system",
+        "Psychological insights"
+      ]
+    },
+    {
+      "id": "content_creation",
+      "topic": "building a personal brand through content",
+      "category": "business",
+      "difficulty": "hard",
+      "expected_qualities": [
+        "Strategic advice",
+        "Platform-specific insights",
+        "Examples of successful creators",
+        "Actionable steps to start"
+      ]
+    },
+    {
+      "id": "focus",
+      "topic": "maintaining deep focus in a distracted world",
+      "category": "productivity",
+      "difficulty": "medium",
+      "expected_qualities": [
+        "Addresses modern attention challenges",
+        "Science-backed if possible",
+        "Practical techniques",
+        "Understanding of digital distractions"
+      ]
+    },
+    {
+      "id": "habits",
+      "topic": "the science of building lasting habits",
+      "category": "self-improvement",
+      "difficulty": "easy",
+      "expected_qualities": [
+        "Reference to habit research",
+        "Clear system or framework",
+        "Examples of good habits",
+        "Common mistakes to avoid"
+      ]
+    },
+    {
+      "id": "ai_future",
+      "topic": "how AI will change creative work in the next 5 years",
+      "category": "technology",
+      "difficulty": "hard",
+      "expected_qualities": [
+        "Forward-looking perspective",
+        "Balanced view (opportunities + challenges)",
+        "Specific predictions or trends",
+        "Actionable advice for creatives"
+      ]
+    },
+    {
+      "id": "burnout",
+      "topic": "recovering from burnout as a founder",
+      "category": "entrepreneurship",
+      "difficulty": "medium",
+      "expected_qualities": [
+        "Empathy for founder struggles",
+        "Personal experience or case studies",
+        "Practical recovery steps",
+        "Prevention strategies"
+      ]
+    },
+    {
+      "id": "writing",
+      "topic": "how to write content that people actually read",
+      "category": "content",
+      "difficulty": "medium",
+      "expected_qualities": [
+        "Writing frameworks or principles",
+        "Understanding of reader psychology",
+        "Examples of good vs bad writing",
+        "Actionable techniques"
+      ]
+    }
+  ],
+  "evaluation_criteria": {
+    "structure": {
+      "weight": 20,
+      "checks": [
+        "Has clear headline",
+        "Introduction hooks within 2 sentences",
+        "Context section builds understanding",
+        "Main content is organized with subheaders",
+        "Conclusion provides clear next step"
+      ]
+    },
+    "depth": {
+      "weight": 25,
+      "checks": [
+        "Goes beyond surface-level advice",
+        "Explains the 'why' behind recommendations",
+        "Includes specific examples or stories",
+        "Provides unique perspective or insight"
+      ]
+    },
+    "engagement": {
+      "weight": 20,
+      "checks": [
+        "Uses conversational tone",
+        "Varies sentence length",
+        "Includes metaphors or analogies",
+        "Bold or emphasized key points appropriately",
+        "Creates visual breaks with formatting"
+      ]
+    },
+    "actionability": {
+      "weight": 20,
+      "checks": [
+        "Provides specific, concrete steps",
+        "Examples are detailed (not vague)",
+        "Reader knows exactly what to do next",
+        "Avoids platitudes and generic advice"
+      ]
+    },
+    "length_and_pacing": {
+      "weight": 15,
+      "checks": [
+        "Meets 1500-2500 word target",
+        "Sections are well-proportioned",
+        "Doesn't feel rushed or padded",
+        "Maintains interest throughout"
+      ]
+    }
+  },
+  "comparison_prompts": [
+    "Which blog is more engaging to read?",
+    "Which blog provides more actionable advice?",
+    "Which blog has better structure and flow?",
+    "Which blog demonstrates deeper understanding of the topic?",
+    "Which blog would you be more likely to share?"
+  ]
+}
