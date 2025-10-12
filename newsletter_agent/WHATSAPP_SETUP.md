@@ -13,10 +13,14 @@ Your Backend (Vertex AI FastAPI)
     ↓
 Session Manager (whatsapp_user_id → adk_session_id)
     ↓
-Google ADK Newsletter Agent
-    ├─ ADK State: {current_newsletter_id: "notion_page_id"}
-    ├─ Sub-agents: researcher, writer, formatter
-    └─ Loads/saves from Notion when needed
+Google ADK Newsletter Agent (Coordinator)
+    ├─ 1. PLANNER → Creates table of contents (sections array)
+    ├─ 2. LOOP through each section:
+    │    └─ RESEARCHER (with Google Search) → Researches section + finds hyperlinks
+    ├─ 3. WRITER → Combines all researched sections into one cohesive story
+    └─ 4. FORMATTER → Final formatting
+    ↓
+Complete Newsletter (with embedded hyperlinks)
     ↓
 Notion Database (Persistent Storage)
     └─ Your personal workspace
@@ -244,12 +248,36 @@ Database ID = `a1b2c3d4e5f6...`
    - Receives webhook from WhatsApp
    - Gets/creates ADK session for user
 
-3. ADK Agent:
-   - Parses: topic="AI", audience="developers", tone="casual"
-   - Calls researcher sub-agent → gathers insights
-   - Calls writer sub-agent → creates content
-   - Calls formatter sub-agent → formats newsletter
+3. ADK Coordinator Agent:
+
+   Step 1: PLANNER
+   - Calls planner sub-agent
+   - Returns: [{title: "Hook", description: "..."}, {title: "Main Content", description: "..."}, ...]
+   - Gets 4 sections
+
+   Step 2: LOOP RESEARCH (4 iterations)
+   - Iteration 1: Calls researcher with Section 1
+     → Researcher uses Google Search
+     → Returns: {key_insights: [...], hyperlinks: [{url: "...", title: "..."}], ...}
+   - Iteration 2: Calls researcher with Section 2
+     → Researcher uses Google Search
+     → Returns: research data + hyperlinks
+   - Iteration 3: Calls researcher with Section 3
+     → Researcher uses Google Search
+     → Returns: research data + hyperlinks
+   - Iteration 4: Calls researcher with Section 4
+     → Researcher uses Google Search
+     → Returns: research data + hyperlinks
+
+   Step 3: WRITER
+   - Calls writer with all 4 researched sections
+   - Writer weaves them into one cohesive story
+   - Embeds hyperlinks naturally: "According to [research](url)..."
    - Returns complete newsletter
+
+   Step 4: FORMATTER
+   - Calls formatter with written content
+   - Returns final formatted newsletter
 
 4. Backend:
    - Saves newsletter to Notion via API
@@ -257,8 +285,9 @@ Database ID = `a1b2c3d4e5f6...`
    - Sends newsletter back to WhatsApp
 ```
 
-**Cost:** ~1000 tokens (full research + write + format)
+**Cost:** ~2500 tokens (planner + 4× researcher with Google Search + writer + formatter)
 **Notion API calls:** 1 (save newsletter)
+**Google Search queries:** ~8-12 (researcher does 2-3 searches per section)
 
 #### Editing Existing Newsletter
 
@@ -488,27 +517,33 @@ TOTAL:            ~$0.025/month (2.5 cents)
 
 ```
 newsletter_agent/
-├── agent.py                      # Original multi-session coordinator
-├── whatsapp_agent.py             # WhatsApp-optimized agent
-├── prompt.py                     # Agent prompts
-├── notion_client.py              # Notion API wrapper
-├── session_manager.py            # Session/state management
-├── webhook_server.py             # WhatsApp webhook handler
+├── agent.py                      # Root coordinator with section-by-section pipeline
+├── prompt.py                     # Coordinator prompt
+├── notion_client.py              # Notion API wrapper (to be created)
+├── session_manager.py            # Session/state management (to be created)
+├── webhook_server.py             # WhatsApp webhook handler (to be created)
 ├── requirements.txt              # Dependencies
 ├── .env                          # Configuration
 ├── README.md                     # Original README
 └── WHATSAPP_SETUP.md            # This file
 
 sub_agents/
-├── researcher/
+├── planner/                      # NEW: Table of contents generator
 │   ├── agent.py
-│   └── prompt.py
-├── writer/
+│   ├── prompt.py
+│   └── __init__.py
+├── researcher/                   # UPDATED: Google Search + hyperlinks
+│   ├── agent.py                 # Now includes GoogleSearchTool
+│   ├── prompt.py                # Section-specific research
+│   └── __init__.py
+├── writer/                       # UPDATED: Story weaver
 │   ├── agent.py
-│   └── prompt.py
+│   ├── prompt.py                # Combines sections into cohesive narrative
+│   └── __init__.py
 └── formatter/
     ├── agent.py
-    └── prompt.py
+    ├── prompt.py
+    └── __init__.py
 ```
 
 ---
@@ -540,24 +575,36 @@ pip install -r requirements.txt
 Create a newsletter about AI productivity tools for software engineers, keep it casual
 ```
 
+**What happens behind the scenes:**
+1. Planner creates 4 sections
+2. Researcher researches each section using Google Search (4 separate calls)
+3. Writer combines all sections into one story with embedded hyperlinks
+4. Formatter finalizes
+
 **Agent response:**
 ```
 📰 Your Newsletter is Ready!
 
-# AI Tools That Actually Save You Time (Not Just Hype)
+# The AI Tool Paradox—And How to Choose Wisely
 
-Let's be real—most "AI productivity tools" are just ChatGPT with a fancy wrapper. But here are three that actually changed how I work:
+The average developer now has access to [47 different AI productivity tools](https://example.com/research). That's up 300% from just last year according to [Stack Overflow's 2025 survey](https://stackoverflow.blog/...). But here's the thing nobody talks about: more tools doesn't mean more productivity.
 
-## 1. GitHub Copilot (The OG)
-Still the king. But here's the trick: use it for boilerplate, not logic...
+I spent three months testing the top contenders. Most were vaporware. But these three actually moved the needle:
 
-[Full newsletter content]
+**GitHub Copilot** still leads the pack. [GitHub's own research](https://github.blog/...) shows developers complete tasks 55% faster. But here's the catch—it works best for boilerplate, not business logic. Use it to write tests, not algorithms.
+
+**Cursor IDE** takes a different approach. By understanding your entire codebase context, it reduces debugging time by an average of [40% according to early adopters](https://example.com/cursor-stats). The difference? It knows what you're building.
+
+**Warp's AI command search** saved me 30 minutes a day. Sounds small, but [that compounds to 180 hours per year](https://example.com/productivity-calc).
+
+But there's a hidden cost. [Research from UC Irvine](https://www.ics.uci.edu/~gmark/chi08-mark.pdf) shows context switching costs 23 minutes of productivity each time. Too many tools? You're switching more than you're building.
+
+The framework: Start with one tool in one workflow. Master it. Then expand. Your productivity isn't about having every tool—it's about deeply integrating the right ones.
+
+What's the one tool you'll commit to this week?
 
 ---
-Created for: Software engineers
-Tone: Casual
-Topic: AI productivity tools
-Stored in Notion ✓
+Researched 4 sections • 8 hyperlinks embedded • Stored in Notion ✓
 ```
 
 ### Example 2: Edit Current Newsletter

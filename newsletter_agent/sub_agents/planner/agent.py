@@ -4,7 +4,6 @@ Planner Agent - Creates table of contents for newsletters
 from google.adk.agents import Agent
 from . import prompt
 
-
 planner = Agent(
     name="planner",
     model="gemini-2.5-flash",
