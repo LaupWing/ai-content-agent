@@ -17,7 +17,7 @@ class SectionLoopAgent(BaseAgent):
 
     def __init__(self, name: str, researcher_agent):
         super().__init__(name=name, sub_agents=[researcher_agent])
-        self.researcher = researcher_agent
+        # Store researcher as part of sub_agents, access it via self.sub_agents[0]
 
     async def _run_async_impl(
         self, ctx: InvocationContext
@@ -38,13 +38,33 @@ class SectionLoopAgent(BaseAgent):
             )
             return
 
+        # Handle case where sections might be a string (parsing needed)
+        if isinstance(sections, str):
+            import json
+            try:
+                sections = json.loads(sections)
+                if isinstance(sections, dict) and "sections" in sections:
+                    sections = sections["sections"]
+            except:
+                yield Event.create_text_event(
+                    f"Error: Could not parse sections. Got: {type(sections)}"
+                )
+                return
+
         # Initialize researched sections array
         researched_sections = []
 
         # Loop through each section
         for idx, section in enumerate(sections):
-            section_title = section.get("title", "")
-            section_description = section.get("description", "")
+            # Handle both dict and string cases
+            if isinstance(section, dict):
+                section_title = section.get("title", "")
+                section_description = section.get("description", "")
+            else:
+                yield Event.create_text_event(
+                    f"Error: Section {idx} is not a dict: {type(section)}"
+                )
+                continue
 
             # Inform about progress
             yield Event.create_text_event(
@@ -67,7 +87,8 @@ Return your findings as structured JSON.
 """
 
             # Call researcher sub-agent for this section
-            async for event in self.researcher.run_async(ctx, message=research_prompt):
+            researcher = self.sub_agents[0]  # Get researcher from sub_agents
+            async for event in researcher.run_async(ctx, message=research_prompt):
                 # Capture the researcher's response
                 if event.type == "text":
                     # Store the research result
