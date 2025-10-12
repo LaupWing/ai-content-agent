@@ -5,32 +5,34 @@ with section-by-section research pipeline and Google Search integration
 Architecture:
 - Root coordinator agent (handles user requests)
 - Newsletter creation as SequentialAgent pipeline
-- LoopAgent for iterating through sections
+- Custom programmatic loop for iterating through sections
 """
-from google.adk.agents import Agent, SequentialAgent, LoopAgent
+from google.adk.agents import Agent, SequentialAgent
 from google.adk.tools import AgentTool
 from . import prompt
 from .sub_agents.planner.agent import planner
 from .sub_agents.researcher.agent import researcher
 from .sub_agents.writer.agent import writer
 from .sub_agents.formatter.agent import formatter
+from .section_loop_handler import SectionLoopAgent
 
 
 # ═══════════════════════════════════════════════════════════
-# SECTION RESEARCH LOOP
+# SECTION RESEARCH LOOP (CUSTOM PROGRAMMATIC AGENT)
 # ═══════════════════════════════════════════════════════════
-# This loop will iterate through sections and research each one
-# The researcher agent will:
-# 1. Check state["sections"] array
-# 2. Get the current section index from state["current_section_index"]
-# 3. Research that section
-# 4. Increment the index
-# 5. Stop when all sections are done
+# This is a custom agent that programmatically loops through sections
+# Much more reliable than instruction-based iteration!
+#
+# How it works:
+# 1. Reads state["sections"] array (from planner)
+# 2. For each section in the array:
+#    - Calls researcher sub-agent with that section
+#    - Collects the research result
+# 3. Stores all results in state["researched_sections"]
 
-section_research_loop = LoopAgent(
+section_research_loop = SectionLoopAgent(
     name="section_research_loop",
-    sub_agents=[researcher],
-    max_iterations=10  # Max 10 sections per newsletter
+    researcher_agent=researcher
 )
 
 
