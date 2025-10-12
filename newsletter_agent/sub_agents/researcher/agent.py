@@ -9,5 +9,6 @@ researcher = Agent(
     model="gemini-2.5-flash",
     instruction=prompt.RESEARCHER_PROMPT,
     description="Researches individual newsletter sections using Google Search, gathers insights, and provides relevant hyperlinks",
+    output_key="researched_sections",  # Append each researched section to state
     tools=[google_search]
 )

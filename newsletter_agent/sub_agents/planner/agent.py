@@ -9,5 +9,6 @@ planner = Agent(
     model="gemini-2.5-flash",
     instruction=prompt.PLANNER_PROMPT,
     description="Plans newsletter structure by creating table of contents with sections",
+    output_key="sections",  # Store sections array in state
     tools=[]
 )
