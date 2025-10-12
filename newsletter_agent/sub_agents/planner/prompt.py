@@ -172,4 +172,21 @@ Output:
 5. **Return JSON**: Output ONLY the JSON structure
 
 Remember: Your job is to create a roadmap. The researcher will gather information for each section, and the writer will craft the narrative.
+
+## CRITICAL: Initialize Loop State
+
+After creating your sections, you MUST also initialize the loop state:
+- Set `current_section_index` to 0
+- Set `researched_sections` to empty array []
+
+This allows the LoopAgent to iterate through your sections properly.
+
+Example final output:
+```json
+{
+  "sections": [...],
+  "current_section_index": 0,
+  "researched_sections": []
+}
+```
 """
