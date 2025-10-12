@@ -5,7 +5,8 @@ instead of relying on instruction-based iteration.
 """
 from typing import AsyncGenerator
 from google.adk.agents import BaseAgent
-from google.adk.core import InvocationContext, Event
+from google.adk.agents.invocation_context import InvocationContext
+from google.adk.events import Event
 
 
 class SectionLoopAgent(BaseAgent):
