@@ -1,0 +1,3 @@
+IDEA_CAPTURE_PROMPT = """
+
+"""
