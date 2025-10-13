@@ -7,6 +7,7 @@ from typing import AsyncGenerator
 from google.adk.agents import BaseAgent
 from google.adk.agents.invocation_context import InvocationContext
 from google.adk.events import Event
+from google.genai import types
 
 
 class SectionLoopAgent(BaseAgent):
@@ -33,8 +34,11 @@ class SectionLoopAgent(BaseAgent):
         sections = ctx.session.state.get("sections", [])
 
         if not sections:
-            yield Event.text_event(
-                "Error: No sections found in state. Planner must run first."
+            yield Event(
+                author=self.name,
+                content=types.Content(
+                    parts=[types.Part(text="Error: No sections found in state. Planner must run first.")]
+                )
             )
             return
 
@@ -46,8 +50,11 @@ class SectionLoopAgent(BaseAgent):
                 if isinstance(sections, dict) and "sections" in sections:
                     sections = sections["sections"]
             except json.JSONDecodeError as e:
-                yield Event.text_event(
-                    f"Error: Could not parse sections. Got: {type(sections)}. Error: {str(e)}"
+                yield Event(
+                    author=self.name,
+                    content=types.Content(
+                        parts=[types.Part(text=f"Error: Could not parse sections. Got: {type(sections)}. Error: {str(e)}")]
+                    )
                 )
                 return
 
@@ -61,14 +68,20 @@ class SectionLoopAgent(BaseAgent):
                 section_title = section.get("title", "")
                 section_description = section.get("description", "")
             else:
-                yield Event.text_event(
-                    f"Error: Section {idx} is not a dict: {type(section)}"
+                yield Event(
+                    author=self.name,
+                    content=types.Content(
+                        parts=[types.Part(text=f"Error: Section {idx} is not a dict: {type(section)}")]
+                    )
                 )
                 continue
 
             # Inform about progress
-            yield Event.text_event(
-                f"Researching section {idx + 1}/{len(sections)}: {section_title}"
+            yield Event(
+                author=self.name,
+                content=types.Content(
+                    parts=[types.Part(text=f"Researching section {idx + 1}/{len(sections)}: {section_title}")]
+                )
             )
 
             # Create research prompt for this specific section
@@ -105,6 +118,9 @@ Return your findings as structured JSON.
         ctx.session.state["researched_sections"] = researched_sections
 
         # Summary message
-        yield Event.text_event(
-            f"✓ Completed research for {len(researched_sections)} sections"
+        yield Event(
+            author=self.name,
+            content=types.Content(
+                parts=[types.Part(text=f"✓ Completed research for {len(researched_sections)} sections")]
+            )
         )
