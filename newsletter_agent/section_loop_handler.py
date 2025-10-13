@@ -33,7 +33,7 @@ class SectionLoopAgent(BaseAgent):
         sections = ctx.session.state.get("sections", [])
 
         if not sections:
-            yield Event.create_text_event(
+            yield Event.text_event(
                 "Error: No sections found in state. Planner must run first."
             )
             return
@@ -45,9 +45,9 @@ class SectionLoopAgent(BaseAgent):
                 sections = json.loads(sections)
                 if isinstance(sections, dict) and "sections" in sections:
                     sections = sections["sections"]
-            except:
-                yield Event.create_text_event(
-                    f"Error: Could not parse sections. Got: {type(sections)}"
+            except json.JSONDecodeError as e:
+                yield Event.text_event(
+                    f"Error: Could not parse sections. Got: {type(sections)}. Error: {str(e)}"
                 )
                 return
 
