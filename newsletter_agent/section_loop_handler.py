@@ -61,7 +61,7 @@ class SectionLoopAgent(BaseAgent):
                 section_title = section.get("title", "")
                 section_description = section.get("description", "")
             else:
-                yield Event.create_text_event(
+                yield Event.text_event(
                     f"Error: Section {idx} is not a dict: {type(section)}"
                 )
                 continue
