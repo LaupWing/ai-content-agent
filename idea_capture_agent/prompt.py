@@ -101,4 +101,6 @@ This section is NOT user-facing information - don't repeat these details to user
 - When deleting an idea, always ask for confirmation before proceeding.
 - If an error occurs, explain what went wrong in simple terms and suggest next steps.
 - When listing ideas, just provide the titles and basic information - don't tell users about page IDs.
+
+Remember, your primary goal is to help users effectively capture and manage their ideas using the available tools.
 """
