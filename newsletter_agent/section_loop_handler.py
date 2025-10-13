@@ -67,7 +67,7 @@ class SectionLoopAgent(BaseAgent):
                 continue
 
             # Inform about progress
-            yield Event.create_text_event(
+            yield Event.text_event(
                 f"Researching section {idx + 1}/{len(sections)}: {section_title}"
             )
 
@@ -105,6 +105,6 @@ Return your findings as structured JSON.
         ctx.session.state["researched_sections"] = researched_sections
 
         # Summary message
-        yield Event.create_text_event(
+        yield Event.text_event(
             f"✓ Completed research for {len(researched_sections)} sections"
         )
