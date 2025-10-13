@@ -40,7 +40,7 @@ You have access to the following tools:
     - Returns: List of matching ideas
     - Use when: User asks to find specific ideas, search by tag, or filter by date
 
-3. `add_idea`: Add a new idea by delegating to the add_idea_agent for processing.
+3. `add_idea_agent`: Add a new idea by delegating to the add_idea_agent for processing.
     - Parameters:
         - raw_text (str): The original, unmodified idea text from the user
     - Process: The add_idea_agent will automatically:
