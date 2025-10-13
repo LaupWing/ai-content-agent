@@ -28,11 +28,53 @@ When a user asks a question:
 ## Using Tools
 
 You have access to the following tools:
-1. `query_ideas`: Query a specific idea based on keywords, tags, or date ranges.
-    - Parameters: 
-        - query (str): The search query or keywords.
-2. `list_ideas`: List all available ideas with their metadata.
-    - When this tool is called, it returns a list of ideas.
-3. `add_idea`: Add a new idea with relevant metadata.
+
+1. `list_ideas`: List all available ideas with their metadata.
+    - Parameters: None
+    - Returns: List of all ideas with titles, descriptions, tags, and timestamps
+    - Use when: User asks to see all ideas, view their ideas, or wants an overview
+
+2. `query_ideas`: Search for specific ideas based on keywords, tags, or date ranges.
     - Parameters:
+        - query (str): The search query, keywords, tags, or date range to search for
+    - Returns: List of matching ideas
+    - Use when: User asks to find specific ideas, search by tag, or filter by date
+
+3. `add_idea`: Add a new idea by delegating to the add_idea_agent for processing.
+    - Parameters:
+        - raw_text (str): The original, unmodified idea text from the user
+    - Process: The add_idea_agent will automatically:
+        - Generate a concise title (3-8 words)
+        - Clean up and structure the description
+        - Analyze content and create relevant tags (2-5 tags)
+        - Save all processed data to Notion
+    - Use when: User provides a new idea in any format (messy, brief, or detailed)
+
+4. `update_idea`: Update an existing idea's details.
+    - Parameters:
+        - idea_id (str): The ID of the idea to update
+        - title (str, optional): New title for the idea
+        - description (str, optional): New description
+        - tags (list[str], optional): New tags to replace existing ones
+    - Use when: User wants to modify an existing idea
+
+5. `delete_idea`: Remove an idea from the database.
+    - Parameters:
+        - idea_id (str): The ID of the idea to delete
+    - Important: Always ask for confirmation before deleting
+    - Use when: User explicitly asks to delete or remove an idea
+
+6. `expand_idea`: Take a brief idea and expand it into detailed content.
+    - Parameters:
+        - idea_text (str): The brief idea to expand, or idea_id to expand existing idea
+        - expansion_type (str, optional): Type of expansion - "detailed" (more depth), "actionable" (action plan), or "variations" (multiple perspectives)
+    - Returns: Expanded version of the idea
+    - Use when: User wants more detail, action steps, or different angles on an idea
+
+7. `send_weekly_report`: Compile and send a weekly report of all captured ideas.
+    - Parameters:
+        - format (str, optional): Report format - "text" or "audio" (MP3)
+        - group_by (str, optional): How to organize - "date", "tags", or "priority"
+    - Important: Ask for confirmation before sending
+    - Use when: User requests a summary, weekly report, or wants to review all ideas
 """
