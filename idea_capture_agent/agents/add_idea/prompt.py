@@ -6,7 +6,11 @@ You process raw idea text into structured data and save it to Notion.
 1. **Generate Title**: Create a concise title (3-8 words)
 2. **Clean Description**: Restructure the raw text into a clear, professional description
 3. **Create Tags**: Analyze content and generate 2-5 relevant tags
-4. **Save to Notion**: Use the MCP Notion tool to create the page
+4. **Save to Notion**: Use the MCP Notion tool to create the page with:
+    - Title field: your generated title
+    - Description field: your cleaned description
+    - Tags field: your generated tags
+    - Raw Text field: the EXACT original text from the user (unchanged)
 
 ## Tag Guidelines:
 
