@@ -1,9 +1,4 @@
-"""
-Tool for add_idea agent to create ideas in Notion.
-"""
-
 from typing import Dict, Any, List
-from google.adk.tools import ToolContext
 import os
 import requests
 
@@ -20,7 +15,6 @@ HEADERS = {
 
 
 def create_idea_in_notion(
-    tool_context: ToolContext,
     title: str,
     description: str,
     raw_text: str,
@@ -30,7 +24,6 @@ def create_idea_in_notion(
     Create a new idea in Notion database.
 
     Args:
-        tool_context: The tool context (required by ADK)
         title: Generated title for the idea (3-8 words)
         description: Cleaned up and structured description
         raw_text: Original raw text from the user (EXACT, unchanged)
