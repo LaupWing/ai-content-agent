@@ -207,3 +207,85 @@ def query_ideas(
             "error": str(e),
             "message": f"Failed to query ideas: {str(e)}"
         }
+
+
+def update_idea(
+    page_id: str,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
+    tags: Optional[List[str]] = None
+) -> Dict[str, Any]:
+    """
+    Update an existing idea in the Notion database.
+
+    Args:
+        page_id: The Notion page ID of the idea to update
+        title: New title (optional)
+        description: New description (optional)
+        tags: New list of tags (optional)
+
+    Returns:
+        Dictionary with success status and confirmation message
+    """
+    if not NOTION_API_KEY or not NOTION_DATABASE_ID:
+        raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
+
+    # Build properties object with only the fields to update
+    properties = {}
+
+    if title is not None:
+        properties["Title"] = {
+            "title": [{"text": {"content": title}}]
+        }
+
+    if description is not None:
+        properties["Description"] = {
+            "rich_text": [{"text": {"content": description}}]
+        }
+
+    if tags is not None:
+        properties["Tags"] = {
+            "multi_select": [{"name": tag} for tag in tags]
+        }
+
+    # If no fields to update, return error
+    if not properties:
+        return {
+            "success": False,
+            "message": "No fields provided to update"
+        }
+
+    payload = {
+        "properties": properties
+    }
+
+    try:
+        response = requests.patch(
+            f"{NOTION_BASE_URL}/pages/{page_id}",
+            headers=HEADERS,
+            json=payload,
+            timeout=10.0
+        )
+        response.raise_for_status()
+        result = response.json()
+
+        updated_fields = []
+        if title is not None:
+            updated_fields.append(f"title to '{title}'")
+        if description is not None:
+            updated_fields.append("description")
+        if tags is not None:
+            updated_fields.append(f"tags to {tags}")
+
+        return {
+            "success": True,
+            "page_id": result["id"],
+            "message": f"Updated {', '.join(updated_fields)}"
+        }
+
+    except requests.exceptions.RequestException as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "message": f"Failed to update idea: {str(e)}"
+        }
