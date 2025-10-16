@@ -297,3 +297,71 @@ def update_idea(
             "error": str(e),
             "message": f"Failed to update idea: {str(e)}"
         }
+
+
+def expand_idea(
+    page_id: str,
+    expanded_content: str
+) -> Dict[str, Any]:
+    """
+    Expand an existing idea by appending new content to its description.
+    Useful for adding details, thoughts, or elaborations to an idea.
+
+    Args:
+        page_id: The Notion page ID of the idea to expand
+        expanded_content: New content to append to the existing description
+
+    Returns:
+        Dictionary with success status and confirmation message
+    """
+    if not NOTION_API_KEY or not NOTION_DATABASE_ID:
+        raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
+
+    try:
+        # First, fetch the current idea to get existing description
+        response = requests.get(
+            f"{NOTION_BASE_URL}/pages/{page_id}",
+            headers=HEADERS,
+            timeout=10.0
+        )
+        response.raise_for_status()
+        page = response.json()
+
+        # Extract current description
+        properties = page.get("properties", {})
+        desc_property = properties.get("Description", {}).get("rich_text", [])
+        current_description = desc_property[0].get("text", {}).get("content", "") if desc_property else ""
+
+        # Append new content with a separator
+        separator = "\n\n---\n\n" if current_description else ""
+        new_description = f"{current_description}{separator}{expanded_content}"
+
+        # Update the page with expanded description
+        payload = {
+            "properties": {
+                "Description": {
+                    "rich_text": [{"text": {"content": new_description}}]
+                }
+            }
+        }
+
+        update_response = requests.patch(
+            f"{NOTION_BASE_URL}/pages/{page_id}",
+            headers=HEADERS,
+            json=payload,
+            timeout=10.0
+        )
+        update_response.raise_for_status()
+
+        return {
+            "success": True,
+            "page_id": page_id,
+            "message": f"Expanded idea with new content ({len(expanded_content)} characters added)"
+        }
+
+    except requests.exceptions.RequestException as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "message": f"Failed to expand idea: {str(e)}"
+        }
