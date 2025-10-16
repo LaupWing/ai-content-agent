@@ -7,7 +7,7 @@ root_agent = Agent(
     name="idea_capture",
     model="gemini-2.5-flash",
     instruction=prompt.IDEA_CAPTURE_PROMPT,
-    description="You manage ideas in Notion: add, list, query, update, delete, expand, and report.",
+    description="Captures and processes raw idea text, generating structured titles, descriptions, and smart tags before saving to Notion",
     tools=[
         AgentTool(agent=add_idea)
     ]
