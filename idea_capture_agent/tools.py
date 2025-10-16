@@ -103,3 +103,107 @@ def list_ideas(
             "error": str(e),
             "message": f"Failed to list ideas: {str(e)}"
         }
+
+
+def query_ideas(
+    search_text: str,
+    limit: int = 10
+) -> Dict[str, Any]:
+    """
+    Search for ideas in the Notion database by text query.
+    Searches through title, description, and raw text fields.
+
+    Args:
+        search_text: Text to search for in ideas
+        limit: Maximum number of ideas to retrieve (default: 10, max: 100)
+
+    Returns:
+        Dictionary with list of matching ideas containing title, description, tags, and page_id
+    """
+    if not NOTION_API_KEY or not NOTION_DATABASE_ID:
+        raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
+
+    # Ensure limit is within bounds
+    limit = min(max(1, limit), 100)
+
+    # Build the query payload with text search filter
+    payload = {
+        "page_size": limit,
+        "filter": {
+            "or": [
+                {
+                    "property": "Title",
+                    "title": {
+                        "contains": search_text
+                    }
+                },
+                {
+                    "property": "Description",
+                    "rich_text": {
+                        "contains": search_text
+                    }
+                },
+                {
+                    "property": "Raw Text",
+                    "rich_text": {
+                        "contains": search_text
+                    }
+                }
+            ]
+        }
+    }
+
+    try:
+        response = requests.post(
+            f"{NOTION_BASE_URL}/databases/{NOTION_DATABASE_ID}/query",
+            headers=HEADERS,
+            json=payload,
+            timeout=10.0
+        )
+        response.raise_for_status()
+        result = response.json()
+
+        # Parse and format the results
+        ideas = []
+        for page in result.get("results", []):
+            properties = page.get("properties", {})
+
+            # Extract title
+            title_property = properties.get("Title", {}).get("title", [])
+            title = title_property[0].get("text", {}).get("content", "") if title_property else "Untitled"
+
+            # Extract description
+            desc_property = properties.get("Description", {}).get("rich_text", [])
+            description = desc_property[0].get("text", {}).get("content", "") if desc_property else ""
+
+            # Extract tags
+            tags_property = properties.get("Tags", {}).get("multi_select", [])
+            tags = [tag.get("name", "") for tag in tags_property]
+
+            # Extract raw text
+            raw_property = properties.get("Raw Text", {}).get("rich_text", [])
+            raw_text = raw_property[0].get("text", {}).get("content", "") if raw_property else ""
+
+            ideas.append({
+                "page_id": page.get("id", ""),
+                "title": title,
+                "description": description,
+                "tags": tags,
+                "raw_text": raw_text
+            })
+
+        return {
+            "success": True,
+            "count": len(ideas),
+            "ideas": ideas,
+            "message": f"Found {len(ideas)} idea(s) matching '{search_text}'"
+        }
+
+    except requests.exceptions.RequestException as e:
+        return {
+            "success": False,
+            "count": 0,
+            "ideas": [],
+            "error": str(e),
+            "message": f"Failed to query ideas: {str(e)}"
+        }
