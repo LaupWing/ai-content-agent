@@ -1,6 +1,7 @@
 from typing import Dict, Any, List
 import os
 import requests
+from datetime import date
 
 NOTION_API_KEY = os.getenv("NOTION_API_KEY", "")
 NOTION_DATABASE_ID = os.getenv("NOTION_IDEAS_DATABASE_ID", "")
@@ -35,6 +36,9 @@ def create_idea_in_notion(
     if not NOTION_API_KEY or not NOTION_DATABASE_ID:
         raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
 
+    # Get today's date in ISO format (YYYY-MM-DD)
+    today = date.today().isoformat()
+
     properties = {
         "Title": {
             "title": [{"text": {"content": title}}]
@@ -47,6 +51,9 @@ def create_idea_in_notion(
         },
         "Tags": {
             "multi_select": [{"name": tag} for tag in tags]
+        },
+        "Date": {
+            "date": {"start": today}
         }
     }
 
