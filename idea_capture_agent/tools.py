@@ -107,15 +107,16 @@ def list_ideas(
 
 def query_ideas(
     search_text: str,
-    limit: int = 10
+    limit: int = 100
 ) -> Dict[str, Any]:
     """
-    Search for ideas in the Notion database by text query.
-    Searches through title, description, and raw text fields.
+    Search for ideas in the Notion database by keywords.
+    Extracts keywords from search_text and finds ideas matching any of them.
+    Keywords can match in any order and search is case-insensitive.
 
     Args:
-        search_text: Text to search for in ideas
-        limit: Maximum number of ideas to retrieve (default: 10, max: 100)
+        search_text: Text to search for (e.g., "delete blog automation")
+        limit: Maximum number of ideas to retrieve (default: 100, max: 100)
 
     Returns:
         Dictionary with list of matching ideas containing title, description, tags, and page_id
@@ -126,31 +127,21 @@ def query_ideas(
     # Ensure limit is within bounds
     limit = min(max(1, limit), 100)
 
-    # Build the query payload with text search filter
+    # Extract keywords - split by spaces and filter out common words
+    stop_words = {"the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by"}
+    keywords = [
+        word.lower().strip()
+        for word in search_text.split()
+        if word.lower().strip() and word.lower().strip() not in stop_words
+    ]
+
+    # If no valid keywords, use the original search text
+    if not keywords:
+        keywords = [search_text.lower()]
+
+    # Fetch ALL ideas (up to limit) without filtering - we'll filter client-side
     payload = {
-        "page_size": limit,
-        "filter": {
-            "or": [
-                {
-                    "property": "Title",
-                    "title": {
-                        "contains": search_text
-                    }
-                },
-                {
-                    "property": "Description",
-                    "rich_text": {
-                        "contains": search_text
-                    }
-                },
-                {
-                    "property": "Raw Text",
-                    "rich_text": {
-                        "contains": search_text
-                    }
-                }
-            ]
-        }
+        "page_size": limit
     }
 
     try:
@@ -163,8 +154,8 @@ def query_ideas(
         response.raise_for_status()
         result = response.json()
 
-        # Parse and format the results
-        ideas = []
+        # Parse and filter results client-side with keyword matching
+        matching_ideas = []
         for page in result.get("results", []):
             properties = page.get("properties", {})
 
@@ -184,19 +175,36 @@ def query_ideas(
             raw_property = properties.get("Raw Text", {}).get("rich_text", [])
             raw_text = raw_property[0].get("text", {}).get("content", "") if raw_property else ""
 
-            ideas.append({
-                "page_id": page.get("id", ""),
-                "title": title,
-                "description": description,
-                "tags": tags,
-                "raw_text": raw_text
-            })
+            # Combine all searchable text (lowercase for case-insensitive search)
+            searchable_text = f"{title} {description} {raw_text} {' '.join(tags)}".lower()
+
+            # Check if ANY keyword matches (flexible matching)
+            keyword_matches = sum(1 for keyword in keywords if keyword in searchable_text)
+
+            # Include idea if at least one keyword matches
+            if keyword_matches > 0:
+                matching_ideas.append({
+                    "page_id": page.get("id", ""),
+                    "title": title,
+                    "description": description,
+                    "tags": tags,
+                    "raw_text": raw_text,
+                    "match_score": keyword_matches  # How many keywords matched
+                })
+
+        # Sort by match score (most matching keywords first)
+        matching_ideas.sort(key=lambda x: x["match_score"], reverse=True)
+
+        # Remove match_score from final results
+        for idea in matching_ideas:
+            del idea["match_score"]
 
         return {
             "success": True,
-            "count": len(ideas),
-            "ideas": ideas,
-            "message": f"Found {len(ideas)} idea(s) matching '{search_text}'"
+            "count": len(matching_ideas),
+            "ideas": matching_ideas,
+            "keywords": keywords,
+            "message": f"Found {len(matching_ideas)} idea(s) matching keywords: {', '.join(keywords)}"
         }
 
     except requests.exceptions.RequestException as e:
