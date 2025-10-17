@@ -5,7 +5,10 @@ Provides reusable functions for interacting with the Notion API.
 from typing import Dict, Any, Optional
 import os
 import requests
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
 
 # Notion API Configuration
 NOTION_API_KEY = os.getenv("NOTION_API_KEY", "")
