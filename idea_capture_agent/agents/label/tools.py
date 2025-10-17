@@ -1,17 +1,11 @@
 from typing import Dict, Any, List
-import os
 import requests
+import sys
+import os
 
-NOTION_API_KEY = os.getenv("NOTION_API_KEY", "")
-NOTION_DATABASE_ID = os.getenv("NOTION_IDEAS_DATABASE_ID", "")
-NOTION_API_VERSION = "2022-06-28"
-NOTION_BASE_URL = "https://api.notion.com/v1"
-
-HEADERS = {
-    "Authorization": f"Bearer {NOTION_API_KEY}",
-    "Content-Type": "application/json",
-    "Notion-Version": NOTION_API_VERSION
-}
+# Add parent directory to path to import notion_client
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from notion_client import get_database_schema
 
 
 def get_existing_tags() -> Dict[str, Any]:
@@ -21,18 +15,9 @@ def get_existing_tags() -> Dict[str, Any]:
     Returns:
         Dictionary containing list of existing tag names
     """
-    if not NOTION_API_KEY or not NOTION_DATABASE_ID:
-        raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
-
     try:
-        # Retrieve the database to get its properties schema
-        response = requests.get(
-            f"{NOTION_BASE_URL}/databases/{NOTION_DATABASE_ID}",
-            headers=HEADERS,
-            timeout=10.0
-        )
-        response.raise_for_status()
-        database = response.json()
+        # Retrieve the database schema
+        database = get_database_schema()
 
         # Extract existing tags from the Tags multi-select property
         tags_property = database.get("properties", {}).get("Tags", {})

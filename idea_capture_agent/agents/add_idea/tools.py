@@ -1,18 +1,12 @@
 from typing import Dict, Any, List
-import os
 import requests
 from datetime import date
+import sys
+import os
 
-NOTION_API_KEY = os.getenv("NOTION_API_KEY", "")
-NOTION_DATABASE_ID = os.getenv("NOTION_IDEAS_DATABASE_ID", "")
-NOTION_API_VERSION = "2022-06-28"
-NOTION_BASE_URL = "https://api.notion.com/v1"
-
-HEADERS = {
-    "Authorization": f"Bearer {NOTION_API_KEY}",
-    "Content-Type": "application/json",
-    "Notion-Version": NOTION_API_VERSION
-}
+# Add parent directory to path to import notion_client
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from notion_client import create_page
 
 
 def create_idea_in_notion(
@@ -33,9 +27,6 @@ def create_idea_in_notion(
     Returns:
         Dictionary with page_id and confirmation message
     """
-    if not NOTION_API_KEY or not NOTION_DATABASE_ID:
-        raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
-
     # Get today's date in ISO format (YYYY-MM-DD)
     today = date.today().isoformat()
 
@@ -57,20 +48,8 @@ def create_idea_in_notion(
         }
     }
 
-    payload = {
-        "parent": {"database_id": NOTION_DATABASE_ID},
-        "properties": properties
-    }
-
     try:
-        response = requests.post(
-            f"{NOTION_BASE_URL}/pages",
-            headers=HEADERS,
-            json=payload,
-            timeout=10.0
-        )
-        response.raise_for_status()
-        result = response.json()
+        result = create_page(properties)
 
         return {
             "success": True,

@@ -1,17 +1,6 @@
 from typing import Dict, Any, List, Optional
-import os
 import requests
-
-NOTION_API_KEY = os.getenv("NOTION_API_KEY", "")
-NOTION_DATABASE_ID = os.getenv("NOTION_IDEAS_DATABASE_ID", "")
-NOTION_API_VERSION = "2022-06-28"
-NOTION_BASE_URL = "https://api.notion.com/v1"
-
-HEADERS = {
-    "Authorization": f"Bearer {NOTION_API_KEY}",
-    "Content-Type": "application/json",
-    "Notion-Version": NOTION_API_VERSION
-}
+from notion_client import query_database, get_page, update_page, parse_idea_from_page
 
 
 def list_ideas(
@@ -28,20 +17,10 @@ def list_ideas(
     Returns:
         Dictionary with list of ideas containing title, description, tags, and page_id
     """
-    if not NOTION_API_KEY or not NOTION_DATABASE_ID:
-        raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
-
-    # Ensure limit is within bounds
-    limit = min(max(1, limit), 100)
-
-    # Build the query payload
-    payload = {
-        "page_size": limit
-    }
-
-    # Add filter if tag is specified
+    # Build filter if tag is specified
+    filter_config = None
     if filter_by_tag:
-        payload["filter"] = {
+        filter_config = {
             "property": "Tags",
             "multi_select": {
                 "contains": filter_by_tag
@@ -49,43 +28,10 @@ def list_ideas(
         }
 
     try:
-        response = requests.post(
-            f"{NOTION_BASE_URL}/databases/{NOTION_DATABASE_ID}/query",
-            headers=HEADERS,
-            json=payload,
-            timeout=10.0
-        )
-        response.raise_for_status()
-        result = response.json()
+        result = query_database(page_size=limit, filter_config=filter_config)
 
         # Parse and format the results
-        ideas = []
-        for page in result.get("results", []):
-            properties = page.get("properties", {})
-
-            # Extract title
-            title_property = properties.get("Title", {}).get("title", [])
-            title = title_property[0].get("text", {}).get("content", "") if title_property else "Untitled"
-
-            # Extract description
-            desc_property = properties.get("Description", {}).get("rich_text", [])
-            description = desc_property[0].get("text", {}).get("content", "") if desc_property else ""
-
-            # Extract tags
-            tags_property = properties.get("Tags", {}).get("multi_select", [])
-            tags = [tag.get("name", "") for tag in tags_property]
-
-            # Extract raw text
-            raw_property = properties.get("Raw Text", {}).get("rich_text", [])
-            raw_text = raw_property[0].get("text", {}).get("content", "") if raw_property else ""
-
-            ideas.append({
-                "page_id": page.get("id", ""),
-                "title": title,
-                "description": description,
-                "tags": tags,
-                "raw_text": raw_text
-            })
+        ideas = [parse_idea_from_page(page) for page in result.get("results", [])]
 
         filter_msg = f" with tag '{filter_by_tag}'" if filter_by_tag else ""
         return {
@@ -121,12 +67,6 @@ def query_ideas(
     Returns:
         Dictionary with list of matching ideas containing title, description, tags, and page_id
     """
-    if not NOTION_API_KEY or not NOTION_DATABASE_ID:
-        raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
-
-    # Ensure limit is within bounds
-    limit = min(max(1, limit), 100)
-
     # Extract keywords - split by spaces and filter out common words
     stop_words = {"the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by"}
     keywords = [
@@ -139,58 +79,24 @@ def query_ideas(
     if not keywords:
         keywords = [search_text.lower()]
 
-    # Fetch ALL ideas (up to limit) without filtering - we'll filter client-side
-    payload = {
-        "page_size": limit
-    }
-
     try:
-        response = requests.post(
-            f"{NOTION_BASE_URL}/databases/{NOTION_DATABASE_ID}/query",
-            headers=HEADERS,
-            json=payload,
-            timeout=10.0
-        )
-        response.raise_for_status()
-        result = response.json()
+        result = query_database(page_size=limit)
 
         # Parse and filter results client-side with keyword matching
         matching_ideas = []
         for page in result.get("results", []):
-            properties = page.get("properties", {})
-
-            # Extract title
-            title_property = properties.get("Title", {}).get("title", [])
-            title = title_property[0].get("text", {}).get("content", "") if title_property else "Untitled"
-
-            # Extract description
-            desc_property = properties.get("Description", {}).get("rich_text", [])
-            description = desc_property[0].get("text", {}).get("content", "") if desc_property else ""
-
-            # Extract tags
-            tags_property = properties.get("Tags", {}).get("multi_select", [])
-            tags = [tag.get("name", "") for tag in tags_property]
-
-            # Extract raw text
-            raw_property = properties.get("Raw Text", {}).get("rich_text", [])
-            raw_text = raw_property[0].get("text", {}).get("content", "") if raw_property else ""
+            idea = parse_idea_from_page(page)
 
             # Combine all searchable text (lowercase for case-insensitive search)
-            searchable_text = f"{title} {description} {raw_text} {' '.join(tags)}".lower()
+            searchable_text = f"{idea['title']} {idea['description']} {idea['raw_text']} {' '.join(idea['tags'])}".lower()
 
             # Check if ANY keyword matches (flexible matching)
             keyword_matches = sum(1 for keyword in keywords if keyword in searchable_text)
 
             # Include idea if at least one keyword matches
             if keyword_matches > 0:
-                matching_ideas.append({
-                    "page_id": page.get("id", ""),
-                    "title": title,
-                    "description": description,
-                    "tags": tags,
-                    "raw_text": raw_text,
-                    "match_score": keyword_matches  # How many keywords matched
-                })
+                idea["match_score"] = keyword_matches
+                matching_ideas.append(idea)
 
         # Sort by match score (most matching keywords first)
         matching_ideas.sort(key=lambda x: x["match_score"], reverse=True)
@@ -235,9 +141,6 @@ def update_idea(
     Returns:
         Dictionary with success status and confirmation message
     """
-    if not NOTION_API_KEY or not NOTION_DATABASE_ID:
-        raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
-
     # Build properties object with only the fields to update
     properties = {}
 
@@ -263,19 +166,8 @@ def update_idea(
             "message": "No fields provided to update"
         }
 
-    payload = {
-        "properties": properties
-    }
-
     try:
-        response = requests.patch(
-            f"{NOTION_BASE_URL}/pages/{page_id}",
-            headers=HEADERS,
-            json=payload,
-            timeout=10.0
-        )
-        response.raise_for_status()
-        result = response.json()
+        result = update_page(page_id, properties)
 
         updated_fields = []
         if title is not None:
@@ -314,18 +206,9 @@ def expand_idea(
     Returns:
         Dictionary with success status and confirmation message
     """
-    if not NOTION_API_KEY or not NOTION_DATABASE_ID:
-        raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
-
     try:
         # First, fetch the current idea to get existing description
-        response = requests.get(
-            f"{NOTION_BASE_URL}/pages/{page_id}",
-            headers=HEADERS,
-            timeout=10.0
-        )
-        response.raise_for_status()
-        page = response.json()
+        page = get_page(page_id)
 
         # Extract current description
         properties = page.get("properties", {})
@@ -337,21 +220,13 @@ def expand_idea(
         new_description = f"{current_description}{separator}{expanded_content}"
 
         # Update the page with expanded description
-        payload = {
-            "properties": {
-                "Description": {
-                    "rich_text": [{"text": {"content": new_description}}]
-                }
+        properties = {
+            "Description": {
+                "rich_text": [{"text": {"content": new_description}}]
             }
         }
 
-        update_response = requests.patch(
-            f"{NOTION_BASE_URL}/pages/{page_id}",
-            headers=HEADERS,
-            json=payload,
-            timeout=10.0
-        )
-        update_response.raise_for_status()
+        update_page(page_id, properties)
 
         return {
             "success": True,
