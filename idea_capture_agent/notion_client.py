@@ -34,6 +34,33 @@ def validate_config() -> None:
         raise ValueError("Missing NOTION_API_KEY or NOTION_IDEAS_DATABASE_ID environment variables")
 
 
+def _handle_response(response: requests.Response) -> Dict[str, Any]:
+    """
+    Centralized response handler for all Notion API calls.
+
+    Args:
+        response: Response object from requests
+
+    Returns:
+        Parsed JSON response
+
+    Raises:
+        requests.exceptions.HTTPError: If response status is not OK, with detailed error message
+    """
+    if not response.ok:
+        try:
+            error_data = response.json()
+            error_msg = f"{response.status_code} {response.reason}: {error_data.get('message', 'Unknown error')}"
+        except:
+            error_msg = f"{response.status_code} {response.reason}: {response.text}"
+
+        error = requests.exceptions.HTTPError(error_msg, response=response)
+        error.response = response
+        raise error
+
+    return response.json()
+
+
 def parse_idea_from_page(page: Dict[str, Any]) -> Dict[str, Any]:
     """
     Extract and parse idea properties from a Notion page object.
@@ -111,8 +138,7 @@ def query_database(
         json=payload,
         timeout=timeout
     )
-    response.raise_for_status()
-    return response.json()
+    return _handle_response(response)
 
 
 def get_page(page_id: str, timeout: float = 10.0) -> Dict[str, Any]:
@@ -136,8 +162,7 @@ def get_page(page_id: str, timeout: float = 10.0) -> Dict[str, Any]:
         headers=HEADERS,
         timeout=timeout
     )
-    response.raise_for_status()
-    return response.json()
+    return _handle_response(response)
 
 
 def update_page(
@@ -169,8 +194,7 @@ def update_page(
         json=payload,
         timeout=timeout
     )
-    response.raise_for_status()
-    return response.json()
+    return _handle_response(response)
 
 
 def create_page(
@@ -203,8 +227,7 @@ def create_page(
         json=payload,
         timeout=timeout
     )
-    response.raise_for_status()
-    return response.json()
+    return _handle_response(response)
 
 
 def get_database_schema(timeout: float = 10.0) -> Dict[str, Any]:
@@ -227,5 +250,4 @@ def get_database_schema(timeout: float = 10.0) -> Dict[str, Any]:
         headers=HEADERS,
         timeout=timeout
     )
-    response.raise_for_status()
-    return response.json()
+    return _handle_response(response)

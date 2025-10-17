@@ -52,6 +52,13 @@ def test_notion_api():
         print(f"   Page ID: {page_id}\n")
     except Exception as e:
         print(f"❌ Failed to create test idea: {e}")
+        # Try to print the response body for debugging
+        if hasattr(e, 'response') and e.response is not None:
+            try:
+                error_details = e.response.json()
+                print(f"   Notion error details: {error_details}")
+            except:
+                print(f"   Response text: {e.response.text}")
         return False
 
     # Step 3: Verify the idea exists by querying
