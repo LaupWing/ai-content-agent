@@ -2,7 +2,8 @@ from google.adk.agents import Agent
 from google.adk.tools import AgentTool
 from .agents.add_idea.agent import add_idea
 from .agents.expand_idea.agent import expand_idea
-from .tools import list_ideas, query_ideas, update_idea
+from .agents.idea_alchemy.agent import idea_alchemy
+from .tools import list_ideas, query_ideas, update_idea, get_random_ideas
 from . import prompt
 
 root_agent = Agent(
@@ -13,8 +14,10 @@ root_agent = Agent(
     tools=[
         AgentTool(agent=add_idea),
         AgentTool(agent=expand_idea),
+        AgentTool(agent=idea_alchemy),
         list_ideas,
         query_ideas,
-        update_idea
+        update_idea,
+        get_random_ideas
     ]
 )

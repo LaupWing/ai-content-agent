@@ -1,5 +1,6 @@
 from typing import Dict, Any, List, Optional
 import requests
+import random
 from notion_client import query_database, get_page, update_page, parse_idea_from_page
 
 
@@ -239,4 +240,66 @@ def expand_idea(
             "success": False,
             "error": str(e),
             "message": f"Failed to expand idea: {str(e)}"
+        }
+
+
+def get_random_ideas(
+    count: int = 3,
+    exclude_ids: Optional[List[str]] = None
+) -> Dict[str, Any]:
+    """
+    Get random ideas from the Notion database for creative combination.
+    Used by the idea_alchemy agent to synthesize novel insights.
+
+    Args:
+        count: Number of random ideas to retrieve (default: 3, max: 10)
+        exclude_ids: Optional list of page IDs to exclude from selection
+
+    Returns:
+        Dictionary with randomly selected ideas
+    """
+    if count < 2:
+        return {
+            "success": False,
+            "ideas": [],
+            "message": "Need at least 2 ideas to combine"
+        }
+
+    if count > 10:
+        count = 10
+
+    try:
+        # Fetch all ideas (or a large sample)
+        result = query_database(page_size=100)
+        all_ideas = [parse_idea_from_page(page) for page in result.get("results", [])]
+
+        # Filter out excluded IDs
+        if exclude_ids:
+            all_ideas = [idea for idea in all_ideas if idea["page_id"] not in exclude_ids]
+
+        # Check if we have enough ideas
+        if len(all_ideas) < count:
+            return {
+                "success": False,
+                "ideas": [],
+                "message": f"Not enough ideas in database. Have {len(all_ideas)}, need {count}"
+            }
+
+        # Randomly select ideas
+        selected_ideas = random.sample(all_ideas, count)
+
+        return {
+            "success": True,
+            "count": len(selected_ideas),
+            "ideas": selected_ideas,
+            "message": f"Selected {len(selected_ideas)} random ideas for alchemy"
+        }
+
+    except requests.exceptions.RequestException as e:
+        return {
+            "success": False,
+            "count": 0,
+            "ideas": [],
+            "error": str(e),
+            "message": f"Failed to get random ideas: {str(e)}"
         }
