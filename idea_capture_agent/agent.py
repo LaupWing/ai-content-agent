@@ -17,7 +17,5 @@ root_agent = Agent(
         query_ideas,
         update_idea,
         expand_idea
-    ],
-    # Initialize with default discussion_mode
-    initial_state={"discussion_mode": "ask_first"}
+    ]
 )
