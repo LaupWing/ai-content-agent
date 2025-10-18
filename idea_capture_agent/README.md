@@ -1,192 +1,374 @@
-# Idea Capture Agent
+# Idea Capture Agent - System Overview
 
-An intelligent AI agent that captures, processes, and manages your ideas in Notion with automatic title generation, description cleanup, and smart tagging.
+An AI-powered idea capture system that transforms raw WhatsApp messages into structured, tagged ideas in Notion.
 
-## Overview
-
-The Idea Capture Agent is designed with one primary goal: **Make capturing ideas effortless**. Simply blast your raw idea to the agent, and it handles everything else - generating titles, cleaning up descriptions, creating relevant tags, and storing everything in Notion.
-
-## Core Features
-
-### Primary Capability: Smart Idea Capture
-- **Input**: Raw, messy idea text in any format
-- **Process**: Automatic title generation, description cleanup, and intelligent tag creation
-- **Output**: Well-structured idea stored in Notion
-
-### Additional Capabilities
-1. **List Ideas**: View all your captured ideas
-2. **Query Ideas**: Search by keywords, tags, or date ranges
-3. **Update Ideas**: Modify existing ideas
-4. **Delete Ideas**: Remove ideas (with confirmation)
-5. **Expand Ideas**: Transform brief ideas into detailed descriptions or action plans
-6. **Weekly Reports**: Get summaries of your ideas in text or MP3 format
-
-## Architecture
-
-The agent uses a clean, modular architecture:
+## 🎯 How It Works
 
 ```
-Root Agent (idea_capture)
-├── Routing & simple operations (list, query, update, delete)
-└── Delegates to specialized agents:
-    ├── add_idea_agent (handles 80% of the intelligence)
-    │   ├── Title generation
-    │   ├── Description cleanup
-    │   ├── Tag detection & creation
-    │   └── Notion API interaction
-    ├── expand_idea_agent (future)
-    └── report_agent (future)
+WhatsApp Message → Laravel Server → AI Agent → Notion Database
+     (Raw Text)      (Webhook)      (Processing)  (Structured Idea)
 ```
 
-**Design Philosophy**: Keep the root agent lean and mean. All complex processing is delegated to specialized sub-agents.
+### Flow Breakdown
 
-## How It Works
+1. **User sends WhatsApp message**
+   - Raw, unstructured idea text
+   - Could be messy, brief, or detailed
+   - Example: "build a chrome extension that saves highlights from articles I read"
 
-### 1. Adding Ideas (Primary Use Case)
+2. **Laravel server receives webhook**
+   - WhatsApp Business API webhook
+   - Captures message content + user identifier
+   - Routes to AI agent processing
 
-User input:
+3. **AI Agent processes the idea** (Google ADK + Gemini)
+   - Generates concise title (3-8 words)
+   - Cleans up and structures description
+   - Analyzes content to create 2-5 relevant tags
+   - Adds timestamp
+
+4. **Saves to Notion database**
+   - Uses Notion API (via MCP)
+   - Stores in user's connected workspace
+   - Database schema: Title, Description, Tags, Date
+
+5. **Optional: Discussion Mode**
+   - Can ask user if they want to expand the idea
+   - Or auto-engage in intellectual exploration
+   - Helps flesh out rough concepts
+
+## 🏗️ Architecture
+
+### Current Setup (Single User)
 ```
-"yo we should add dark mode it's annoying at night"
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+│  WhatsApp   │────▶│    Laravel   │────▶│  AI Agent   │
+│             │     │    Server    │     │  (Gemini)   │
+└─────────────┘     └──────────────┘     └──────┬──────┘
+                                                 │
+                                                 ▼
+                                         ┌──────────────┐
+                                         │    Notion    │
+                                         │     API      │
+                                         │  (Your DB)   │
+                                         └──────────────┘
 ```
 
-Agent processes:
-- **Raw Text**: "yo we should add dark mode it's annoying at night"
-- **Title**: "Add Dark Mode Feature"
-- **Description**: "Implement dark mode to improve user experience during nighttime usage and reduce eye strain."
-- **Tags**: ["feature-request", "ui-ux", "accessibility", "quick-win"]
+**Auth:** Direct integration token (hardcoded/env)
+**Limitation:** Only works for your Notion workspace
 
-### 2. Managing Ideas
-
+### Multi-User Setup (OAuth)
 ```
-List all ideas
-Show ideas tagged with "urgent"
-Update my dark mode idea
-Delete the old feature request
-```
-
-### 3. Expanding Ideas
-
-```
-Expand my dark mode idea into an action plan
-Give me more details on the marketing campaign idea
-Show me different variations of the automation concept
-```
-
-### 4. Weekly Reports
-
-```
-Send me a weekly report grouped by tags
-Generate an audio report of this week's ideas
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+│  WhatsApp   │────▶│    Laravel   │────▶│  AI Agent   │
+│ (User A/B/C)│     │    Server    │     │  (Gemini)   │
+└─────────────┘     └──────┬───────┘     └──────┬──────┘
+                           │                     │
+                           ▼                     ▼
+                    ┌──────────────┐     ┌──────────────┐
+                    │   Database   │     │    Notion    │
+                    │              │     │     OAuth    │
+                    │ - users      │     │              │
+                    │ - tokens     │     └──────────────┘
+                    │ - workspaces │              │
+                    └──────────────┘              │
+                                                  ▼
+                                    ┌──────────────────────────┐
+                                    │   Multiple Workspaces    │
+                                    │                          │
+                                    │  User A → Notion DB A    │
+                                    │  User B → Notion DB B    │
+                                    │  User C → Notion DB C    │
+                                    └──────────────────────────┘
 ```
 
-## Technical Details
+**Auth:** OAuth 2.0 flow per user
+**Each user:**
+1. Connects their Notion workspace (OAuth)
+2. Creates or auto-generates "Ideas" database in their workspace
+3. Laravel stores their OAuth token
+4. Agent uses appropriate token based on WhatsApp sender
 
-### State Management
-- Stateless system - all state managed in Notion
-- No persistent memory between requests
+## 📊 Database Requirements
 
-### Notion Integration
-- Uses Notion page IDs internally for all operations
-- Users only see/use idea titles
-- Automatic ID resolution when users reference ideas by name
+### Laravel Database (MySQL/PostgreSQL)
+**Required for multi-user:**
+```sql
+-- Users table
+users (
+  id,
+  whatsapp_number,
+  name,
+  created_at
+)
 
-### Error Handling
-- User-facing: Simple, clear error messages
-- Internal: Full error details captured for debugging
+-- Notion OAuth tokens (encrypted)
+notion_tokens (
+  id,
+  user_id (FK),
+  access_token (encrypted),
+  workspace_id,
+  workspace_name,
+  created_at,
+  expires_at
+)
 
-## Project Structure
+-- Optional: Track databases
+notion_databases (
+  id,
+  user_id (FK),
+  database_id,
+  database_name,
+  created_at
+)
+```
+
+### Notion Database (Per User)
+**Each user needs an "Ideas" database in their own workspace with:**
+- **Title** (text) - Generated by AI
+- **Description** (text) - Cleaned up version
+- **Tags** (multi-select) - AI-generated tags
+- **Date** (date) - Creation timestamp
+- **Status** (select) - Optional: New, Expanded, Archived
+
+**Important:** YES, each user creates their own database in their Notion workspace!
+
+**Setup Options:**
+1. **Manual:** User creates database, shares with integration
+2. **Auto:** Laravel creates database via Notion API after OAuth
+
+## 🤖 AI Agent Components
+
+### Main Agent: `idea_capture`
+- **Model:** Gemini 2.5 Flash
+- **Framework:** Google ADK
+- **Purpose:** Orchestrates all idea operations
+
+### Sub-Agents:
+1. **`add_idea`** - Processes raw text into structured ideas
+2. **`expand_idea_agent`** - Intellectual discussion and expansion
+
+### Tools:
+- `list_ideas` - View all captured ideas
+- `query_ideas` - Search by keywords/tags/dates
+- `update_idea` - Modify existing ideas
+- `expand_idea` - Generate detailed expansions
+- `delete_idea` - Remove ideas
+
+### Discussion Modes:
+- **`ask_first`** (default) - Prompt user after saving
+- **`auto_discuss`** - Automatically engage
+- **`off`** - No discussion, just save
+
+## 🔐 Authentication Flow (Multi-User)
+
+### Initial Setup
+```
+1. User sends WhatsApp message
+2. Laravel checks if user exists
+3. If new → Send Notion OAuth link via WhatsApp
+4. User clicks link → Authorizes in Notion
+5. Notion redirects to Laravel callback
+6. Laravel stores token (encrypted)
+7. Laravel auto-creates "Ideas" database in user's workspace
+8. User receives confirmation via WhatsApp
+```
+
+### Ongoing Usage
+```
+1. WhatsApp message arrives at Laravel
+2. Laravel identifies user by phone number
+3. Fetches user's Notion token from database
+4. Passes token + raw text to AI agent
+5. Agent uses that token for Notion API calls
+6. Idea saved to user's own workspace
+7. Confirmation sent back via WhatsApp
+```
+
+## 📡 WhatsApp Integration
+
+**Laravel handles:**
+- Webhook reception from WhatsApp Business API
+- Message parsing and user identification
+- User authentication/OAuth management
+- Triggering AI agent with raw text + token
+- Sending responses back to WhatsApp
+
+**Agent receives from Laravel:**
+```json
+{
+  "user_id": "user_123",
+  "raw_text": "idea about building something cool",
+  "notion_token": "secret_abc123...",
+  "notion_database_id": "abc123..."
+}
+```
+
+**Agent sends back to Laravel:**
+```json
+{
+  "status": "success",
+  "idea": {
+    "title": "Building Something Cool Idea",
+    "tags": ["innovation", "project-idea"]
+  },
+  "message": "Idea saved! Would you like to discuss it?"
+}
+```
+
+## 🚀 Current Capabilities
+
+✅ Capture ideas from raw WhatsApp text
+✅ AI-generated titles, descriptions, tags
+✅ Save to Notion database
+✅ List/query/update existing ideas
+✅ Expand ideas with detailed discussion
+✅ Configurable discussion modes
+
+🔄 **Planned:**
+- Multi-user OAuth support
+- Auto-database creation
+- Weekly idea reports (MP3 format)
+- Priority/categorization features
+
+## 🛠️ Tech Stack
+
+- **Backend:** Laravel (PHP)
+- **AI Framework:** Google ADK (Python)
+- **LLM:** Gemini 2.5 Flash
+- **Database:** MySQL/PostgreSQL (Laravel)
+- **Storage:** Notion API (via MCP)
+- **Messaging:** WhatsApp Business API
+- **Auth:** Notion OAuth 2.0 (planned)
+
+## 🔑 Key Design Decisions
+
+### Why WhatsApp?
+- Frictionless capture (no app switching)
+- Always accessible on mobile
+- Natural language input
+- You already have Laravel server set up!
+
+### Why Notion?
+- Flexible database structure
+- User-friendly browsing/editing
+- Powerful query/filter capabilities
+- Existing user workflows
+- Each user gets their own workspace
+
+### Why AI Processing?
+- Raw ideas are often messy
+- Automatic tagging saves time
+- Consistent structure across captures
+- Discussion mode helps develop ideas
+
+### Why Google ADK?
+- Built-in agent orchestration
+- Tool calling framework
+- Sub-agent composition
+- State management
+
+## 📝 Usage Examples
+
+### Basic Capture
+```
+WhatsApp: "chrome extension for saving article highlights"
+
+Agent Response (via WhatsApp):
+✅ Idea saved!
+Title: Article Highlight Chrome Extension
+Tags: browser-extension, productivity, reading
+
+Would you like to discuss and expand on this idea?
+```
+
+### Query Ideas
+```
+WhatsApp: "show me all productivity ideas"
+
+Agent Response:
+Found 3 productivity ideas:
+1. Article Highlight Chrome Extension
+2. Focus Timer with Ambient Sounds
+3. Task Batching Dashboard
+```
+
+### Expand Idea
+```
+WhatsApp: "expand the chrome extension idea"
+
+Agent Response:
+Let's explore this deeper. What types of highlights matter most to you?
+- Text selections for research?
+- Images and visual content?
+- Code snippets?
+
+[Engages in discussion to flesh out requirements]
+```
+
+## 🔮 Future Enhancements
+
+- **Voice notes** → Transcription → Idea capture
+- **Image OCR** → Extract text from photos
+- **Collaborative workspaces** → Team idea sharing
+- **AI-powered connections** → Link related ideas
+- **Scheduled reviews** → Weekly idea summaries
+- **Export formats** → PDF, Markdown, Audio
+- **Integration triggers** → Auto-create tasks in other tools
+
+## 🚦 Getting Started (Multi-User)
+
+### 1. Notion OAuth Setup
+```bash
+# Create Notion integration at https://www.notion.so/my-integrations
+# Set as "Public integration" for OAuth
+# Copy Client ID and Client Secret
+```
+
+### 2. Laravel Configuration
+```php
+// .env
+NOTION_CLIENT_ID=your_client_id
+NOTION_CLIENT_SECRET=your_client_secret
+NOTION_REDIRECT_URI=https://yourapp.com/auth/notion/callback
+```
+
+### 3. Database Migration
+```bash
+php artisan migrate
+# Creates users, notion_tokens, notion_databases tables
+```
+
+### 4. WhatsApp Webhook
+```php
+// routes/api.php
+Route::post('/whatsapp/webhook', [WhatsAppController::class, 'handle']);
+```
+
+### 5. OAuth Routes
+```php
+// routes/web.php
+Route::get('/auth/notion', [NotionOAuthController::class, 'redirect']);
+Route::get('/auth/notion/callback', [NotionOAuthController::class, 'callback']);
+```
+
+## 📂 Project Structure
 
 ```
 idea_capture_agent/
-├── __init__.py
 ├── agent.py              # Root agent definition
-├── prompt.py             # Main agent prompt
-├── TODO.md               # Development decisions & roadmap
+├── prompt.py             # Main agent instructions
+├── tools.py              # Tool implementations
+├── agents/
+│   ├── add_idea/
+│   │   └── agent.py      # Add idea sub-agent
+│   └── expand_idea/
+│       └── agent.py      # Expand idea sub-agent
 └── README.md             # This file
 ```
 
-## Getting Started
+---
 
-1. **Setup Notion Integration**
-   - Create a Notion database with fields: Title, Description, Tags, Raw Text, Created Date
-   - Configure MCP for Notion API access
-
-2. **Configure the Agent**
-   ```python
-   from idea_capture_agent import idea_capture
-
-   # Agent is ready to use
-   idea_capture.run("I want to build a chrome extension for bookmarking")
-   ```
-
-3. **Implement Tools** (TODO)
-   - `list_ideas`
-   - `query_ideas`
-   - `add_idea_agent` (sub-agent)
-   - `update_idea`
-   - `delete_idea`
-   - `expand_idea`
-   - `send_weekly_report`
-
-## Development Roadmap
-
-### Phase 1: Core Capture (MVP)
-- [ ] Implement root agent
-- [ ] Create `add_idea_agent` sub-agent
-- [ ] Build basic tools: `add_idea_agent`, `list_ideas`, `query_ideas`
-- [ ] Test: User → raw idea → processed → stored
-
-### Phase 2: Management Features
-- [ ] Implement `update_idea`
-- [ ] Implement `delete_idea`
-- [ ] Test full CRUD operations
-
-### Phase 3: Advanced Features
-- [ ] Create `expand_idea_agent`
-- [ ] Create `report_agent` for weekly reports
-- [ ] Implement MP3 generation for audio reports
-- [ ] Test end-to-end workflows
-
-## Configuration
-
-See `TODO.md` for detailed configuration decisions needed:
-- Tag generation strategy
-- Weekly report content & format
-- Expansion types and depth
-- Notion database schema
-
-## Best Practices
-
-### For Users
-- Just blast your idea - don't worry about formatting
-- Use natural language to reference ideas ("my dark mode idea")
-- Be specific when updating or deleting ideas
-
-### For Developers
-- Keep root agent lean - delegate complex logic to sub-agents
-- Always use page IDs internally, never expose to users
-- Test tag generation thoroughly - it's the most valuable feature
-- Error messages should be simple for users, detailed for logs
-
-## Dependencies
-
-- Google ADK (Agent Development Kit)
-- Notion API via MCP
-- gemini-2.5-flash (model)
-
-## Contributing
-
-When adding features:
-1. Check `TODO.md` for architectural decisions
-2. Keep root agent minimal
-3. Create specialized sub-agents for complex tasks
-4. Update prompts to be clear and concise
-5. Test with messy, real-world input
-
-## License
-
-[Your License Here]
-
-## Support
-
-For issues, questions, or feature requests, please [create an issue/contact info].
+**Last Updated:** 2025-10-18
+**Status:** Production (Single User) | Planning (Multi-User OAuth)
+**Integration:** WhatsApp → Laravel → Python AI Agent → Notion
