@@ -2,7 +2,7 @@ from google.adk.agents import Agent
 from .tools import append_discussion_to_idea
 from . import prompt
 
-expand_idea_agent = Agent(
+expand_idea = Agent(
     name="expand_idea",
     model="gemini-2.5-flash",
     instruction=prompt.EXPAND_IDEA_PROMPT,
